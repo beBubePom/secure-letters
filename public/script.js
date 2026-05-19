@@ -66,6 +66,31 @@ async function loadUnlockedLetters() {
       }
     });
   } catch (err) { console.error("Lỗi load thư:", err); }
+
+  // ── GSAP: stagger từng thư hiện ra khi scroll ────────────────────────────
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Title fade in từ trên xuống
+  gsap.from("h1", {
+    y: -40, opacity: 0, duration: 1,
+    ease: "power3.out"
+  });
+
+  // Từng thư slide từ trái vào, lần lượt theo scroll
+  gsap.utils.toArray(".box").forEach((box, i) => {
+    gsap.from(box, {
+      scrollTrigger: {
+        trigger: box,
+        start: "top 90%",
+        toggleActions: "play none none none",
+      },
+      x: -60,
+      opacity: 0,
+      duration: 0.5,
+      delay: (i % 5) * 0.06,   // stagger nhẹ theo nhóm 5
+      ease: "power2.out",
+    });
+  });
 }
 loadUnlockedLetters();
 
@@ -79,6 +104,12 @@ function openModal(num) {
   document.getElementById("passwordInput").value = "";
   document.getElementById("error").innerText = !unlockedSet.has(num)
     ? `🔒 Thư này mở vào ${getUnlockLabel(num)}` : "";
+
+  // GSAP: modal hiện ra mượt
+  gsap.fromTo(".modal-content",
+    { scale: 0.85, opacity: 0, y: 30 },
+    { scale: 1,    opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.4)" }
+  );
 }
 
 async function checkPassword() {
@@ -101,16 +132,29 @@ async function checkPassword() {
     document.getElementById("passwordSection").style.display = "none";
     document.getElementById("letterContent").style.display = "block";
     document.getElementById("letterContent").innerText = data.content;
+
+    // GSAP: nội dung thư hiện ra từng chút
+    gsap.fromTo("#letterContent",
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
   } catch { document.getElementById("error").innerText = "Vợ đợi thêm 1 xíu nữa nha!!!"; }
 }
 
 document.getElementById("passwordInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
 document.getElementById("closeBtn").onclick = function () {
-  document.getElementById("modal").style.display = "none";
+  // GSAP: modal đóng mượt rồi mới ẩn
+  gsap.to(".modal-content", {
+    scale: 0.88, opacity: 0, y: 20, duration: 0.28, ease: "power2.in",
+    onComplete: () => {
+      document.getElementById("modal").style.display = "none";
+      gsap.set(".modal-content", { scale: 1, opacity: 1, y: 0 }); // reset
+      document.getElementById("passwordSection").style.display = "block";
+      document.getElementById("letterContent").style.display = "none";
+    }
+  });
   letterMusic.pause(); letterMusic.currentTime = 0;
   bgMusic.play().catch(()=>{});
-  document.getElementById("passwordSection").style.display = "block";
-  document.getElementById("letterContent").style.display = "none";
 };
 document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) document.getElementById("closeBtn").onclick();

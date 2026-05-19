@@ -2,45 +2,83 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>100 Lá Thư Cho Em</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Hiệu ứng hạt rơi -->
-<canvas id="particleCanvas"></canvas>
-<!-- Mặt trời / Mặt trăng -->
-<canvas id="celestialCanvas"></canvas>
+  <!-- Cursor tuỳ chỉnh -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
 
-<!-- PopCat nhạc -->
-<div id="musicCat">
-  <img id="catImg" src="images/pop1.png" alt="Pop Cat">
-</div>
+  <!-- Canvas hạt bụi -->
+  <canvas id="particleCanvas"></canvas>
 
-<h1>100 Lá Thư Cho Em</h1>
+  <!-- Three.js moon container -->
+  <div id="moonContainer"></div>
 
-<div class="letter-list" id="letterGrid"></div>
-
-<!-- Modal -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span id="closeBtn">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <div id="passwordSection">
-      <input type="password" id="passwordInput" placeholder="Nhập mật mã...">
-      <button onclick="checkPassword()">Mở thư</button>
-      <p id="error"></p>
-    </div>
-    <div id="letterContent" style="display:none;"></div>
+  <!-- PopCat -->
+  <div id="musicCat">
+    <img id="catImg" src="images/pop1.png" alt="Pop Cat">
   </div>
-</div>
 
-<audio id="bgMusic" src="music/background.mp3" loop></audio>
-<audio id="letterMusic"></audio>
+  <!-- Tiêu đề typing -->
+  <h1><span id="typingText"></span><span id="typingCursor">|</span></h1>
+  <p class="subtitle">những lời chưa nói</p>
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="script.js"></script>
+  <!-- Danh sách thư -->
+  <div class="letter-list" id="letterGrid"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeBtn">&times;</span>
+      <h2 id="modalTitle"></h2>
+
+      <!-- Envelope animation -->
+      <div id="envelopeWrap">
+        <svg id="envelopeSVG" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Envelope body -->
+          <rect x="5" y="30" width="190" height="105" rx="6" fill="#1a1228" stroke="rgba(180,100,220,0.4)" stroke-width="1"/>
+          <!-- Bottom folds -->
+          <path d="M5,135 L100,80 L195,135 Z" fill="#120d1e" stroke="rgba(180,100,220,0.25)" stroke-width="0.5"/>
+          <path d="M5,30 L100,80 L195,30" fill="#16102a" stroke="rgba(180,100,220,0.3)" stroke-width="0.5"/>
+          <!-- Flap (sẽ animate) -->
+          <g id="envelopeFlap" style="transform-origin: 100px 30px; transform: rotateX(0deg)">
+            <path d="M5,30 L100,90 L195,30 Z" fill="#1d1535" stroke="rgba(180,100,220,0.5)" stroke-width="1" filter="url(#glow)"/>
+          </g>
+          <!-- Seal -->
+          <circle id="envelopeSeal" cx="100" cy="70" r="12" fill="rgba(160,80,200,0.6)" stroke="rgba(200,130,240,0.8)" stroke-width="1"/>
+          <text x="100" y="74" text-anchor="middle" fill="rgba(230,200,255,0.9)" font-size="10" font-family="serif">♡</text>
+        </svg>
+      </div>
+
+      <div id="passwordSection">
+        <input type="password" id="passwordInput" placeholder="mật khẩu...">
+        <button onclick="checkPassword()">mở thư</button>
+        <p id="error"></p>
+      </div>
+
+      <div id="letterContent" style="display:none;"></div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="music/background.mp3" loop></audio>
+  <audio id="letterMusic"></audio>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

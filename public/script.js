@@ -4,9 +4,75 @@ let unlockedSet = new Set();
 const bgMusic = document.getElementById("bgMusic");
 const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
-bgMusic.volume = 0.4;
+bgMusic.volume = 0.35;
 
-// ── PopCat ───────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// CURSOR TUỲ CHỈNH + TRAIL
+// ══════════════════════════════════════════════════════════════════════════════
+const cursor     = document.getElementById("cursor");
+const cursorRing = document.getElementById("cursor-ring");
+let mouseX = 0, mouseY = 0;
+let ringX  = 0, ringY  = 0;
+
+const TRAIL_COUNT = 12;
+const trails = Array.from({ length: TRAIL_COUNT }, (_, i) => {
+  const div = document.createElement("div");
+  div.className = "cursor-trail";
+  const sz = 3 - i * 0.18;
+  div.style.cssText = `width:${sz}px;height:${sz}px;opacity:0;background:rgba(${180 - i*5},${100 - i*2},${240 - i*3},${0.7 - i*0.05})`;
+  document.body.appendChild(div);
+  return { el: div, x: 0, y: 0 };
+});
+
+document.addEventListener("mousemove", e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + "px";
+  cursor.style.top  = mouseY + "px";
+});
+
+function animateCursor() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.left = ringX + "px";
+  cursorRing.style.top  = ringY + "px";
+
+  for (let i = TRAIL_COUNT - 1; i > 0; i--) {
+    trails[i].x += (trails[i-1].x - trails[i].x) * 0.35;
+    trails[i].y += (trails[i-1].y - trails[i].y) * 0.35;
+    trails[i].el.style.left    = trails[i].x + "px";
+    trails[i].el.style.top     = trails[i].y + "px";
+    trails[i].el.style.opacity = (1 - i / TRAIL_COUNT) * 0.5;
+  }
+  trails[0].x += (mouseX - trails[0].x) * 0.5;
+  trails[0].y += (mouseY - trails[0].y) * 0.5;
+  trails[0].el.style.left    = trails[0].x + "px";
+  trails[0].el.style.top     = trails[0].y + "px";
+  trails[0].el.style.opacity = 0.6;
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Hover effect trên clickable
+document.addEventListener("mouseover", e => {
+  if (e.target.closest("button, .box.unlocked, #closeBtn, #musicCat")) {
+    cursor.style.transform = "translate(-50%,-50%) scale(1.8)";
+    cursorRing.style.width  = "48px";
+    cursorRing.style.height = "48px";
+    cursorRing.style.borderColor = "rgba(200,130,255,0.6)";
+  }
+});
+document.addEventListener("mouseout", e => {
+  if (e.target.closest("button, .box.unlocked, #closeBtn, #musicCat")) {
+    cursor.style.transform = "translate(-50%,-50%) scale(1)";
+    cursorRing.style.width  = "32px";
+    cursorRing.style.height = "32px";
+    cursorRing.style.borderColor = "rgba(180,100,220,0.4)";
+  }
+});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// POPCAT
+// ══════════════════════════════════════════════════════════════════════════════
 catImg.addEventListener("mouseenter", () => { catImg.src = "images/pop2.png"; });
 catImg.addEventListener("mouseleave", () => { if (bgMusic.paused) catImg.src = "images/pop1.png"; });
 catImg.addEventListener("click", () => {
@@ -14,7 +80,26 @@ catImg.addEventListener("click", () => {
   else { bgMusic.pause(); catImg.src = "images/pop1.png"; }
 });
 
-// ── Lịch mở thư ──────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// TYPING TITLE
+// ══════════════════════════════════════════════════════════════════════════════
+const TITLE_TEXT = "100 Lá Thư Cho Em";
+const typingEl   = document.getElementById("typingText");
+let   charIdx    = 0;
+
+function typeTitle() {
+  if (charIdx < TITLE_TEXT.length) {
+    typingEl.textContent += TITLE_TEXT[charIdx++];
+    setTimeout(typeTitle, 80 + Math.random() * 40);
+  } else {
+    document.getElementById("typingCursor").style.animationPlayState = "running";
+  }
+}
+setTimeout(typeTitle, 600);
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LỊCH MỞ THƯ
+// ══════════════════════════════════════════════════════════════════════════════
 function buildSchedule() {
   const s = []; let n = 1, y = 2026;
   while (n <= 100) {
@@ -31,26 +116,30 @@ function getUnlockLabel(num) {
   return `${String(e.day).padStart(2,"0")}/${String(e.month).padStart(2,"0")}/${e.year}`;
 }
 
-// ── Build danh sách thư ───────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// BUILD DANH SÁCH THƯ
+// ══════════════════════════════════════════════════════════════════════════════
 const grid = document.getElementById("letterGrid");
 for (let i = 1; i <= 100; i++) {
   const box = document.createElement("div");
   box.className = "box locked";
   box.id = "box-" + i;
   box.innerHTML = `
-    <div class="box-icon">🔒</div>
+    <div class="box-icon">—</div>
     <div class="box-info">
       <div class="box-title">Thư #${i}</div>
-      <div class="box-date">Mở vào ${getUnlockLabel(i)}</div>
+      <div class="box-date">mở vào ${getUnlockLabel(i)}</div>
     </div>`;
   box.onclick = () => openModal(i);
   grid.appendChild(box);
 }
 
-// ── Load thư đã mở ────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// LOAD THƯ ĐÃ MỞ + GSAP
+// ══════════════════════════════════════════════════════════════════════════════
 async function loadUnlockedLetters() {
   try {
-    const res = await fetch("/unlocked-letters");
+    const res  = await fetch("/unlocked-letters");
     const data = await res.json();
     unlockedSet = new Set(data.unlocked);
     unlockedSet.forEach(num => {
@@ -58,10 +147,10 @@ async function loadUnlockedLetters() {
       if (box) {
         box.classList.replace("locked", "unlocked");
         box.innerHTML = `
-          <div class="box-icon">💌</div>
+          <div class="box-icon">♡</div>
           <div class="box-info">
             <div class="box-title">Thư #${num}</div>
-            <div class="box-date">Đã mở · ${getUnlockLabel(num)}</div>
+            <div class="box-date">đã mở · ${getUnlockLabel(num)}</div>
           </div>`;
       }
     });
@@ -69,32 +158,39 @@ async function loadUnlockedLetters() {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  gsap.from("h1", { y: -40, opacity: 0, duration: 1, ease: "power3.out" });
-
   gsap.utils.toArray(".box").forEach((box, i) => {
     gsap.from(box, {
-      scrollTrigger: { trigger: box, start: "top 90%", toggleActions: "play none none none" },
-      x: -60, opacity: 0, duration: 0.5,
-      delay: (i % 5) * 0.06, ease: "power2.out",
+      scrollTrigger: { trigger: box, start: "top 92%", toggleActions: "play none none none" },
+      x: -40, opacity: 0, duration: 0.6,
+      delay: (i % 8) * 0.04, ease: "power2.out",
     });
   });
 }
 loadUnlockedLetters();
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// MODAL + ENVELOPE ANIMATION
+// ══════════════════════════════════════════════════════════════════════════════
 function openModal(num) {
   currentLetter = num;
   document.getElementById("modalTitle").innerText = "Thư #" + num;
   document.getElementById("modal").style.display = "block";
   document.getElementById("letterContent").style.display = "none";
   document.getElementById("passwordSection").style.display = "block";
+  document.getElementById("envelopeWrap").style.display = "block";
   document.getElementById("passwordInput").value = "";
   document.getElementById("error").innerText = !unlockedSet.has(num)
-    ? `🔒 Thư này mở vào ${getUnlockLabel(num)}` : "";
+    ? `mở vào ${getUnlockLabel(num)}` : "";
+
+  // Reset envelope
+  const flap = document.getElementById("envelopeFlap");
+  const seal = document.getElementById("envelopeSeal");
+  flap.style.transform = "rotateX(0deg)";
+  seal.style.opacity = "1";
 
   gsap.fromTo(".modal-content",
-    { scale: 0.85, opacity: 0, y: 30 },
-    { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.4)" }
+    { scale: 0.88, opacity: 0, y: 24 },
+    { scale: 1, opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.5)" }
   );
 }
 
@@ -109,22 +205,37 @@ async function checkPassword() {
     let data;
     try { data = await response.json(); } catch { data = {}; }
 
-    if (response.status === 401) { document.getElementById("error").innerText = "Sai mật khẩu rồi vợ yêu ơi!!! ^^"; return; }
-    if (response.status === 403) { document.getElementById("error").innerText = data.message || "Sắp mở rồi, đợi thêm xíu nha vợ yêu!!!"; return; }
-    if (!response.ok) { document.getElementById("error").innerText = `Lỗi ${response.status} — thử lại nhé 😥`; return; }
+    if (response.status === 401) { document.getElementById("error").innerText = "sai mật khẩu rồi vợ yêu ơi ^^"; return; }
+    if (response.status === 403) { document.getElementById("error").innerText = data.message || "sắp mở rồi, đợi thêm xíu nha vợ yêu"; return; }
+    if (!response.ok) { document.getElementById("error").innerText = "lỗi — thử lại nhé em"; return; }
 
-    bgMusic.pause(); bgMusic.currentTime = 0;
-    if (data.music) { letterMusic.src = data.music; letterMusic.volume = 0.6; letterMusic.play().catch(() => {}); }
+    // Animate envelope opening
+    const flap = document.getElementById("envelopeFlap");
+    const seal = document.getElementById("envelopeSeal");
 
-    document.getElementById("passwordSection").style.display = "none";
-    document.getElementById("letterContent").style.display = "block";
-    document.getElementById("letterContent").innerText = data.content;
+    gsap.to(seal, { opacity: 0, duration: 0.3 });
+    gsap.to(flap, {
+      rotateX: -150, duration: 0.7, ease: "power2.inOut",
+      onComplete: () => {
+        gsap.to("#envelopeWrap", { opacity: 0, y: -10, duration: 0.4,
+          onComplete: () => {
+            document.getElementById("envelopeWrap").style.display = "none";
+            document.getElementById("passwordSection").style.display = "none";
+            document.getElementById("letterContent").style.display = "block";
+            document.getElementById("letterContent").innerText = data.content;
 
-    gsap.fromTo("#letterContent",
-      { opacity: 0, y: 18 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-    );
-  } catch { document.getElementById("error").innerText = "Vợ đợi thêm 1 xíu nữa nha!!!"; }
+            bgMusic.pause(); bgMusic.currentTime = 0;
+            if (data.music) {
+              letterMusic.src = data.music;
+              letterMusic.volume = 0.5;
+              letterMusic.play().catch(() => {});
+            }
+          }
+        });
+      }
+    });
+
+  } catch { document.getElementById("error").innerText = "vợ đợi thêm 1 xíu nha!"; }
 }
 
 document.getElementById("passwordInput").addEventListener("keydown", e => {
@@ -134,68 +245,232 @@ document.getElementById("passwordInput").addEventListener("keydown", e => {
 function closeModal() {
   letterMusic.pause(); letterMusic.currentTime = 0;
   bgMusic.play().catch(() => {});
-
-  // Ẩn modal thẳng, không dùng GSAP để tránh conflict
-  const modal = document.getElementById("modal");
-  const mc = document.querySelector(".modal-content");
-  modal.style.display = "none";
-  // Reset GSAP inline styles nếu có
-  gsap.set(mc, { clearProps: "all" });
+  document.getElementById("modal").style.display = "none";
+  gsap.set(".modal-content", { clearProps: "all" });
+  gsap.set("#envelopeWrap", { clearProps: "all" });
   document.getElementById("passwordSection").style.display = "block";
+  document.getElementById("envelopeWrap").style.display = "block";
   document.getElementById("letterContent").style.display = "none";
 }
 
 document.getElementById("closeBtn").onclick = closeModal;
-document.getElementById("modal").addEventListener("click", e => { if (e.target === document.getElementById("modal")) closeModal(); });
+document.getElementById("modal").addEventListener("click", e => {
+  if (e.target === document.getElementById("modal")) closeModal();
+});
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
-// ── Hạt bụi lấp lánh ─────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// THREE.JS MOON 3D
+// ══════════════════════════════════════════════════════════════════════════════
+(function initMoon() {
+  const container = document.getElementById("moonContainer");
+  const W = 220, H = 220;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+  camera.position.z = 2.8;
+
+  // Tạo texture mặt trăng bằng canvas
+  function makeMoonTexture() {
+    const c   = document.createElement("canvas");
+    c.width   = 512; c.height = 512;
+    const ctx = c.getContext("2d");
+
+    // Nền xám lunar
+    ctx.fillStyle = "#8a96aa";
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Noise texture
+    for (let i = 0; i < 8000; i++) {
+      const x = Math.random() * 512;
+      const y = Math.random() * 512;
+      const r = Math.random() * 1.5;
+      const v = Math.floor(Math.random() * 50 + 110);
+      ctx.fillStyle = `rgb(${v},${v+4},${v+12})`;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Mare (vùng tối)
+    const mares = [
+      { x: 200, y: 200, rx: 80, ry: 60 },
+      { x: 340, y: 280, rx: 55, ry: 45 },
+      { x: 140, y: 340, rx: 45, ry: 35 },
+    ];
+    mares.forEach(m => {
+      const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, Math.max(m.rx, m.ry));
+      g.addColorStop(0,   "rgba(70,78,95,0.55)");
+      g.addColorStop(0.6, "rgba(80,88,105,0.3)");
+      g.addColorStop(1,   "rgba(90,98,115,0)");
+      ctx.fillStyle = g;
+      ctx.save();
+      ctx.scale(m.rx / Math.max(m.rx, m.ry), m.ry / Math.max(m.rx, m.ry));
+      ctx.beginPath();
+      ctx.arc(m.x / (m.rx / Math.max(m.rx, m.ry)), m.y / (m.ry / Math.max(m.rx, m.ry)),
+        Math.max(m.rx, m.ry), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // Crater
+    const craters = [
+      { x: 160, y: 170, r: 32 }, { x: 310, y: 230, r: 22 },
+      { x: 200, y: 360, r: 18 }, { x: 380, y: 150, r: 14 },
+      { x: 95,  y: 290, r: 16 }, { x: 260, y: 420, r: 11 },
+      { x: 430, y: 370, r: 19 }, { x: 80,  y: 120, r: 9  },
+      { x: 350, y: 420, r: 8  }, { x: 450, y: 220, r: 13 },
+    ];
+    craters.forEach(({ x, y, r }) => {
+      // Bowl shadow
+      const shadow = ctx.createRadialGradient(x + r*0.2, y + r*0.25, r*0.05, x, y, r);
+      shadow.addColorStop(0,   "rgba(50,58,75,0.6)");
+      shadow.addColorStop(0.65,"rgba(65,73,90,0.35)");
+      shadow.addColorStop(1,   "rgba(100,110,130,0)");
+      ctx.fillStyle = shadow;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      // Rim highlight
+      const rim = ctx.createRadialGradient(x - r*0.4, y - r*0.35, r*0.6, x, y, r * 1.05);
+      rim.addColorStop(0,   "rgba(200,210,230,0)");
+      rim.addColorStop(0.85,"rgba(185,195,215,0)");
+      rim.addColorStop(1,   "rgba(185,195,215,0.22)");
+      ctx.fillStyle = rim;
+      ctx.beginPath();
+      ctx.arc(x, y, r * 1.05, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    return new THREE.CanvasTexture(c);
+  }
+
+  // Bump map
+  function makeBumpTexture() {
+    const c = document.createElement("canvas");
+    c.width = 256; c.height = 256;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#808080";
+    ctx.fillRect(0, 0, 256, 256);
+    const craters = [
+      {x:80,y:85,r:16},{x:155,y:115,r:11},{x:100,y:180,r:9},
+      {x:190,y:75,r:7},{x:48,y:145,r:8},{x:130,y:210,r:6},
+    ];
+    craters.forEach(({ x, y, r }) => {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, "rgba(0,0,0,0.8)");
+      g.addColorStop(0.7,"rgba(0,0,0,0.3)");
+      g.addColorStop(1, "rgba(255,255,255,0.2)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    return new THREE.CanvasTexture(c);
+  }
+
+  const moonTexture = makeMoonTexture();
+  const bumpTexture = makeBumpTexture();
+
+  const geometry = new THREE.SphereGeometry(1, 64, 64);
+  const material = new THREE.MeshPhongMaterial({
+    map:         moonTexture,
+    bumpMap:     bumpTexture,
+    bumpScale:   0.04,
+    shininess:   4,
+    specular:    new THREE.Color(0x222233),
+  });
+  const moon = new THREE.Mesh(geometry, material);
+  scene.add(moon);
+
+  // Ánh sáng
+  const sunLight = new THREE.DirectionalLight(0xd0d8ff, 1.1);
+  sunLight.position.set(-2.5, 1.5, 2);
+  scene.add(sunLight);
+
+  const ambientLight = new THREE.AmbientLight(0x1a1030, 0.6);
+  scene.add(ambientLight);
+
+  // Mouse parallax
+  let targetRotX = 0, targetRotY = 0;
+  document.addEventListener("mousemove", e => {
+    targetRotY = (e.clientX / window.innerWidth  - 0.5) * 0.3;
+    targetRotX = (e.clientY / window.innerHeight - 0.5) * 0.2;
+  });
+
+  // Scroll parallax
+  let scrollY = 0;
+  window.addEventListener("scroll", () => { scrollY = window.scrollY; });
+
+  // Animate
+  function renderMoon() {
+    requestAnimationFrame(renderMoon);
+    moon.rotation.y += 0.0012;
+    moon.rotation.x += (targetRotX - moon.rotation.x) * 0.03;
+    moon.rotation.y += (targetRotY - moon.rotation.y) * 0.03;
+
+    // Parallax scroll
+    container.style.transform = `translateY(${scrollY * 0.15}px)`;
+
+    renderer.render(scene, camera);
+  }
+  renderMoon();
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HẠT BỤI LẤPLÁNH
+// ══════════════════════════════════════════════════════════════════════════════
 const canvas = document.getElementById("particleCanvas");
-const ctx = canvas.getContext("2d");
-let W = canvas.width = window.innerWidth;
+const ctx    = canvas.getContext("2d");
+let W = canvas.width  = window.innerWidth;
 let H = canvas.height = window.innerHeight;
 window.addEventListener("resize", () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
 
-const COLORS = ["255,255,255","255,200,220","255,230,150","200,180,255","180,230,255"];
+const COLORS = ["255,255,255","220,200,255","200,180,255","180,220,255","255,220,240"];
 
 class Dust {
-  constructor(initial = false) { this.init(initial); }
-  init(initial = false) {
+  constructor(init = false) { this.reset(init); }
+  reset(init = false) {
     this.x = Math.random() * W;
-    this.y = initial ? Math.random() * H : -10;
-    this.r = 0.8 + Math.random() * 2.2;
+    this.y = init ? Math.random() * H : -10;
+    this.r = 0.5 + Math.random() * 1.6;
     this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-    this.speedY = 0.3 + Math.random() * 0.8;
-    this.speedX = 0.4 + Math.random() * 0.6;
+    this.vy = 0.2 + Math.random() * 0.5;
+    this.vx = 0.15 + Math.random() * 0.35;
     this.wobble = Math.random() * Math.PI * 2;
-    this.wobbleSpeed = 0.015 + Math.random() * 0.025;
-    this.alpha = Math.random();
-    this.alphaDir = Math.random() > 0.5 ? 1 : -1;
-    this.alphaSpeed = 0.008 + Math.random() * 0.018;
-    this.alphaMin = 0.1;
-    this.alphaMax = 0.85 + Math.random() * 0.15;
-    this.glow = Math.random() > 0.55;
+    this.wobbleSpeed = 0.008 + Math.random() * 0.015;
+    this.alpha = Math.random() * 0.5;
+    this.alphaDir = 1;
+    this.alphaSpeed = 0.004 + Math.random() * 0.01;
+    this.alphaMax = 0.4 + Math.random() * 0.4;
+    this.glow = Math.random() > 0.6;
   }
   update() {
     this.wobble += this.wobbleSpeed;
-    this.x += this.speedX + Math.sin(this.wobble) * 0.3;
-    this.y += this.speedY;
+    this.x += this.vx + Math.sin(this.wobble) * 0.2;
+    this.y += this.vy;
     this.alpha += this.alphaDir * this.alphaSpeed;
     if (this.alpha >= this.alphaMax) { this.alpha = this.alphaMax; this.alphaDir = -1; }
-    if (this.alpha <= this.alphaMin) { this.alpha = this.alphaMin; this.alphaDir = 1; }
-    if (this.y > H + 10 || this.x > W + 10) this.init();
+    if (this.alpha <= 0.05)          { this.alpha = 0.05;          this.alphaDir =  1; }
+    if (this.y > H + 8 || this.x > W + 8) this.reset();
   }
   draw() {
     ctx.save();
     ctx.globalAlpha = this.alpha;
     if (this.glow) {
-      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
-      grad.addColorStop(0, `rgba(${this.color},${this.alpha})`);
-      grad.addColorStop(0.4, `rgba(${this.color},${this.alpha * 0.4})`);
-      grad.addColorStop(1, `rgba(${this.color},0)`);
-      ctx.fillStyle = grad;
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 5);
+      g.addColorStop(0,   `rgba(${this.color},${this.alpha * 0.8})`);
+      g.addColorStop(0.4, `rgba(${this.color},${this.alpha * 0.2})`);
+      g.addColorStop(1,   `rgba(${this.color},0)`);
+      ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, this.r * 5, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.fillStyle = `rgba(${this.color},1)`;
@@ -206,178 +481,11 @@ class Dust {
   }
 }
 
-const dusts = Array.from({ length: 120 }, () => new Dust(true));
+// Ít hạt hơn — thưa, điểm đạm
+const dusts = Array.from({ length: 70 }, () => new Dust(true));
 function animateDust() {
   ctx.clearRect(0, 0, W, H);
   dusts.forEach(d => { d.update(); d.draw(); });
   requestAnimationFrame(animateDust);
 }
 animateDust();
-
-// ── Background theo giờ thực ──────────────────────────────────────────────────
-function lerp(a, b, t) { return a + (b - a) * t; }
-function lerpC(r1,g1,b1,r2,g2,b2,t) {
-  return [Math.round(lerp(r1,r2,t)), Math.round(lerp(g1,g2,t)), Math.round(lerp(b1,b2,t))];
-}
-
-const TIME_COLORS = [
-  { h:  0, r:  8, g:  5, b: 10 },
-  { h:  5, r:  8, g:  5, b: 10 },
-  { h:  6, r: 80, g: 35, b: 15 },
-  { h:  8, r: 95, g: 58, b: 32 },
-  { h: 12, r:100, g: 65, b: 38 },
-  { h: 17, r: 90, g: 52, b: 28 },
-  { h: 19, r: 60, g: 28, b: 18 },
-  { h: 21, r: 18, g: 10, b: 14 },
-  { h: 24, r:  8, g:  5, b: 10 },
-];
-
-function getBgColor() {
-  const now = new Date();
-  const hour = now.getHours() + now.getMinutes() / 60;
-  let a = TIME_COLORS[TIME_COLORS.length - 1], b = TIME_COLORS[0];
-  for (let i = 0; i < TIME_COLORS.length - 1; i++) {
-    if (hour >= TIME_COLORS[i].h && hour < TIME_COLORS[i+1].h) { a = TIME_COLORS[i]; b = TIME_COLORS[i+1]; break; }
-  }
-  const t = (hour - a.h) / (b.h - a.h);
-  const [r,g,bl] = lerpC(a.r,a.g,a.b, b.r,b.g,b.b, t);
-  return `radial-gradient(circle at top, rgb(${r+14},${g+10},${bl+8}), rgb(${r},${g},${bl}) 70%)`;
-}
-function updateBg() { document.body.style.background = getBgColor(); }
-updateBg();
-setInterval(updateBg, 60000);
-
-// ── Mặt trời → Mặt trăng theo scroll ─────────────────────────────────────────
-const cel = document.getElementById("celestialCanvas");
-const celCtx = cel.getContext("2d");
-const SZ = 220;
-cel.width = cel.height = SZ;
-const CX = SZ / 2, CY = SZ / 2, R = 48;
-
-const CRATERS = [
-  { ox: -0.22, oy: -0.28, r: 0.11 }, { ox:  0.28, oy: -0.12, r: 0.08 },
-  { ox: -0.08, oy:  0.33, r: 0.13 }, { ox:  0.20, oy:  0.25, r: 0.07 },
-  { ox: -0.36, oy:  0.12, r: 0.06 }, { ox:  0.06, oy: -0.40, r: 0.05 },
-];
-const STARS = [
-  { ox:  1.9, oy: -1.5, r: 1.8 }, { ox:  1.3, oy: -2.0, r: 1.2 },
-  { ox: -1.7, oy: -1.2, r: 1.5 }, { ox:  2.1, oy:  0.6, r: 1.1 },
-  { ox: -1.4, oy:  1.7, r: 1.7 }, { ox:  0.8, oy:  2.1, r: 1.2 },
-  { ox: -2.1, oy:  0.4, r: 1.4 },
-];
-
-function drawCelestial(p) {
-  p = Math.max(0, Math.min(1, p));
-  celCtx.clearRect(0, 0, SZ, SZ);
-
-  const [cr,cg,cb] = lerpC(255,210,0, 220,235,255, p);
-  const [gr,gg,gb] = lerpC(255,140,0, 120,160,255, p);
-
-  const glowR = lerp(R * 2.4, R * 3.0, p);
-  const glowA = lerp(0.18, 0.38, p);
-  const glow = celCtx.createRadialGradient(CX, CY, R * 0.5, CX, CY, glowR);
-  glow.addColorStop(0, `rgba(${gr},${gg},${gb},${glowA})`);
-  glow.addColorStop(0.45, `rgba(${gr},${gg},${gb},${glowA * 0.3})`);
-  glow.addColorStop(1, `rgba(${gr},${gg},${gb},0)`);
-  celCtx.fillStyle = glow;
-  celCtx.beginPath();
-  celCtx.arc(CX, CY, glowR, 0, Math.PI * 2);
-  celCtx.fill();
-
-  const rayA = Math.max(0, 1 - p * 2.8);
-  if (rayA > 0.01) {
-    celCtx.save();
-    celCtx.globalAlpha = rayA;
-    for (let i = 0; i < 12; i++) {
-      const angle = (i / 12) * Math.PI * 2;
-      const wobble = Math.sin(Date.now() * 0.0012 + i * 0.9) * 1.8;
-      const g2 = celCtx.createLinearGradient(
-        CX + Math.cos(angle) * (R+6), CY + Math.sin(angle) * (R+6),
-        CX + Math.cos(angle) * (R+30+wobble), CY + Math.sin(angle) * (R+30+wobble)
-      );
-      g2.addColorStop(0, `rgba(${cr},${cg},${cb},0.95)`);
-      g2.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-      celCtx.strokeStyle = g2;
-      celCtx.lineWidth = 2.5;
-      celCtx.lineCap = "round";
-      celCtx.beginPath();
-      celCtx.moveTo(CX + Math.cos(angle) * (R+6), CY + Math.sin(angle) * (R+6));
-      celCtx.lineTo(CX + Math.cos(angle) * (R+30+wobble), CY + Math.sin(angle) * (R+30+wobble));
-      celCtx.stroke();
-    }
-    celCtx.restore();
-  }
-
-  const off = new OffscreenCanvas(SZ, SZ);
-  const offCtx = off.getContext("2d");
-
-  const bodyGrad = offCtx.createRadialGradient(CX - R*0.28, CY - R*0.28, 0, CX, CY, R);
-  if (p < 0.5) {
-    bodyGrad.addColorStop(0, `rgb(255,252,180)`);
-    bodyGrad.addColorStop(0.35, `rgb(255,220,50)`);
-    bodyGrad.addColorStop(0.75, `rgb(${cr},${Math.round(cg*0.85)},0)`);
-    bodyGrad.addColorStop(1, `rgb(${Math.round(cr*0.65)},${Math.round(cg*0.5)},0)`);
-  } else {
-    bodyGrad.addColorStop(0, `rgb(245,250,255)`);
-    bodyGrad.addColorStop(0.4, `rgb(${cr},${cg},${cb})`);
-    bodyGrad.addColorStop(0.78, `rgb(${Math.round(cr*0.74)},${Math.round(cg*0.80)},${Math.round(cb*0.84)})`);
-    bodyGrad.addColorStop(1, `rgb(${Math.round(cr*0.42)},${Math.round(cg*0.50)},${Math.round(cb*0.62)})`);
-  }
-  offCtx.fillStyle = bodyGrad;
-  offCtx.beginPath();
-  offCtx.arc(CX, CY, R, 0, Math.PI * 2);
-  offCtx.fill();
-
-  if (p > 0.45) {
-    const cA = Math.min(1, (p - 0.45) / 0.4);
-    CRATERS.forEach(c => {
-      const cx2 = CX + c.ox * R, cy2 = CY + c.oy * R, cr2 = c.r * R;
-      const cGrad = offCtx.createRadialGradient(cx2 - cr2*0.35, cy2 - cr2*0.35, 0, cx2, cy2, cr2);
-      cGrad.addColorStop(0, `rgba(200,215,230,${cA*0.20})`);
-      cGrad.addColorStop(0.5, `rgba(110,130,155,${cA*0.38})`);
-      cGrad.addColorStop(0.85, `rgba(65,85,110,${cA*0.55})`);
-      cGrad.addColorStop(1, `rgba(40,60,90,${cA*0.25})`);
-      offCtx.fillStyle = cGrad;
-      offCtx.beginPath();
-      offCtx.arc(cx2, cy2, cr2, 0, Math.PI * 2);
-      offCtx.fill();
-    });
-  }
-
-  if (p > 0.35) {
-    const sp = Math.min(1, (p - 0.35) / 0.65);
-    offCtx.globalCompositeOperation = "destination-out";
-    offCtx.beginPath();
-    offCtx.arc(CX + lerp(0, R*0.80, sp), CY, lerp(R*0.75, R*1.06, sp), 0, Math.PI * 2);
-    offCtx.fill();
-    offCtx.globalCompositeOperation = "source-over";
-  }
-
-  celCtx.drawImage(off, 0, 0);
-
-  if (p > 0.5) {
-    const starA = Math.min(1, (p - 0.5) / 0.4);
-    STARS.forEach(st => {
-      const twinkle = 0.4 + 0.6 * Math.sin(Date.now() * 0.0018 + st.ox * 3.7);
-      celCtx.save();
-      celCtx.globalAlpha = starA * twinkle;
-      celCtx.fillStyle = `rgb(${cr},${cg},${cb})`;
-      celCtx.shadowColor = `rgba(${gr},${gg},${gb},0.9)`;
-      celCtx.shadowBlur = 10;
-      celCtx.beginPath();
-      celCtx.arc(CX + st.ox * R, CY + st.oy * R, st.r, 0, Math.PI * 2);
-      celCtx.fill();
-      celCtx.restore();
-    });
-  }
-}
-
-function getScrollProgress() {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  return max > 0 ? window.scrollY / max : 0;
-}
-
-(function celestialLoop() {
-  drawCelestial(getScrollProgress());
-  requestAnimationFrame(celestialLoop);
-})();

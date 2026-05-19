@@ -143,21 +143,29 @@ async function checkPassword() {
 
 document.getElementById("passwordInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
 document.getElementById("closeBtn").onclick = function () {
-  // GSAP: modal đóng mượt rồi mới ẩn
-  gsap.to(".modal-content", {
-    scale: 0.88, opacity: 0, y: 20, duration: 0.28, ease: "power2.in",
-    onComplete: () => {
-      document.getElementById("modal").style.display = "none";
-      gsap.set(".modal-content", { scale: 1, opacity: 1, y: 0 }); // reset
-      document.getElementById("passwordSection").style.display = "block";
-      document.getElementById("letterContent").style.display = "none";
-    }
-  });
   letterMusic.pause(); letterMusic.currentTime = 0;
   bgMusic.play().catch(()=>{});
+
+  gsap.to(".modal-content", {
+    scale: 0.88, opacity: 0, y: 20, duration: 0.25, ease: "power2.in",
+    onComplete: () => {
+      document.getElementById("modal").style.display = "none";
+      // Reset tất cả về trạng thái ban đầu
+      gsap.set(".modal-content", { clearProps: "all" });
+      document.getElementById("passwordSection").style.display = "block";
+      document.getElementById("letterContent").style.display = "none";
+      document.getElementById("letterContent").style.opacity = "";
+      document.getElementById("letterContent").style.transform = "";
+    }
+  });
 };
 document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) document.getElementById("closeBtn").onclick();
+});
+
+// Đảm bảo ESC cũng đóng được modal
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.getElementById("closeBtn").onclick();
 });
 
 // ── Hiệu ứng hạt bụi lấp lánh ───────────────────────────────────────────────

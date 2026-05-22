@@ -259,169 +259,7 @@ document.getElementById("modal").addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
-// ══════════════════════════════════════════════════════════════════════════════
-// THREE.JS MOON 3D
-// ══════════════════════════════════════════════════════════════════════════════
-(function initMoon() {
-  const container = document.getElementById("moonContainer");
-  const W = 220, H = 220;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x000000, 0);
-  container.appendChild(renderer.domElement);
-
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
-  camera.position.z = 2.8;
-
-  // Tạo texture mặt trăng bằng canvas
-  function makeMoonTexture() {
-    const c   = document.createElement("canvas");
-    c.width   = 512; c.height = 512;
-    const ctx = c.getContext("2d");
-
-    // Nền xám lunar
-    ctx.fillStyle = "#8a96aa";
-    ctx.fillRect(0, 0, 512, 512);
-
-    // Noise texture
-    for (let i = 0; i < 8000; i++) {
-      const x = Math.random() * 512;
-      const y = Math.random() * 512;
-      const r = Math.random() * 1.5;
-      const v = Math.floor(Math.random() * 50 + 110);
-      ctx.fillStyle = `rgb(${v},${v+4},${v+12})`;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Mare (vùng tối)
-    const mares = [
-      { x: 200, y: 200, rx: 80, ry: 60 },
-      { x: 340, y: 280, rx: 55, ry: 45 },
-      { x: 140, y: 340, rx: 45, ry: 35 },
-    ];
-    mares.forEach(m => {
-      const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, Math.max(m.rx, m.ry));
-      g.addColorStop(0,   "rgba(70,78,95,0.55)");
-      g.addColorStop(0.6, "rgba(80,88,105,0.3)");
-      g.addColorStop(1,   "rgba(90,98,115,0)");
-      ctx.fillStyle = g;
-      ctx.save();
-      ctx.scale(m.rx / Math.max(m.rx, m.ry), m.ry / Math.max(m.rx, m.ry));
-      ctx.beginPath();
-      ctx.arc(m.x / (m.rx / Math.max(m.rx, m.ry)), m.y / (m.ry / Math.max(m.rx, m.ry)),
-        Math.max(m.rx, m.ry), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    });
-
-    // Crater
-    const craters = [
-      { x: 160, y: 170, r: 32 }, { x: 310, y: 230, r: 22 },
-      { x: 200, y: 360, r: 18 }, { x: 380, y: 150, r: 14 },
-      { x: 95,  y: 290, r: 16 }, { x: 260, y: 420, r: 11 },
-      { x: 430, y: 370, r: 19 }, { x: 80,  y: 120, r: 9  },
-      { x: 350, y: 420, r: 8  }, { x: 450, y: 220, r: 13 },
-    ];
-    craters.forEach(({ x, y, r }) => {
-      // Bowl shadow
-      const shadow = ctx.createRadialGradient(x + r*0.2, y + r*0.25, r*0.05, x, y, r);
-      shadow.addColorStop(0,   "rgba(50,58,75,0.6)");
-      shadow.addColorStop(0.65,"rgba(65,73,90,0.35)");
-      shadow.addColorStop(1,   "rgba(100,110,130,0)");
-      ctx.fillStyle = shadow;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-      // Rim highlight
-      const rim = ctx.createRadialGradient(x - r*0.4, y - r*0.35, r*0.6, x, y, r * 1.05);
-      rim.addColorStop(0,   "rgba(200,210,230,0)");
-      rim.addColorStop(0.85,"rgba(185,195,215,0)");
-      rim.addColorStop(1,   "rgba(185,195,215,0.22)");
-      ctx.fillStyle = rim;
-      ctx.beginPath();
-      ctx.arc(x, y, r * 1.05, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    return new THREE.CanvasTexture(c);
-  }
-
-  // Bump map
-  function makeBumpTexture() {
-    const c = document.createElement("canvas");
-    c.width = 256; c.height = 256;
-    const ctx = c.getContext("2d");
-    ctx.fillStyle = "#808080";
-    ctx.fillRect(0, 0, 256, 256);
-    const craters = [
-      {x:80,y:85,r:16},{x:155,y:115,r:11},{x:100,y:180,r:9},
-      {x:190,y:75,r:7},{x:48,y:145,r:8},{x:130,y:210,r:6},
-    ];
-    craters.forEach(({ x, y, r }) => {
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, "rgba(0,0,0,0.8)");
-      g.addColorStop(0.7,"rgba(0,0,0,0.3)");
-      g.addColorStop(1, "rgba(255,255,255,0.2)");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    return new THREE.CanvasTexture(c);
-  }
-
-  const moonTexture = makeMoonTexture();
-  const bumpTexture = makeBumpTexture();
-
-  const geometry = new THREE.SphereGeometry(1, 64, 64);
-  const material = new THREE.MeshPhongMaterial({
-    map:         moonTexture,
-    bumpMap:     bumpTexture,
-    bumpScale:   0.04,
-    shininess:   4,
-    specular:    new THREE.Color(0x222233),
-  });
-  const moon = new THREE.Mesh(geometry, material);
-  scene.add(moon);
-
-  // Ánh sáng
-  const sunLight = new THREE.DirectionalLight(0xd0d8ff, 1.1);
-  sunLight.position.set(-2.5, 1.5, 2);
-  scene.add(sunLight);
-
-  const ambientLight = new THREE.AmbientLight(0x1a1030, 0.6);
-  scene.add(ambientLight);
-
-  // Mouse parallax
-  let targetRotX = 0, targetRotY = 0;
-  document.addEventListener("mousemove", e => {
-    targetRotY = (e.clientX / window.innerWidth  - 0.5) * 0.3;
-    targetRotX = (e.clientY / window.innerHeight - 0.5) * 0.2;
-  });
-
-  // Scroll parallax
-  let scrollY = 0;
-  window.addEventListener("scroll", () => { scrollY = window.scrollY; });
-
-  // Animate
-  function renderMoon() {
-    requestAnimationFrame(renderMoon);
-    moon.rotation.y += 0.0012;
-    moon.rotation.x += (targetRotX - moon.rotation.x) * 0.03;
-    moon.rotation.y += (targetRotY - moon.rotation.y) * 0.03;
-
-    // Parallax scroll
-    container.style.transform = `translateY(${scrollY * 0.15}px)`;
-
-    renderer.render(scene, camera);
-  }
-  renderMoon();
-})();
 
 // ══════════════════════════════════════════════════════════════════════════════
 // HẠT BỤI LẤPLÁNH
@@ -439,7 +277,7 @@ class Dust {
   reset(init = false) {
     this.x = Math.random() * W;
     this.y = init ? Math.random() * H : -10;
-    this.r = 0.5 + Math.random() * 1.6;
+    this.r = 1 + Math.random() * 2.5;
     this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
     this.vy = 0.2 + Math.random() * 0.5;
     this.vx = 0.15 + Math.random() * 0.35;
@@ -448,8 +286,8 @@ class Dust {
     this.alpha = Math.random() * 0.5;
     this.alphaDir = 1;
     this.alphaSpeed = 0.004 + Math.random() * 0.01;
-    this.alphaMax = 0.4 + Math.random() * 0.4;
-    this.glow = Math.random() > 0.6;
+    this.alphaMax = 0.6 + Math.random() * 0.35;
+    this.glow = Math.random() > 0.45;
   }
   update() {
     this.wobble += this.wobbleSpeed;
@@ -482,7 +320,7 @@ class Dust {
 }
 
 // Ít hạt hơn — thưa, điểm đạm
-const dusts = Array.from({ length: 70 }, () => new Dust(true));
+const dusts = Array.from({ length: 150 }, () => new Dust(true));
 function animateDust() {
   ctx.clearRect(0, 0, W, H);
   dusts.forEach(d => { d.update(); d.draw(); });

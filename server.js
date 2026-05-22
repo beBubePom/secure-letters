@@ -7,28 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: [
-        "'self'",
-        "https://cdnjs.cloudflare.com",
-        "https://fonts.googleapis.com",
-      ],
-      styleSrc: [
-        "'self'",
-        "'unsafe-inline'",
-        "https://fonts.googleapis.com",
-      ],
-      fontSrc: [
-        "'self'",
-        "https://fonts.gstatic.com",
-      ],
-      imgSrc: ["'self'", "data:", "blob:"],
-      connectSrc: ["'self'"],
-      workerSrc: ["'self'", "blob:"],
-    },
-  },
+  contentSecurityPolicy: false,
 }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));

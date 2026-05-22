@@ -119,11 +119,33 @@ function getUnlockLabel(num) {
 // ══════════════════════════════════════════════════════════════════════════════
 // BUILD DANH SÁCH THƯ
 // ══════════════════════════════════════════════════════════════════════════════
+const BOX_COLORS = [
+  { border:"rgba(180,120,255,0.45)", hover:"rgba(200,150,255,1)", bg:"rgba(160,100,255,0.07)", glow:"rgba(180,120,255,0.25)" },
+  { border:"rgba(100,180,255,0.45)", hover:"rgba(140,210,255,1)", bg:"rgba(100,180,255,0.07)", glow:"rgba(100,180,255,0.25)" },
+  { border:"rgba(255,130,155,0.45)", hover:"rgba(255,170,185,1)", bg:"rgba(255,120,140,0.06)", glow:"rgba(255,140,160,0.25)" },
+  { border:"rgba(80,215,170,0.45)",  hover:"rgba(120,245,200,1)", bg:"rgba(80,215,170,0.06)",  glow:"rgba(100,220,180,0.25)" },
+  { border:"rgba(255,195,90,0.45)",  hover:"rgba(255,220,130,1)", bg:"rgba(255,195,80,0.06)",  glow:"rgba(255,200,100,0.25)" },
+  { border:"rgba(150,195,255,0.45)", hover:"rgba(185,220,255,1)", bg:"rgba(140,190,255,0.07)", glow:"rgba(160,200,255,0.25)" },
+  { border:"rgba(215,120,255,0.45)", hover:"rgba(238,155,255,1)", bg:"rgba(210,115,255,0.06)", glow:"rgba(220,130,255,0.25)" },
+  { border:"rgba(90,235,195,0.45)",  hover:"rgba(120,255,215,1)", bg:"rgba(80,230,190,0.06)",  glow:"rgba(100,240,200,0.25)" },
+];
+
+const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
+  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
+  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
+  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
+  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃"];
+
 const grid = document.getElementById("letterGrid");
 for (let i = 1; i <= 100; i++) {
   const box = document.createElement("div");
   box.className = "box locked";
   box.id = "box-" + i;
+  const c = BOX_COLORS[(i - 1) % BOX_COLORS.length];
+  box.style.setProperty("--box-color", c.border);
+  box.style.setProperty("--box-hover", c.hover);
+  box.style.setProperty("--box-bg",    c.bg);
+  box.style.setProperty("--box-glow",  c.glow);
   box.innerHTML = `
     <div class="box-icon">—</div>
     <div class="box-info">
@@ -146,8 +168,9 @@ async function loadUnlockedLetters() {
       const box = document.getElementById("box-" + num);
       if (box) {
         box.classList.replace("locked", "unlocked");
+        const icon = ICONS_UNLOCKED[(num - 1) % ICONS_UNLOCKED.length];
         box.innerHTML = `
-          <div class="box-icon">♡</div>
+          <div class="box-icon">${icon}</div>
           <div class="box-info">
             <div class="box-title">Thư #${num}</div>
             <div class="box-date">đã mở · ${getUnlockLabel(num)}</div>

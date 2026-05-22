@@ -125,8 +125,13 @@ h1 {
 .box-title { font-size: 13px; font-weight: 400; color: #b0c0da; letter-spacing: 0.5px; transition: all 0.3s; }
 .box-date  { font-size: 11px; color: rgba(150,130,185,0.4); margin-top: 2px; }
 
-.box.locked { opacity: 0.28; cursor: not-allowed; }
-.box.locked:hover { opacity: 0.42; }
+.box.locked { cursor: not-allowed; }
+.box.locked .box-icon,
+.box.locked .box-title,
+.box.locked .box-date { opacity: 0.35; }
+.box.locked:hover .box-icon,
+.box.locked:hover .box-title,
+.box.locked:hover .box-date { opacity: 0.55; }
 
 /* ── Modal ───────────────────────────────────────────────────────────────────── */
 #modal {

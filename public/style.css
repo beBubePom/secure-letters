@@ -68,15 +68,69 @@ h1 {
   text-transform: lowercase;
 }
 
-/* ── Danh sách thư ───────────────────────────────────────────────────────────── */
-.letter-list {
+/* ── Layout 2 cột ────────────────────────────────────────────────────────────── */
+.main-layout {
   position: relative;
   z-index: 1;
   display: flex;
+  gap: 0;
+  align-items: flex-start;
+  max-width: 1200px;
+  padding: 0 40px 80px 40px;
+}
+
+/* ── Danh sách thư ───────────────────────────────────────────────────────────── */
+.letter-list {
+  display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 0 0 80px 40px;
-  width: 420px;
+  width: 400px;
+  flex-shrink: 0;
+  padding-right: 20px;
+}
+
+/* ── Side panel (đếm ngược) ──────────────────────────────────────────────────── */
+.side-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  position: sticky;
+  top: 40px;
+}
+
+#countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 36px 28px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(160,120,220,0.12);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.cd-label { font-size: 11px; letter-spacing: 4px; color: rgba(160,140,200,0.4); font-family: sans-serif; text-transform: lowercase; text-align: center; }
+.cd-days { font-size: 68px; font-weight: 300; color: rgba(220,200,255,0.9); letter-spacing: -2px; line-height: 1; text-shadow: 0 0 40px rgba(180,130,255,0.25); font-family: 'Playfair Display', serif; }
+.cd-unit { font-size: 11px; letter-spacing: 3px; color: rgba(160,130,200,0.4); font-family: sans-serif; margin-top: 4px; }
+.cd-row { display: flex; gap: 24px; align-items: flex-end; }
+.cd-col { display: flex; flex-direction: column; align-items: center; }
+.cd-small { font-size: 32px; font-weight: 300; color: rgba(200,175,240,0.7); letter-spacing: -1px; line-height: 1; font-family: 'Playfair Display', serif; }
+.cd-dot { font-size: 24px; color: rgba(160,120,220,0.25); padding-bottom: 4px; }
+.cd-separator { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, rgba(160,120,220,0.25), transparent); }
+.cd-badge { font-size: 11px; font-family: sans-serif; letter-spacing: 2px; color: rgba(200,160,255,0.55); border: 1px solid rgba(180,130,255,0.18); border-radius: 20px; padding: 4px 14px; }
+.cd-quote { font-size: 12px; font-style: italic; color: rgba(170,145,210,0.5); text-align: center; max-width: 240px; line-height: 1.75; font-family: 'Playfair Display', serif; }
+.cd-quote::before { content: '"'; color: rgba(150,100,210,0.35); }
+.cd-quote::after  { content: '"'; color: rgba(150,100,210,0.35); }
+.cd-date { font-size: 10px; color: rgba(130,110,170,0.3); font-family: sans-serif; letter-spacing: 1px; }
+
+@media (max-width: 768px) {
+  .main-layout { flex-direction: column; padding: 0 20px 60px; }
+  .letter-list { width: 100%; padding-right: 0; }
+  .side-panel { width: 100%; position: static; padding-top: 32px; }
 }
 
 .box {

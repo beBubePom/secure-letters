@@ -354,6 +354,66 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
 
 
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ĐẾÂM NGƯỢC THƯ TIẾP THEO
+// ══════════════════════════════════════════════════════════════════════════════
+(function initCountdown() {
+  const QUOTES = [
+    "vợ chờ thêm một chút nữa thôi, chồng hứa sẽ xứng đáng",
+    "mỗi lá thư là một phần nhỏ trái tim chồng dành cho vợ",
+    "ngày mở thư tới rồi sẽ tới, như chồng luôn ở đây bên vợ",
+    "chồng đã nghĩ về khoảnh khắc này từ rất lâu rồi đó em",
+    "thêm một ngày qua là thêm một ngày anh thương em hơn",
+  ];
+
+  function getNext() {
+    const now = new Date();
+    for (const e of SCHEDULE) {
+      const d = new Date(e.year, e.month - 1, e.day, 0, 0, 0);
+      if (d > now) return { ...e, date: d };
+    }
+    return null;
+  }
+
+  const next = getNext();
+  const wrap = document.getElementById("countdown");
+  if (!next || !wrap) return;
+
+  const dateStr = `ngày ${String(next.day).padStart(2,"0")}/${String(next.month).padStart(2,"0")}/${next.year}`;
+  const quote   = QUOTES[(next.letter - 1) % QUOTES.length];
+
+  wrap.innerHTML = `
+    <div class="cd-label">thư tiếp theo mở trong</div>
+    <div class="cd-col">
+      <div class="cd-days" id="cdDays">000</div>
+      <div class="cd-unit">ngày</div>
+    </div>
+    <div class="cd-row">
+      <div class="cd-col"><div class="cd-small" id="cdHours">00</div><div class="cd-unit">giờ</div></div>
+      <div class="cd-dot">·</div>
+      <div class="cd-col"><div class="cd-small" id="cdMinutes">00</div><div class="cd-unit">phút</div></div>
+      <div class="cd-dot">·</div>
+      <div class="cd-col"><div class="cd-small" id="cdSeconds">00</div><div class="cd-unit">giây</div></div>
+    </div>
+    <div class="cd-separator"></div>
+    <div class="cd-badge">Thư #${next.letter}</div>
+    <div class="cd-quote">${quote}</div>
+    <div class="cd-date">${dateStr}</div>
+  `;
+
+  function tick() {
+    const diff = next.date - new Date();
+    if (diff <= 0) return;
+    document.getElementById("cdDays").textContent    = String(Math.floor(diff/(1000*60*60*24))).padStart(3,"0");
+    document.getElementById("cdHours").textContent   = String(Math.floor((diff%(1000*60*60*24))/(1000*60*60))).padStart(2,"0");
+    document.getElementById("cdMinutes").textContent = String(Math.floor((diff%(1000*60*60))/(1000*60))).padStart(2,"0");
+    document.getElementById("cdSeconds").textContent = String(Math.floor((diff%(1000*60))/1000)).padStart(2,"0");
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
 // ══════════════════════════════════════════════════════════════════════════════
 // HẠT BỤI LẤPLÁNH
 // ══════════════════════════════════════════════════════════════════════════════

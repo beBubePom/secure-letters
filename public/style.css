@@ -8,35 +8,7 @@ body {
   cursor: none;
 }
 
-/* ── Cursor ──────────────────────────────────────────────────────────────────── */
-#cursor {
-  position: fixed;
-  width: 8px; height: 8px;
-  background: rgba(200,160,255,0.9);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: transform 0.1s, background 0.2s;
-  mix-blend-mode: screen;
-}
-#cursor-ring {
-  position: fixed;
-  width: 32px; height: 32px;
-  border: 1px solid rgba(180,100,220,0.4);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: transform 0.15s ease, width 0.2s, height 0.2s, opacity 0.2s;
-}
-.cursor-trail {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9997;
-  transform: translate(-50%,-50%);
-}
+
 
 /* ── Canvas hạt ──────────────────────────────────────────────────────────────── */
 #particleCanvas {
@@ -112,7 +84,7 @@ h1 {
   align-items: center;
   gap: 14px;
   padding: 12px 14px;
-  border-left: 2.5px solid rgba(200,140,255,0.75);
+  border-left: 3px solid rgb(210,150,255);
   border-radius: 0 8px 8px 0;
   cursor: none;
   transition: all 0.35s ease;
@@ -126,12 +98,6 @@ h1 {
 .box-date  { font-size: 11px; color: rgba(150,130,185,0.4); margin-top: 2px; }
 
 .box.locked { cursor: not-allowed; }
-.box.locked .box-icon,
-.box.locked .box-title,
-.box.locked .box-date { opacity: 0.35; }
-.box.locked:hover .box-icon,
-.box.locked:hover .box-title,
-.box.locked:hover .box-date { opacity: 0.55; }
 
 /* ── Modal ───────────────────────────────────────────────────────────────────── */
 #modal {
@@ -269,3 +235,6 @@ button:hover {
   #moonContainer { width: 150px; height: 150px; right: 60px; }
   .modal-content { padding: 28px 20px; }
 }
+
+/* Ẩn con trỏ mặc định trên tất cả elements */
+*, *::before, *::after { cursor: none !important; }

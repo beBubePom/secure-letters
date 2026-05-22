@@ -7,68 +7,78 @@ const catImg = document.getElementById("catImg");
 bgMusic.volume = 0.18;
 
 // ══════════════════════════════════════════════════════════════════════════════
-// CURSOR TUỲ CHỈNH + TRAIL
+// CURSOR VẾT MỰC
 // ══════════════════════════════════════════════════════════════════════════════
-const cursor     = document.getElementById("cursor");
-const cursorRing = document.getElementById("cursor-ring");
-let mouseX = 0, mouseY = 0;
-let ringX  = 0, ringY  = 0;
+(function initInkCursor() {
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:9999;width:100%;height:100%";
+  document.body.appendChild(canvas);
 
-const TRAIL_COUNT = 12;
-const trails = Array.from({ length: TRAIL_COUNT }, (_, i) => {
-  const div = document.createElement("div");
-  div.className = "cursor-trail";
-  const sz = 3 - i * 0.18;
-  div.style.cssText = `width:${sz}px;height:${sz}px;opacity:0;background:rgba(${180 - i*5},${100 - i*2},${240 - i*3},${0.7 - i*0.05})`;
-  document.body.appendChild(div);
-  return { el: div, x: 0, y: 0 };
-});
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
 
-document.addEventListener("mousemove", e => {
-  mouseX = e.clientX; mouseY = e.clientY;
-  cursor.style.left = mouseX + "px";
-  cursor.style.top  = mouseY + "px";
-});
+  const ctx = canvas.getContext("2d");
+  const SEGMENTS = [];
+  const MAX_AGE  = 45;
+  const MAX_LEN  = 32;
+  let lastX = -1, lastY = -1, mx = -1, my = -1;
 
-function animateCursor() {
-  ringX += (mouseX - ringX) * 0.12;
-  ringY += (mouseY - ringY) * 0.12;
-  cursorRing.style.left = ringX + "px";
-  cursorRing.style.top  = ringY + "px";
+  document.addEventListener("mousemove", e => {
+    mx = e.clientX; my = e.clientY;
+    if (lastX >= 0) {
+      SEGMENTS.push({ x1: lastX, y1: lastY, x2: mx, y2: my, age: 0 });
+      if (SEGMENTS.length > MAX_LEN) SEGMENTS.shift();
+    }
+    lastX = mx; lastY = my;
+  });
 
-  for (let i = TRAIL_COUNT - 1; i > 0; i--) {
-    trails[i].x += (trails[i-1].x - trails[i].x) * 0.35;
-    trails[i].y += (trails[i-1].y - trails[i].y) * 0.35;
-    trails[i].el.style.left    = trails[i].x + "px";
-    trails[i].el.style.top     = trails[i].y + "px";
-    trails[i].el.style.opacity = (1 - i / TRAIL_COUNT) * 0.5;
+  function loop() {
+    requestAnimationFrame(loop);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = SEGMENTS.length - 1; i >= 0; i--) {
+      SEGMENTS[i].age++;
+      if (SEGMENTS[i].age > MAX_AGE) SEGMENTS.splice(i, 1);
+    }
+
+    SEGMENTS.forEach((s, idx) => {
+      const lifeRatio = 1 - s.age / MAX_AGE;
+      const posRatio  = (idx + 1) / SEGMENTS.length;
+      const alpha = lifeRatio * posRatio * 0.78;
+      const width = 1.5 + posRatio * 2.5;
+      const hue = 260 + posRatio * 40;
+      const l   = 60 + posRatio * 20;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = `hsl(${hue}, 80%, ${l}%)`;
+      ctx.lineWidth   = width;
+      ctx.lineCap     = "round";
+      ctx.lineJoin    = "round";
+      ctx.shadowColor = `hsla(${hue}, 80%, ${l}%, 0.45)`;
+      ctx.shadowBlur  = 4;
+      ctx.beginPath();
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // Cursor dot
+    if (mx >= 0) {
+      ctx.save();
+      ctx.fillStyle = "rgba(220,180,255,0.95)";
+      ctx.shadowColor = "rgba(200,150,255,0.6)";
+      ctx.shadowBlur  = 8;
+      ctx.beginPath();
+      ctx.arc(mx, my, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   }
-  trails[0].x += (mouseX - trails[0].x) * 0.5;
-  trails[0].y += (mouseY - trails[0].y) * 0.5;
-  trails[0].el.style.left    = trails[0].x + "px";
-  trails[0].el.style.top     = trails[0].y + "px";
-  trails[0].el.style.opacity = 0.6;
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-// Hover effect trên clickable
-document.addEventListener("mouseover", e => {
-  if (e.target.closest("button, .box.unlocked, #closeBtn, #musicCat")) {
-    cursor.style.transform = "translate(-50%,-50%) scale(1.8)";
-    cursorRing.style.width  = "48px";
-    cursorRing.style.height = "48px";
-    cursorRing.style.borderColor = "rgba(200,130,255,0.6)";
-  }
-});
-document.addEventListener("mouseout", e => {
-  if (e.target.closest("button, .box.unlocked, #closeBtn, #musicCat")) {
-    cursor.style.transform = "translate(-50%,-50%) scale(1)";
-    cursorRing.style.width  = "32px";
-    cursorRing.style.height = "32px";
-    cursorRing.style.borderColor = "rgba(180,100,220,0.4)";
-  }
-});
+  loop();
+})();
 
 // ══════════════════════════════════════════════════════════════════════════════
 // POPCAT
@@ -120,14 +130,14 @@ function getUnlockLabel(num) {
 // BUILD DANH SÁCH THƯ
 // ══════════════════════════════════════════════════════════════════════════════
 const BOX_COLORS = [
-  { border:"rgb(200,140,255)",  hover:"rgb(225,180,255)",  bg:"rgba(190,120,255,0.18)", glow:"rgba(200,140,255,0.6)" },
-  { border:"rgb(100,195,255)",  hover:"rgb(150,220,255)",  bg:"rgba(100,190,255,0.18)", glow:"rgba(100,195,255,0.6)" },
-  { border:"rgb(255,140,165)",  hover:"rgb(255,180,198)",  bg:"rgba(255,130,155,0.16)", glow:"rgba(255,140,165,0.6)" },
-  { border:"rgb(60,230,180)",   hover:"rgb(100,255,210)",  bg:"rgba(60,225,175,0.16)",  glow:"rgba(60,230,180,0.6)"  },
-  { border:"rgb(255,210,80)",   hover:"rgb(255,232,130)",  bg:"rgba(255,205,70,0.16)",  glow:"rgba(255,210,80,0.6)"  },
-  { border:"rgb(140,210,255)",  hover:"rgb(185,230,255)",  bg:"rgba(135,205,255,0.18)", glow:"rgba(140,210,255,0.6)" },
-  { border:"rgb(230,120,255)",  hover:"rgb(248,160,255)",  bg:"rgba(225,115,255,0.16)", glow:"rgba(230,120,255,0.6)" },
-  { border:"rgb(80,248,210)",   hover:"rgb(120,255,228)",  bg:"rgba(75,242,205,0.16)",  glow:"rgba(80,248,210,0.6)"  },
+  { border:"rgb(210,150,255)",  hover:"rgb(235,195,255)",  bg:"rgba(200,130,255,0.22)", glow:"rgba(210,150,255,0.75)" },
+  { border:"rgb(100,205,255)",  hover:"rgb(150,230,255)",  bg:"rgba(100,200,255,0.22)", glow:"rgba(100,205,255,0.75)" },
+  { border:"rgb(255,150,175)",  hover:"rgb(255,190,210)",  bg:"rgba(255,135,165,0.20)", glow:"rgba(255,150,175,0.75)" },
+  { border:"rgb(60,240,190)",   hover:"rgb(100,255,215)",  bg:"rgba(60,235,185,0.20)",  glow:"rgba(60,240,190,0.75)"  },
+  { border:"rgb(255,220,80)",   hover:"rgb(255,238,135)",  bg:"rgba(255,215,70,0.20)",  glow:"rgba(255,220,80,0.75)"  },
+  { border:"rgb(140,215,255)",  hover:"rgb(185,238,255)",  bg:"rgba(135,210,255,0.22)", glow:"rgba(140,215,255,0.75)" },
+  { border:"rgb(240,130,255)",  hover:"rgb(252,170,255)",  bg:"rgba(235,120,255,0.20)", glow:"rgba(240,130,255,0.75)" },
+  { border:"rgb(80,255,215)",   hover:"rgb(120,255,232)",  bg:"rgba(75,250,210,0.20)",  glow:"rgba(80,255,215,0.75)"  },
 ];
 
 const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
@@ -143,8 +153,9 @@ for (let i = 1; i <= 100; i++) {
   box.id = "box-" + i;
   const c = BOX_COLORS[(i - 1) % BOX_COLORS.length];
 
-  // Set màu viền trực tiếp
+  // Viền luôn sáng, không phân biệt locked/unlocked
   box.style.borderLeftColor = c.border;
+  box.style.borderLeftWidth = '3px';
 
   box.innerHTML = `
     <div class="box-icon">—</div>
@@ -153,13 +164,8 @@ for (let i = 1; i <= 100; i++) {
       <div class="box-date">mở vào ${getUnlockLabel(i)}</div>
     </div>`;
 
-  // Hover effect trực tiếp bằng JS
+  // Hover effect — chỉ animate, không reset màu viền về tối
   box.addEventListener("mouseenter", () => {
-    if (box.classList.contains("locked")) {
-      box.style.borderLeftColor = c.hover;
-      box.style.opacity = "0.55";
-      return;
-    }
     box.style.paddingLeft = "20px";
     box.style.borderLeftColor = c.hover;
     box.style.borderLeftWidth = "3px";
@@ -172,14 +178,9 @@ for (let i = 1; i <= 100; i++) {
   });
 
   box.addEventListener("mouseleave", () => {
-    if (box.classList.contains("locked")) {
-      box.style.borderLeftColor = c.border;
-      box.style.opacity = "0.28";
-      return;
-    }
     box.style.paddingLeft = "14px";
-    box.style.borderLeftColor = c.border;
-    box.style.borderLeftWidth = "2.5px";
+    box.style.borderLeftColor = c.border;  // luôn về màu sáng, không tối
+    box.style.borderLeftWidth = "3px";
     box.style.background = "transparent";
     box.style.boxShadow = "none";
     const title = box.querySelector(".box-title");

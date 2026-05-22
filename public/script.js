@@ -142,16 +142,52 @@ for (let i = 1; i <= 100; i++) {
   box.className = "box locked";
   box.id = "box-" + i;
   const c = BOX_COLORS[(i - 1) % BOX_COLORS.length];
-  box.style.setProperty("--box-color", c.border);
-  box.style.setProperty("--box-hover", c.hover);
-  box.style.setProperty("--box-bg",    c.bg);
-  box.style.setProperty("--box-glow",  c.glow);
+
+  // Set màu viền trực tiếp
+  box.style.borderLeftColor = c.border;
+
   box.innerHTML = `
     <div class="box-icon">—</div>
     <div class="box-info">
       <div class="box-title">Thư #${i}</div>
       <div class="box-date">mở vào ${getUnlockLabel(i)}</div>
     </div>`;
+
+  // Hover effect trực tiếp bằng JS
+  box.addEventListener("mouseenter", () => {
+    if (box.classList.contains("locked")) {
+      box.style.borderLeftColor = c.hover;
+      box.style.opacity = "0.55";
+      return;
+    }
+    box.style.paddingLeft = "20px";
+    box.style.borderLeftColor = c.hover;
+    box.style.borderLeftWidth = "3px";
+    box.style.background = c.bg;
+    box.style.boxShadow = `2px 0 0 ${c.glow}, 4px 0 24px ${c.glow}, 8px 0 40px ${c.glow}`;
+    const title = box.querySelector(".box-title");
+    const icon  = box.querySelector(".box-icon");
+    if (title) { title.style.color = "#f0f5ff"; title.style.textShadow = `0 0 16px ${c.glow}`; }
+    if (icon)  { icon.style.transform = "scale(1.18)"; icon.style.filter = `drop-shadow(0 0 6px ${c.glow})`; }
+  });
+
+  box.addEventListener("mouseleave", () => {
+    if (box.classList.contains("locked")) {
+      box.style.borderLeftColor = c.border;
+      box.style.opacity = "0.28";
+      return;
+    }
+    box.style.paddingLeft = "14px";
+    box.style.borderLeftColor = c.border;
+    box.style.borderLeftWidth = "2.5px";
+    box.style.background = "transparent";
+    box.style.boxShadow = "none";
+    const title = box.querySelector(".box-title");
+    const icon  = box.querySelector(".box-icon");
+    if (title) { title.style.color = "#b0c0da"; title.style.textShadow = "none"; }
+    if (icon)  { icon.style.transform = "scale(1)"; icon.style.filter = "none"; }
+  });
+
   box.onclick = () => openModal(i);
   grid.appendChild(box);
 }

@@ -4,7 +4,7 @@ let unlockedSet = new Set();
 const bgMusic = document.getElementById("bgMusic");
 const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
-bgMusic.volume = 0.35;
+bgMusic.volume = 0.18;
 
 // ══════════════════════════════════════════════════════════════════════════════
 // CURSOR TUỲ CHỈNH + TRAIL
@@ -286,7 +286,7 @@ async function checkPassword() {
             bgMusic.pause(); bgMusic.currentTime = 0;
             if (data.music) {
               letterMusic.src = data.music;
-              letterMusic.volume = 0.5;
+              letterMusic.volume = 0.25;
               letterMusic.play().catch(() => {});
             }
           }

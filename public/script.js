@@ -269,31 +269,47 @@ async function checkPassword() {
     if (response.status === 403) { document.getElementById("error").innerText = data.message || "sắp mở rồi, đợi thêm xíu nha vợ yêu"; return; }
     if (!response.ok) { document.getElementById("error").innerText = "lỗi — thử lại nhé em"; return; }
 
-    // Animate envelope opening
-    const flap = document.getElementById("envelopeFlap");
-    const seal = document.getElementById("envelopeSeal");
+    // Step 1: Thông báo thành công
+    const errorEl = document.getElementById("error");
+    errorEl.style.color = "rgba(180,255,200,0.95)";
+    errorEl.style.fontSize = "15px";
+    errorEl.style.fontStyle = "italic";
+    errorEl.innerText = "vợ yêu mở thư được rồi nhé!! 🖤";
+    document.getElementById("passwordInput").style.opacity = "0";
+    document.querySelector("#passwordSection button").style.opacity = "0";
 
-    gsap.to(seal, { opacity: 0, duration: 0.3 });
-    gsap.to(flap, {
-      rotateX: -150, duration: 0.7, ease: "power2.inOut",
-      onComplete: () => {
-        gsap.to("#envelopeWrap", { opacity: 0, y: -10, duration: 0.4,
+    // Step 2: Đợi 2s rồi animate phong bì
+    setTimeout(() => {
+      const flap = document.getElementById("envelopeFlap");
+      const seal = document.getElementById("envelopeSeal");
+      gsap.to(seal, { opacity: 0, duration: 0.25 });
+      setTimeout(() => {
+        gsap.to(flap, {
+          rotateX: -170, duration: 0.75, ease: "power2.inOut",
           onComplete: () => {
-            document.getElementById("envelopeWrap").style.display = "none";
-            document.getElementById("passwordSection").style.display = "none";
-            document.getElementById("letterContent").style.display = "block";
-            document.getElementById("letterContent").innerText = data.content;
-
-            bgMusic.pause(); bgMusic.currentTime = 0;
-            if (data.music) {
-              letterMusic.src = data.music;
-              letterMusic.volume = 0.25;
-              letterMusic.play().catch(() => {});
-            }
+            gsap.to("#envelopeWrap", { opacity: 0, y: -12, duration: 0.4,
+              onComplete: () => {
+                document.getElementById("envelopeWrap").style.display = "none";
+                document.getElementById("passwordSection").style.display = "none";
+                const lc = document.getElementById("letterContent");
+                lc.style.display = "block";
+                lc.innerText = data.content;
+                gsap.fromTo(lc,
+                  { opacity: 0, y: 20 },
+                  { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+                );
+                bgMusic.pause(); bgMusic.currentTime = 0;
+                if (data.music) {
+                  letterMusic.src = data.music;
+                  letterMusic.volume = 0.25;
+                  letterMusic.play().catch(() => {});
+                }
+              }
+            });
           }
         });
-      }
-    });
+      }, 250);
+    }, 2000);
 
   } catch { document.getElementById("error").innerText = "vợ đợi thêm 1 xíu nha!"; }
 }
@@ -308,9 +324,26 @@ function closeModal() {
   document.getElementById("modal").style.display = "none";
   gsap.set(".modal-content", { clearProps: "all" });
   gsap.set("#envelopeWrap", { clearProps: "all" });
+  gsap.set("#envelopeFlap", { clearProps: "all" });
+  gsap.set("#envelopeSeal", { clearProps: "all" });
+
+  // Reset UI
   document.getElementById("passwordSection").style.display = "block";
   document.getElementById("envelopeWrap").style.display = "block";
   document.getElementById("letterContent").style.display = "none";
+
+  // Reset input & button opacity
+  const pw = document.getElementById("passwordInput");
+  const btn = document.querySelector("#passwordSection button");
+  pw.style.opacity = "1"; pw.value = "";
+  if (btn) btn.style.opacity = "1";
+
+  // Reset error style
+  const errorEl = document.getElementById("error");
+  errorEl.innerText = "";
+  errorEl.style.color = "";
+  errorEl.style.fontSize = "";
+  errorEl.style.fontStyle = "";
 }
 
 document.getElementById("closeBtn").onclick = closeModal;

@@ -93,7 +93,7 @@ catImg.addEventListener("click", () => {
 // ══════════════════════════════════════════════════════════════════════════════
 // TYPING TITLE
 // ══════════════════════════════════════════════════════════════════════════════
-const TITLE_TEXT = "100 Lá Thư Cho Em";
+const TITLE_TEXT = "Hạnh phúc có hình hài gì vậy?";
 const typingEl   = document.getElementById("typingText");
 let   charIdx    = 0;
 

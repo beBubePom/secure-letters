@@ -364,11 +364,11 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
 // ══════════════════════════════════════════════════════════════════════════════
 (function initCountdown() {
   const QUOTES = [
-    "vợ chờ thêm một chút nữa thôi, chồng hứa sẽ xứng đáng",
-    "mỗi lá thư là một phần nhỏ trái tim chồng dành cho vợ",
-    "ngày mở thư tới rồi sẽ tới, như chồng luôn ở đây bên vợ",
-    "chồng đã nghĩ về khoảnh khắc này từ rất lâu rồi đó em",
-    "thêm một ngày qua là thêm một ngày anh thương em hơn",
+    "vợ yêu của chồng đợi thêm chút nữa nhé",
+    "vợ yêu của chồng đợi thêm chút nữa nhé",
+    "vợ yêu của chồng đợi thêm chút nữa nhé",
+    "vợ yêu của chồng đợi thêm chút nữa nhé",
+    "vợ yêu của chồng đợi thêm chút nữa nhé",
   ];
 
   function getNext() {

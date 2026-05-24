@@ -321,29 +321,33 @@ document.getElementById("passwordInput").addEventListener("keydown", e => {
 function closeModal() {
   letterMusic.pause(); letterMusic.currentTime = 0;
   bgMusic.play().catch(() => {});
-  document.getElementById("modal").style.display = "none";
-  gsap.set(".modal-content", { clearProps: "all" });
-  gsap.set("#envelopeWrap", { clearProps: "all" });
-  gsap.set("#envelopeFlap", { clearProps: "all" });
-  gsap.set("#envelopeSeal", { clearProps: "all" });
 
-  // Reset UI
-  document.getElementById("passwordSection").style.display = "block";
-  document.getElementById("envelopeWrap").style.display = "block";
-  document.getElementById("letterContent").style.display = "none";
+  // Animation đóng modal
+  gsap.to(".modal-content", {
+    scale: 0.9, opacity: 0, y: 16, duration: 0.22, ease: "power2.in",
+    onComplete: () => {
+      document.getElementById("modal").style.display = "none";
+      gsap.set(".modal-content", { clearProps: "all" });
+      gsap.set("#envelopeWrap",  { clearProps: "all" });
+      gsap.set("#envelopeFlap",  { clearProps: "all" });
+      gsap.set("#envelopeSeal",  { clearProps: "all" });
 
-  // Reset input & button opacity
-  const pw = document.getElementById("passwordInput");
-  const btn = document.querySelector("#passwordSection button");
-  pw.style.opacity = "1"; pw.value = "";
-  if (btn) btn.style.opacity = "1";
+      document.getElementById("passwordSection").style.display = "block";
+      document.getElementById("envelopeWrap").style.display = "block";
+      document.getElementById("letterContent").style.display = "none";
 
-  // Reset error style
-  const errorEl = document.getElementById("error");
-  errorEl.innerText = "";
-  errorEl.style.color = "";
-  errorEl.style.fontSize = "";
-  errorEl.style.fontStyle = "";
+      const pw  = document.getElementById("passwordInput");
+      const btn = document.querySelector("#passwordSection button");
+      if (pw)  { pw.style.opacity = "1"; pw.value = ""; }
+      if (btn) btn.style.opacity = "1";
+
+      const err = document.getElementById("error");
+      err.innerText = "";
+      err.style.color = "";
+      err.style.fontSize = "";
+      err.style.fontStyle = "";
+    }
+  });
 }
 
 document.getElementById("closeBtn").onclick = closeModal;

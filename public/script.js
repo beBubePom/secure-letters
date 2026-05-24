@@ -52,7 +52,7 @@ bgMusic.volume = 0.18;
 
       ctx.save();
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = `hsl(${hue}, 80%, ${l}%)`;
+      ctx.strokeStyle = `hsl(${345 + posRatio * 15}, 75%, ${l}%)`;
       ctx.lineWidth   = width;
       ctx.lineCap     = "round";
       ctx.lineJoin    = "round";
@@ -68,8 +68,8 @@ bgMusic.volume = 0.18;
     // Cursor dot
     if (mx >= 0) {
       ctx.save();
-      ctx.fillStyle = "rgba(220,180,255,0.95)";
-      ctx.shadowColor = "rgba(200,150,255,0.6)";
+      ctx.fillStyle = "rgba(255,180,190,0.95)";
+      ctx.shadowColor = "rgba(240,140,160,0.6)";
       ctx.shadowBlur  = 8;
       ctx.beginPath();
       ctx.arc(mx, my, 3, 0, Math.PI * 2);
@@ -130,14 +130,14 @@ function getUnlockLabel(num) {
 // BUILD DANH SÁCH THƯ
 // ══════════════════════════════════════════════════════════════════════════════
 const BOX_COLORS = [
-  { border:"rgb(210,150,255)",  hover:"rgb(235,195,255)",  bg:"rgba(200,130,255,0.22)", glow:"rgba(210,150,255,0.75)" },
-  { border:"rgb(100,205,255)",  hover:"rgb(150,230,255)",  bg:"rgba(100,200,255,0.22)", glow:"rgba(100,205,255,0.75)" },
-  { border:"rgb(255,150,175)",  hover:"rgb(255,190,210)",  bg:"rgba(255,135,165,0.20)", glow:"rgba(255,150,175,0.75)" },
-  { border:"rgb(60,240,190)",   hover:"rgb(100,255,215)",  bg:"rgba(60,235,185,0.20)",  glow:"rgba(60,240,190,0.75)"  },
-  { border:"rgb(255,220,80)",   hover:"rgb(255,238,135)",  bg:"rgba(255,215,70,0.20)",  glow:"rgba(255,220,80,0.75)"  },
-  { border:"rgb(140,215,255)",  hover:"rgb(185,238,255)",  bg:"rgba(135,210,255,0.22)", glow:"rgba(140,215,255,0.75)" },
-  { border:"rgb(240,130,255)",  hover:"rgb(252,170,255)",  bg:"rgba(235,120,255,0.20)", glow:"rgba(240,130,255,0.75)" },
-  { border:"rgb(80,255,215)",   hover:"rgb(120,255,232)",  bg:"rgba(75,250,210,0.20)",  glow:"rgba(80,255,215,0.75)"  },
+  { border:"rgb(240,150,165)",  hover:"rgb(255,185,198)",  bg:"rgba(230,130,148,0.18)", glow:"rgba(240,150,165,0.7)" },
+  { border:"rgb(245,170,155)",  hover:"rgb(255,200,185)",  bg:"rgba(235,155,138,0.18)", glow:"rgba(245,170,155,0.7)" },
+  { border:"rgb(255,160,180)",  hover:"rgb(255,195,210)",  bg:"rgba(245,140,162,0.18)", glow:"rgba(255,160,180,0.7)" },
+  { border:"rgb(230,140,160)",  hover:"rgb(248,175,192)",  bg:"rgba(220,120,142,0.18)", glow:"rgba(230,140,160,0.7)" },
+  { border:"rgb(255,175,170)",  hover:"rgb(255,205,200)",  bg:"rgba(245,158,152,0.18)", glow:"rgba(255,175,170,0.7)" },
+  { border:"rgb(240,155,175)",  hover:"rgb(255,188,205)",  bg:"rgba(230,138,158,0.18)", glow:"rgba(240,155,175,0.7)" },
+  { border:"rgb(250,145,168)",  hover:"rgb(255,180,200)",  bg:"rgba(238,128,152,0.18)", glow:"rgba(250,145,168,0.7)" },
+  { border:"rgb(235,160,155)",  hover:"rgb(252,192,188)",  bg:"rgba(225,142,138,0.18)", glow:"rgba(235,160,155,0.7)" },
 ];
 
 const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",

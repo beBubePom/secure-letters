@@ -102,8 +102,38 @@ h1 {
 
 #countdown {
   user-select: none;
-  pointer-events: none;
+  pointer-events: auto;
   display: flex;
+  transition: all 0.4s ease;}
+
+#countdown:hover {
+  border-color: rgba(200,150,255,0.45);
+  background: rgba(160,100,255,0.06);
+  box-shadow:
+    0 0 30px rgba(180,120,255,0.15),
+    0 0 60px rgba(160,100,255,0.08),
+    inset 0 0 30px rgba(140,80,255,0.04);
+}
+#countdown:hover .cd-days {
+  text-shadow: 0 0 40px rgba(210,170,255,0.7), 0 0 80px rgba(180,130,255,0.3);
+  color: rgba(240,220,255,1);
+}
+#countdown:hover .cd-small {
+  text-shadow: 0 0 20px rgba(200,160,255,0.6);
+  color: rgba(225,200,255,0.95);
+}
+#countdown:hover .cd-badge {
+  border-color: rgba(210,160,255,0.5);
+  color: rgba(220,180,255,0.85);
+  box-shadow: 0 0 12px rgba(190,130,255,0.2);
+}
+#countdown:hover .cd-quote {
+  color: rgba(200,175,230,0.75);
+}
+#countdown:hover .cd-separator {
+  background: linear-gradient(90deg, transparent, rgba(200,150,255,0.5), transparent);
+}
+
   flex-direction: column;
   align-items: center;
   gap: 20px;
@@ -302,5 +332,7 @@ button:hover {
   .modal-content { padding: 28px 20px; }
 }
 
-/* Ẩn con trỏ mặc định trên tất cả elements */
-*, *::before, *::after { cursor: none !important; }
+/* Ẩn con trỏ mặc định + không cho chọn text trên toàn trang */
+*, *::before, *::after { cursor: none !important; user-select: none; }
+/* Chỉ cho chọn text trong ô nhập liệu và nội dung thư */
+input, textarea, #letterContent { user-select: text; }

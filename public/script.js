@@ -99,19 +99,22 @@ function loadTrack(idx) {
 // POPCAT
 // ══════════════════════════════════════════════════════════════════════════════
 catImg.addEventListener("mouseenter", () => { catImg.src = "images/pop2.png"; });
-catImg.addEventListener("mouseleave", () => { if (bgMusic.paused) catImg.src = "images/pop1.png"; });
+catImg.addEventListener("mouseleave", () => { catImg.src = "images/pop1.png"; });
 catImg.addEventListener("click", () => {
+  // Đổi sang bài tiếp theo (hoặc phát nếu đang dừng)
   if (bgMusic.paused) {
     bgMusic.play();
-    catImg.src = "images/pop2.png";
   } else {
-    // Đổi sang bài tiếp theo
     currentTrack = (currentTrack + 1) % PLAYLIST.length;
     loadTrack(currentTrack);
-    catImg.src = "images/pop2.png";
-    catImg.style.filter = "brightness(2) drop-shadow(0 0 12px rgba(240,150,165,0.9))";
-    setTimeout(() => { catImg.style.filter = "drop-shadow(0 0 8px rgba(240,150,165,0.4))"; }, 300);
   }
+  // Nhấp nháy pop2 rồi về pop1 sau 200ms
+  catImg.src = "images/pop2.png";
+  catImg.style.filter = "brightness(2) drop-shadow(0 0 12px rgba(240,150,165,0.9))";
+  setTimeout(() => {
+    catImg.src = "images/pop1.png";
+    catImg.style.filter = "drop-shadow(0 0 8px rgba(240,150,165,0.4))";
+  }, 200);
 });
 
 // ══════════════════════════════════════════════════════════════════════════════

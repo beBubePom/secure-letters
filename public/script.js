@@ -6,6 +6,21 @@ const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
 bgMusic.volume = 0.18;
 
+// ── Playlist ──────────────────────────────────────────────────────────────────
+const PLAYLIST = [
+  "music/background.mp3",
+  "music/background2.mp3",
+];
+let currentTrack = 0;
+
+function loadTrack(idx) {
+  const wasPlaying = !bgMusic.paused;
+  bgMusic.src = PLAYLIST[idx];
+  bgMusic.load();
+  if (wasPlaying) bgMusic.play().catch(() => {});
+}
+
+
 // ══════════════════════════════════════════════════════════════════════════════
 // CURSOR VẾT MỰC
 // ══════════════════════════════════════════════════════════════════════════════
@@ -86,8 +101,17 @@ bgMusic.volume = 0.18;
 catImg.addEventListener("mouseenter", () => { catImg.src = "images/pop2.png"; });
 catImg.addEventListener("mouseleave", () => { if (bgMusic.paused) catImg.src = "images/pop1.png"; });
 catImg.addEventListener("click", () => {
-  if (bgMusic.paused) { bgMusic.play(); catImg.src = "images/pop2.png"; }
-  else { bgMusic.pause(); catImg.src = "images/pop1.png"; }
+  if (bgMusic.paused) {
+    bgMusic.play();
+    catImg.src = "images/pop2.png";
+  } else {
+    // Đổi sang bài tiếp theo
+    currentTrack = (currentTrack + 1) % PLAYLIST.length;
+    loadTrack(currentTrack);
+    catImg.src = "images/pop2.png";
+    catImg.style.filter = "brightness(2) drop-shadow(0 0 12px rgba(240,150,165,0.9))";
+    setTimeout(() => { catImg.style.filter = "drop-shadow(0 0 8px rgba(240,150,165,0.4))"; }, 300);
+  }
 });
 
 // ══════════════════════════════════════════════════════════════════════════════

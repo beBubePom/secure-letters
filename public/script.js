@@ -6,19 +6,41 @@ const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
 bgMusic.volume = 0.18;
 
-// ── Playlist ──────────────────────────────────────────────────────────────────
+// ── Playlist shuffle ─────────────────────────────────────────────────────────
 const PLAYLIST = [
   "music/background.mp3",
   "music/background2.mp3",
 ];
+
+// Shuffle playlist ngẫu nhiên
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let shuffled = shuffleArray(PLAYLIST);
 let currentTrack = 0;
 
 function loadTrack(idx) {
   const wasPlaying = !bgMusic.paused;
-  bgMusic.src = PLAYLIST[idx];
+  bgMusic.src = shuffled[idx];
   bgMusic.load();
   if (wasPlaying) bgMusic.play().catch(() => {});
 }
+
+function nextTrack() {
+  currentTrack = (currentTrack + 1) % shuffled.length;
+  // Hết 1 vòng → shuffle lại
+  if (currentTrack === 0) shuffled = shuffleArray(PLAYLIST);
+  loadTrack(currentTrack);
+}
+
+// Tự động chuyển bài khi hết nhạc
+bgMusic.addEventListener("ended", () => nextTrack());
 
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -105,8 +127,7 @@ catImg.addEventListener("click", () => {
   if (bgMusic.paused) {
     bgMusic.play();
   } else {
-    currentTrack = (currentTrack + 1) % PLAYLIST.length;
-    loadTrack(currentTrack);
+    nextTrack();
   }
   // Nhấp nháy pop2 rồi về pop1 sau 200ms
   catImg.src = "images/pop2.png";

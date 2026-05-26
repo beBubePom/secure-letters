@@ -4,7 +4,7 @@ let unlockedSet = new Set();
 const bgMusic = document.getElementById("bgMusic");
 const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
-bgMusic.volume = 0.18;
+bgMusic.volume = 0.09;
 
 // ── Playlist shuffle ─────────────────────────────────────────────────────────
 const PLAYLIST = [

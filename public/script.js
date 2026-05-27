@@ -96,7 +96,7 @@ bgMusic.addEventListener("ended", () => nextTrack());
       const posRatio  = (idx + 1) / SEGMENTS.length;
       const alpha = lifeRatio * posRatio * 0.78;
       const width = 1.5 + posRatio * 2.5;
-      const hue = 260 + posRatio * 40;
+      const hue = 15 + posRatio * 20;
       const l   = 60 + posRatio * 20;
 
       ctx.save();

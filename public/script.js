@@ -812,7 +812,9 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
   if (!next || !wrap) return;
 
   const dateStr = `ngày ${String(next.day).padStart(2,"0")}/${String(next.month).padStart(2,"0")}/${next.year}`;
-  const quote   = QUOTES[(next.letter - 1) % QUOTES.length];
+  function randomQuote() {
+    return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  }
 
   wrap.innerHTML = `
     <div class="cd-label">thư tiếp theo mở trong</div>
@@ -829,7 +831,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
     </div>
     <div class="cd-separator"></div>
     <div class="cd-badge">Thư #${next.letter}</div>
-    <div class="cd-quote">${quote}</div>
+    <div class="cd-quote" id="cdQuote">${randomQuote()}</div>
     <div class="cd-date">${dateStr}</div>
   `;
 
@@ -843,6 +845,11 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
   }
   tick();
   setInterval(tick, 1000);
+  // Đổi câu quote mỗi 30 giây
+  setInterval(() => {
+    const el = document.getElementById("cdQuote");
+    if (el) el.textContent = randomQuote();
+  }, 30000);
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════

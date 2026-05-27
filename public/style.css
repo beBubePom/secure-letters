@@ -168,9 +168,28 @@ h1 {
 .cd-date { font-size: 10px; color: rgba(130,110,170,0.3); font-family: sans-serif; letter-spacing: 1px; }
 
 @media (max-width: 768px) {
-  .main-layout { flex-direction: column; padding: 0 20px 60px; }
-  .letter-list { width: 100%; padding-right: 0; }
-  .side-panel { width: 100%; position: static; padding-top: 32px; }
+  h1 { font-size: 1.4rem; margin-left: 20px; }
+  .subtitle { margin-left: 22px; }
+  .main-layout {
+    flex-direction: column;
+    padding: 0 20px 60px;
+  }
+  /* Đổi thứ tự — countdown lên trên, letter list xuống dưới */
+  .side-panel {
+    order: -1;
+    width: 100%;
+    position: static;
+    padding-top: 0;
+    padding-bottom: 24px;
+  }
+  .letter-list {
+    order: 1;
+    width: 100%;
+    padding-right: 0;
+  }
+  #countdown {
+    max-width: 100%;
+  }
 }
 
 .box {

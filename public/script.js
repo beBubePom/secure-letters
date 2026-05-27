@@ -485,6 +485,16 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
     const el = document.getElementById("cdQuote");
     if (el) el.textContent = randomQuote();
   }, 30000);
+
+  // Mobile tap — phát sáng rồi tắt
+  wrap.addEventListener("touchstart", () => {
+    wrap.classList.remove("tapped");
+    void wrap.offsetWidth; // reset animation
+    wrap.classList.add("tapped");
+  }, { passive: true });
+  wrap.addEventListener("animationend", () => {
+    wrap.classList.remove("tapped");
+  });
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════

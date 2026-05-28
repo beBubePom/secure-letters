@@ -73,11 +73,10 @@ bgMusic.addEventListener("ended", () => nextTrack());
 // ══════════════════════════════════════════════════════════════════════════════
 (function initInkCursor() {
   const canvas = document.createElement("canvas");
-  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:999999;width:100%;height:100%;opacity:0";
+  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:99999999;width:100%;height:100%;opacity:0";
   document.body.appendChild(canvas);
-  // Chỉ hiện ink cursor sau khi intro kết thúc
-  const showInk = () => { canvas.style.transition="opacity 1s"; canvas.style.opacity="1"; };
-  document.addEventListener("introEnded", showInk, {once: true});
+  // Hiện ink cursor ngay từ đầu
+  canvas.style.opacity = "1";
 
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();

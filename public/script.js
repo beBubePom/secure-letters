@@ -68,6 +68,88 @@ function nextTrack() {
 bgMusic.addEventListener("ended", () => nextTrack());
 
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CURSOR CHẤM — dùng cho pre-welcome và welcome screen
+// ══════════════════════════════════════════════════════════════════════════════
+(function initDotCursor() {
+  const dot = document.createElement("div");
+  dot.id = "dotCursor";
+  dot.style.cssText = [
+    "position:fixed",
+    "width:8px", "height:8px",
+    "border-radius:50%",
+    "background:rgba(220,190,255,0.9)",
+    "pointer-events:none",
+    "z-index:999999999",
+    "transform:translate(-50%,-50%)",
+    "transition:opacity 0.3s",
+    "box-shadow:0 0 10px rgba(200,160,255,0.6)",
+  ].join(";");
+  document.body.appendChild(dot);
+
+  // Sparkle trail
+  const sparks = [];
+  let mx = -999, my = -999;
+
+  document.addEventListener("mousemove", e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + "px";
+    dot.style.top  = my + "px";
+
+    // Chỉ hiện dot cursor khi chưa vào trang web
+    const preW = document.getElementById("preWelcome");
+    const intro = document.getElementById("introScreen");
+    const onIntroLayer = (preW && preW.style.display !== "none") ||
+                         (intro && intro.style.display !== "none");
+    dot.style.opacity = onIntroLayer ? "1" : "0";
+
+    if (!onIntroLayer) return;
+    for (let i = 0; i < 2; i++) {
+      sparks.push({
+        x: mx + (Math.random()-0.5)*10,
+        y: my + (Math.random()-0.5)*10,
+        r: Math.random()*2+0.5,
+        life: 1,
+        vx: (Math.random()-0.5)*1.5,
+        vy: (Math.random()-0.5)*1.5 - 0.4,
+      });
+    }
+  });
+
+  // Sparkle canvas
+  const sc = document.createElement("canvas");
+  sc.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:999999998;";
+  document.body.appendChild(sc);
+  const sctx = sc.getContext("2d");
+
+  function resizeSC() { sc.width = window.innerWidth; sc.height = window.innerHeight; }
+  resizeSC(); window.addEventListener("resize", resizeSC);
+
+  (function loopDot() {
+    requestAnimationFrame(loopDot);
+    sctx.clearRect(0, 0, sc.width, sc.height);
+
+    const preW  = document.getElementById("preWelcome");
+    const intro = document.getElementById("introScreen");
+    const show  = (preW && preW.style.display !== "none") ||
+                  (intro && intro.style.display !== "none");
+    if (!show) return;
+
+    for (let i = sparks.length-1; i >= 0; i--) {
+      const s = sparks[i];
+      s.life -= 0.05; s.x += s.vx; s.y += s.vy; s.r *= 0.94;
+      if (s.life <= 0) { sparks.splice(i, 1); continue; }
+      sctx.save();
+      sctx.globalAlpha = s.life * 0.8;
+      sctx.fillStyle = "rgba(220,190,255,1)";
+      sctx.shadowColor = "rgba(200,160,255,0.8)"; sctx.shadowBlur = 6;
+      sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, Math.PI*2); sctx.fill();
+      sctx.restore();
+    }
+  })();
+})();
+
 // ══════════════════════════════════════════════════════════════════════════════
 // CURSOR VẾT MỰC
 // ══════════════════════════════════════════════════════════════════════════════
@@ -75,8 +157,11 @@ bgMusic.addEventListener("ended", () => nextTrack());
   const canvas = document.createElement("canvas");
   canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:99999999;width:100%;height:100%;opacity:0";
   document.body.appendChild(canvas);
-  // Hiện ink cursor ngay từ đầu
-  canvas.style.opacity = "1";
+  // Chỉ hiện sau khi vào trang web
+  document.addEventListener("introEnded", () => {
+    canvas.style.transition = "opacity 0.8s";
+    canvas.style.opacity = "1";
+  }, {once: true});
 
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();

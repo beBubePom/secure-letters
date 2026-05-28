@@ -387,3 +387,64 @@ button:hover {
 *, *::before, *::after { cursor: none !important; user-select: none; }
 /* Chỉ cho chọn text trong ô nhập liệu và nội dung thư */
 input, textarea, #letterContent { user-select: text; }
+
+/* ── Volume bar ───────────────────────────────────────────────────────────────── */
+#volumeBar {
+  position: fixed;
+  top: 78px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(200,150,255,0.12);
+  border-radius: 30px;
+  padding: 5px 12px;
+  width: 150px;
+  z-index: 100;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+#volumeBar:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(240,220,255,0.6);
+  box-shadow:
+    0 0 16px rgba(255,240,255,0.25),
+    0 0 32px rgba(220,200,255,0.15),
+    inset 0 0 12px rgba(255,255,255,0.04);
+}
+#volumeBar:hover .vol-icon {
+  color: rgba(255,245,255,0.9);
+  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+#volumeBar:hover #volumeSlider::-webkit-slider-thumb {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+}
+#volumeBar:hover #volumeSlider {
+  background: rgba(255,240,255,0.35);
+}
+.vol-icon {
+  font-size: 12px;
+  color: rgba(180,140,240,0.45);
+  transition: all 0.3s;
+}
+#volumeSlider {
+  -webkit-appearance: none;
+  flex: 1;
+  height: 2px;
+  background: rgba(200,150,255,0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: none;
+  transition: background 0.3s;
+}
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(200,150,255,0.85);
+  cursor: none;
+  transition: all 0.3s;
+}

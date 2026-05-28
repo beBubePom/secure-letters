@@ -6,6 +6,19 @@ const letterMusic = document.getElementById("letterMusic");
 const catImg = document.getElementById("catImg");
 bgMusic.volume = 0.09;
 
+// ── Volume slider ─────────────────────────────────────────────────────────────
+const volumeSlider = document.getElementById("volumeSlider");
+const volIcon      = document.getElementById("volIcon");
+if (volumeSlider) {
+  volumeSlider.value = Math.round(bgMusic.volume * 100);
+  volumeSlider.addEventListener("input", () => {
+    const v = volumeSlider.value / 100;
+    bgMusic.volume = v;
+    letterMusic.volume = v * 0.25 / 0.09; // scale letterMusic proportionally
+    volIcon.textContent = v === 0 ? "🔇" : v < 0.4 ? "🔈" : "🔊";
+  });
+}
+
 // ── Playlist shuffle ─────────────────────────────────────────────────────────
 const PLAYLIST = [
   "music/background.mp3",

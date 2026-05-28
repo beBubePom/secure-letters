@@ -7,8 +7,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- ══ PRE-WELCOME SCREEN ══ -->
+  <div id="preWelcome">
+    <div id="preWelcomeHint">chạm để bắt đầu</div>
+  </div>
+
+  <!-- ══ INTRO SCREEN ══ -->
+  <div id="introScreen">
+    <canvas id="introCanvas"></canvas>
+    <div id="introWrap">
+      <div id="introBig">Hạnh phúc có hình hài gì vậy?</div>
+      <div id="introDivider"></div>
+      <div id="introSmall">Có lẽ… là những ký ức chưa từng rời đi.</div>
+      <div id="introDots"></div>
+      <button id="introBtn">chạm để bước vào nơi lưu giữ kí ức bọn mình nhé</button>
+      <div id="introCredit">được tạo bởi Pom · được nuôi dưỡng bằng tình cảm của bé Bư</div>
+    </div>
+    <div id="introOv"></div>
+    <div id="introFl"></div>
+  </div>
+
+
 
   <!-- Canvas hạt bụi -->
   <canvas id="particleCanvas"></canvas>
@@ -22,10 +46,23 @@
 
   <!-- Tiêu đề typing -->
   <h1><span id="typingText"></span><span id="typingCursor">|</span></h1>
-  <p class="subtitle">mong rằng sự đồng hành cùng em có thể giúp anh hiểu hơn về nó</p>
+  <p class="subtitle page-hidden">mong rằng sự đồng hành cùng em có thể giúp anh hiểu hơn về nó</p>
+
+  <!-- Gallery -->
+  <div id="gallerySection" class="page-hidden">
+    <div id="galleryHeader" onclick="toggleGallery()">
+      <div id="galleryTitle">
+        kỷ niệm của chúng mình
+      </div>
+      <span id="galleryChevron">▾</span>
+    </div>
+    <div id="galleryBody">
+      <p id="galleryMessage">Vợ chồng mình chưa có nhiều câu chuyện chung để kể, chưa có quá nhiều khoảnh khắc đáng nhớ được lưu lại, nhưng chồng nghĩ điều đó không quan trọng bằng việc mình vẫn còn ở đây, vẫn còn muốn bước tiếp cùng nhau. Vì kỷ niệm không phải thứ tự nhiên có, mà là thứ được tạo ra từ những ngày mình chọn ở bên nhau. Vậy cùng chồng viết lên đây những câu chuyện riêng của bọn mình nhé!!</p>
+    </div>
+  </div>
 
   <!-- Layout chính: 2 cột -->
-  <div class="main-layout">
+  <div class="main-layout page-hidden">
     <div class="letter-list" id="letterGrid"></div>
     <div class="side-panel">
       <div id="countdown"></div>
@@ -74,6 +111,7 @@
     </div>
   </div>
 
+  <audio id="welcomeMusic" src="music/welcome.mp3" loop></audio>
   <audio id="bgMusic" src="music/background.mp3" loop></audio>
   <audio id="letterMusic"></audio>
 

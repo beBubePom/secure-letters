@@ -6,7 +6,6 @@ body {
   color: #e4c0c6;
   min-height: 100vh;
   cursor: none;
-  zoom: 1.1;
 }
 
 
@@ -27,6 +26,8 @@ body {
   position: fixed;
   top: 20px; right: 25px;
   z-index: 2000;
+  opacity: 0;
+  transition: opacity 1s ease;
   cursor: none;
 }
 #musicCat img {
@@ -51,6 +52,7 @@ h1 {
   text-shadow: 0 0 40px rgba(210,118,140,0.3);
 }
 #typingCursor {
+  display: none;
   animation: blink 1s step-end infinite;
   color: rgba(180,120,240,0.7);
 }
@@ -393,6 +395,8 @@ input, textarea, #letterContent { user-select: text; }
   position: fixed;
   top: 88px;
   right: 8px;
+  opacity: 0;
+  transition: opacity 1s ease;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -447,4 +451,222 @@ input, textarea, #letterContent { user-select: text; }
   background: rgba(200,150,255,0.85);
   cursor: none;
   transition: all 0.3s;
+}
+
+/* ── Gallery ─────────────────────────────────────────────────────────────────── */
+#gallerySection {
+  position: relative;
+  z-index: 1;
+  margin: 40px 40px 60px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(200,150,255,0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+#galleryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  cursor: none;
+  border-bottom: 1px solid rgba(200,150,255,0.08);
+  transition: background 0.3s;
+  user-select: none;
+}
+#galleryHeader:hover {
+  background: rgba(200,150,255,0.04);
+}
+#galleryTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: rgba(180,150,220,0.7);
+  font-family: sans-serif;
+}
+#galleryIcon { font-size: 16px; }
+#galleryChevron {
+  font-size: 18px;
+  color: rgba(180,150,220,0.4);
+  transition: transform 0.3s;
+}
+#galleryBody { padding: 20px 22px; }
+#galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.photo-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(200,150,255,0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: none;
+}
+.photo-card:hover {
+  border-color: rgba(220,170,255,0.5);
+  box-shadow: 0 0 16px rgba(200,140,255,0.12);
+  transform: translateY(-2px);
+}
+.photo-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: rgba(255,255,255,0.03);
+}
+.photo-img-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  background: rgba(255,255,255,0.03);
+}
+.photo-meta {
+  padding: 8px 10px 10px;
+}
+.photo-date {
+  font-size: 10px;
+  color: rgba(160,130,200,0.45);
+  font-family: sans-serif;
+  letter-spacing: 1px;
+}
+.photo-caption {
+  font-size: 12px;
+  color: rgba(200,180,230,0.7);
+  margin-top: 3px;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+#galleryMessage {
+  font-size: 18px;
+  line-height: 2.1;
+  color: rgba(200,180,230,0.65);
+  font-family: 'Crimson Pro', 'Be Vietnam Pro', Georgia, serif;
+  font-style: italic;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4px 0 8px;
+  text-align: center;
+}
+
+#gallerySection {
+  margin: 20px 40px 32px;
+}
+
+/* ══ INTRO SCREEN ══════════════════════════════════════════════════════════ */
+#introScreen {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #08050f;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif;
+  pointer-events: auto;
+  cursor: none;
+}
+#introCanvas { position: absolute; inset: 0; pointer-events: none; }
+
+#introWrap {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 22px;
+  text-align: center; padding: 0 40px;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 1.8s ease, transform 1.8s ease;
+  user-select: none;
+}
+#introWrap.show { opacity: 1; transform: translateY(0); }
+
+#introBig {
+  font-size: 42px; font-weight: 300; font-style: italic;
+  color: rgba(230,210,255,0.92); letter-spacing: 0.5px; line-height: 1.4;
+  text-shadow: 0 0 48px rgba(180,130,255,0.25);
+  user-select: none;
+}
+#introDivider {
+  width: 40px; height: 1px;
+  background: rgba(200,160,255,0.25);
+}
+#introSmall {
+  font-size: 15px; font-style: italic; font-weight: 300;
+  color: rgba(180,155,220,0.55); letter-spacing: 0.5px; line-height: 1.8;
+  user-select: none;
+}
+#introBtn {
+  margin-top: 16px; padding: 8px 0;
+  background: transparent;
+  border: none;
+  color: rgba(200,170,240,0.55);
+  font-size: 12px; letter-spacing: 2.5px;
+  font-family: sans-serif;
+  cursor: none;
+  transition: all 0.4s ease;
+  user-select: none;
+}
+#introBtn:hover {
+  color: rgba(230,210,255,0.85);
+  letter-spacing: 3.5px;
+}
+#introOv {
+  position: absolute; inset: 0; background: #08050f;
+  z-index: 10; pointer-events: none;
+  opacity: 1; transition: opacity 1.2s ease;
+}
+#introFl {
+  position: absolute; inset: 0; background: white;
+  z-index: 20; pointer-events: none; opacity: 0;
+}
+
+#introCredit {
+  font-size: 11px;
+  font-family: sans-serif;
+  letter-spacing: 1.5px;
+  color: rgba(160,130,200,0.3);
+  margin-top: 32px;
+  font-style: normal;
+  user-select: none;
+}
+
+#introDots {
+  font-size: 16px;
+  color: rgba(200,170,255,0.5);
+  letter-spacing: 6px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  user-select: none;
+}
+
+/* ── Page reveal after intro ────────────────────────────────────────────────── */
+.page-hidden { opacity: 0; transform: translateY(16px); }
+.page-reveal {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ══ PRE-WELCOME SCREEN ═══════════════════════════════════════════════════════ */
+#preWelcome {
+  position: fixed; inset: 0; z-index: 9999999;
+  background: #08050f;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none;
+  transition: opacity 1s ease;
+}
+#preWelcomeHint {
+  font-size: 12px;
+  letter-spacing: 5px;
+  font-family: sans-serif;
+  color: rgba(200,180,255,0.35);
+  text-transform: lowercase;
+  user-select: none;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.2; }
+  50%       { opacity: 0.7; }
 }

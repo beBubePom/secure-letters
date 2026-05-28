@@ -73,8 +73,11 @@ bgMusic.addEventListener("ended", () => nextTrack());
 // ══════════════════════════════════════════════════════════════════════════════
 (function initInkCursor() {
   const canvas = document.createElement("canvas");
-  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:9999;width:100%;height:100%";
+  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:999999;width:100%;height:100%;opacity:0";
   document.body.appendChild(canvas);
+  // Chỉ hiện ink cursor sau khi intro kết thúc
+  const showInk = () => { canvas.style.transition="opacity 1s"; canvas.style.opacity="1"; };
+  document.addEventListener("introEnded", showInk, {once: true});
 
   function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();
@@ -183,7 +186,7 @@ function typeTitle() {
     document.getElementById("typingCursor").style.animationPlayState = "running";
   }
 }
-setTimeout(typeTitle, 600);
+// typeTitle will be triggered after intro ends
 
 // ══════════════════════════════════════════════════════════════════════════════
 // LỊCH MỞ THƯ
@@ -576,3 +579,473 @@ function animateDust() {
   requestAnimationFrame(animateDust);
 }
 animateDust();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// GALLERY ẢNH KỶ NIỆM
+// Thêm ảnh vào đây: { date, caption, url } — url là link Cloudinary
+// ══════════════════════════════════════════════════════════════════════════════
+const GALLERY_PHOTOS = [
+  { date: "28/08/2024", caption: "lần đầu gặp nhau", url: "" },
+  { date: "14/02/2025", caption: "valentine đầu tiên", url: "" },
+  { date: "01/04/2025", caption: "chuyến đi biển",    url: "" },
+  { date: "15/05/2025", caption: "sinh nhật em",       url: "" },
+];
+
+(function initGallery() {
+  const grid = document.getElementById("galleryGrid");
+  if (!grid) return;
+
+  GALLERY_PHOTOS.forEach(photo => {
+    const card = document.createElement("div");
+    card.className = "photo-card";
+
+    const imgHTML = photo.url
+      ? `<img class="photo-img" src="${photo.url}" alt="${photo.caption}" loading="lazy">`
+      : `<div class="photo-img-placeholder">📷</div>`;
+
+    card.innerHTML = `
+      ${imgHTML}
+      <div class="photo-meta">
+        <div class="photo-date">${photo.date}</div>
+        <div class="photo-caption">${photo.caption}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+})();
+
+let galleryOpen = true;
+function toggleGallery() {
+  galleryOpen = !galleryOpen;
+  const body    = document.getElementById("galleryBody");
+  const chevron = document.getElementById("galleryChevron");
+  body.style.display    = galleryOpen ? "block" : "none";
+  chevron.style.transform = galleryOpen ? "rotate(0deg)" : "rotate(-90deg)";
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INTRO SCREEN — cánh cửa mở ra ký ức (full features)
+// ══════════════════════════════════════════════════════════════════════════════
+(function initIntro() {
+  const screen    = document.getElementById("introScreen");
+  const preScreen = document.getElementById("preWelcome");
+
+  // ── Pre-welcome: click anywhere → vào welcome screen ──────────────────
+  screen.style.display    = "none"; // Ẩn intro
+  screen.style.visibility = "hidden";
+
+  function enterWelcome() {
+    // Start welcome music
+    welcomeMusic.volume = 0.18;
+    welcomeMusic.play().catch(() => {});
+
+    // Show intro screen ngay lập tức (đằng sau pre-welcome)
+    screen.style.display    = "flex";
+    screen.style.visibility = "visible";
+    startIntroAnimation();
+
+    // Fade out pre-welcome sau đó
+    preScreen.style.opacity = "0";
+    setTimeout(() => {
+      preScreen.style.display = "none";
+    }, 1000);
+  }
+
+  preScreen.addEventListener("click",      enterWelcome, { once: true });
+  preScreen.addEventListener("touchstart", enterWelcome, { once: true, passive: true });
+
+  const cv = document.getElementById("introCanvas");
+  const cx     = cv.getContext("2d");
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  const W = cv.width, H = cv.height;
+
+  // ── 6. Màu nền theo giờ ─────────────────────────────────────────────────
+  const hour = new Date().getHours();
+  let bgColor;
+  if (hour >= 5  && hour < 9)  bgColor = "#0a0610"; // bình minh — xanh tím nhạt
+  else if (hour >= 9  && hour < 17) bgColor = "#08050f"; // ban ngày — đen tím
+  else if (hour >= 17 && hour < 20) bgColor = "#100608"; // hoàng hôn — đỏ tím
+  else                               bgColor = "#05030a"; // đêm — đen xanh
+  screen.style.background = bgColor;
+  screen.style.transition = "background 3s ease";
+
+  // ── Stars background (setup, runs always) ──────────────────────────────
+  const STARS = Array.from({length: 150}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25,
+    r: Math.random()*1.6+.3,
+    a: Math.random()*.55+.08,
+    c: ['255,255,255','210,190,255','175,215,255','255,210,240'][Math.floor(Math.random()*4)],
+    tw: Math.random()*Math.PI*2,
+  }));
+
+  // ── 4. Hình trái tim mờ bằng hạt sao ────────────────────────────────────
+  const HEART_STARS = Array.from({length: 80}, (_, i) => {
+    const t = (i / 80) * Math.PI * 2;
+    const hx = 16 * Math.pow(Math.sin(t), 3);
+    const hy = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    const scale = Math.min(W, H) * 0.028;
+    return {
+      bx: W/2 + hx*scale + (Math.random()-0.5)*scale*0.8,
+      by: H/2 + hy*scale + (Math.random()-0.5)*scale*0.8,
+      r: Math.random()*1.2+0.3,
+      tw: Math.random()*Math.PI*2,
+      alpha: 0,
+    };
+  });
+  let heartVisible = false;
+
+  // ── 1. Cursor sparkle trail ──────────────────────────────────────────────
+  const sparkles = [];
+  let mx = -999, my = -999;
+  screen.addEventListener("mousemove", e => {
+    mx = e.clientX; my = e.clientY;
+    for (let i = 0; i < 3; i++) {
+      sparkles.push({
+        x: mx + (Math.random()-0.5)*12,
+        y: my + (Math.random()-0.5)*12,
+        r: Math.random()*2.5+0.5,
+        life: 1,
+        vx: (Math.random()-0.5)*1.2,
+        vy: (Math.random()-0.5)*1.2 - 0.5,
+        c: ['255,255,255','220,200,255','200,230,255','255,220,240'][Math.floor(Math.random()*4)],
+      });
+    }
+  });
+
+  let tt = 0, done = false;
+  function loopIntro() {
+    requestAnimationFrame(loopIntro);
+    cx.clearRect(0, 0, W, H);
+    tt += .01;
+
+    // Stars
+    STARS.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      const a = p.a*(0.35+0.65*Math.sin(tt+p.tw));
+      cx.save(); cx.globalAlpha=a;
+      cx.fillStyle=`rgb(${p.c})`;
+      cx.shadowColor=`rgba(${p.c},.55)`; cx.shadowBlur=7;
+      cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2); cx.fill();
+      cx.restore();
+    });
+
+    // Heart stars
+    if (heartVisible) {
+      HEART_STARS.forEach(p => {
+        if (p.alpha < 0.06) p.alpha += 0.0008;
+        cx.save(); cx.globalAlpha = p.alpha*(0.5+0.5*Math.sin(tt*1.5+p.tw));
+        cx.fillStyle = "rgba(220,180,255,1)";
+        cx.shadowColor = "rgba(200,150,255,0.6)"; cx.shadowBlur = 4;
+        cx.beginPath(); cx.arc(p.bx,p.by,p.r,0,Math.PI*2); cx.fill();
+        cx.restore();
+      });
+    }
+
+    // Sparkles
+    for (let i = sparkles.length-1; i >= 0; i--) {
+      const s = sparkles[i];
+      s.life -= 0.045;
+      s.x += s.vx; s.y += s.vy;
+      s.r *= 0.96;
+      if (s.life <= 0) { sparkles.splice(i,1); continue; }
+      cx.save(); cx.globalAlpha = s.life * 0.9;
+      cx.fillStyle = `rgb(${s.c})`;
+      cx.shadowColor = `rgba(${s.c},0.8)`; cx.shadowBlur = 8;
+      cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, Math.PI*2); cx.fill();
+      // Star shape
+      cx.restore();
+    }
+  }
+  loopIntro();
+
+  const ov = document.getElementById("introOv");
+  const iw = document.getElementById("introWrap");
+  const fl = document.getElementById("introFl");
+
+  // ── 5. Typewriter sound ──────────────────────────────────────────────────
+  function playClick() {
+    try {
+      const actx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc  = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.connect(gain); gain.connect(actx.destination);
+      osc.frequency.setValueAtTime(800 + Math.random()*400, actx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, actx.currentTime+0.04);
+      gain.gain.setValueAtTime(0.04, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime+0.05);
+      osc.start(); osc.stop(actx.currentTime+0.05);
+    } catch(e){}
+  }
+
+  // ── Typing function ──────────────────────────────────────────────────────
+  function typeText(el, text, speed, callback) {
+    el.textContent = "";
+    let i = 0;
+    const interval = setInterval(() => {
+      el.textContent += text[i];
+      playClick();
+      i++;
+      if (i >= text.length) { clearInterval(interval); if(callback) callback(); }
+    }, speed);
+  }
+
+  // ── 2. Glow theo cursor + màu theo giờ ─────────────────────────────────
+  const h = new Date().getHours();
+  let charColor;
+  if      (h >= 5  && h < 9)  charColor = "rgba(180,220,255,1)";  // sáng — xanh bầu trời
+  else if (h >= 9  && h < 17) charColor = "rgba(230,210,255,1)";  // trưa — tím nhạt
+  else if (h >= 17 && h < 20) charColor = "rgba(255,200,160,1)";  // chiều — cam ấm
+  else                         charColor = "rgba(200,170,255,1)";  // đêm — tím bạc
+
+  function makeRipple(el) {
+    const text = el.textContent;
+    el.innerHTML = text.split("").map((ch, i) =>
+      ch === " " ? `<span style="display:inline-block;width:0.28em"> </span>` :
+      `<span class="rch" data-i="${i}" style="display:inline-block;transition:color 0.2s,text-shadow 0.2s">${ch}</span>`
+    ).join("");
+
+    // Chỉ đúng chữ đang hover mới sáng + nhô lên
+    el.querySelectorAll(".rch").forEach(s => {
+      s.addEventListener("mouseenter", () => {
+        s.style.color      = charColor;
+        s.style.textShadow = `0 0 20px ${charColor}, 0 0 40px ${charColor}`;
+        s.style.transform  = "translateY(-5px) scale(1.25)";
+      });
+      s.addEventListener("mouseleave", () => {
+        s.style.color = ""; s.style.textShadow = ""; s.style.transform = "";
+      });
+    });
+  }
+
+  // ── Sequence ─────────────────────────────────────────────────────────────
+  const welcomeMusic = document.getElementById("welcomeMusic");
+
+  // welcomeMusic started in enterWelcome
+  // Fade in overlay
+  function startIntroAnimation() {
+  setTimeout(() => { ov.style.opacity = "0"; }, 300);
+  setTimeout(() => {
+    iw.classList.add("show");
+    const big  = document.getElementById("introBig");
+    const sml  = document.getElementById("introSmall");
+    const btn  = document.getElementById("introBtn");
+    const cred = document.getElementById("introCredit");
+    const div  = document.getElementById("introDivider");
+    const dots = document.getElementById("introDots");
+
+    big.textContent=""; sml.textContent="";
+    btn.textContent=""; cred.textContent="";
+    div.style.opacity="0";
+
+    typeText(big, "Hạnh phúc có hình hài gì vậy?", 55, () => {
+      makeRipple(big);
+      // Heart xuất hiện
+      setTimeout(() => { heartVisible = true; }, 400);
+
+      setTimeout(() => {
+        div.style.transition="opacity 0.8s";
+        div.style.opacity="1";
+      }, 300);
+
+      setTimeout(() => {
+        typeText(sml, "Có lẽ… là những ký ức chưa từng rời đi.", 45, () => {
+
+          // ── 3. Countdown dots với tick to ────────────────────────────
+          function playTick(freq, vol) {
+            try {
+              const actx = new (window.AudioContext || window.webkitAudioContext)();
+              const osc  = actx.createOscillator();
+              const gain = actx.createGain();
+              osc.connect(gain); gain.connect(actx.destination);
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(freq, actx.currentTime);
+              osc.frequency.exponentialRampToValueAtTime(freq * 0.5, actx.currentTime + 0.12);
+              gain.gain.setValueAtTime(vol, actx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.18);
+              osc.start(); osc.stop(actx.currentTime + 0.2);
+            } catch(e){}
+          }
+
+          let dotCount = 0;
+          dots.style.opacity = "1";
+          const dotInterval = setInterval(() => {
+            dotCount++;
+            dots.textContent = "✦".repeat(dotCount);
+            // Tick to dần lên — 3 tiếng đếm ngược
+            if      (dotCount === 1) playTick(420, 0.18);
+            else if (dotCount === 2) playTick(520, 0.22);
+            else if (dotCount === 3) playTick(680, 0.30);
+            if (dotCount >= 3) {
+              clearInterval(dotInterval);
+              setTimeout(() => {
+                dots.style.opacity = "0";
+                setTimeout(() => {
+                  typeText(btn, "chạm để bước vào nơi lưu giữ kí ức của bọn mình nhé", 28, () => {
+                    setTimeout(() => {
+                      typeText(cred, "được tạo bởi Pom · được nuôi dưỡng bằng tình cảm của bé Bư", 22);
+                    }, 300);
+                  });
+                }, 300);
+              }, 400);
+            }
+          }, 500);
+        });
+      }, 600);
+    });
+  }, 1400);
+
+  } // end startIntroAnimation
+
+  // ── Click enter ──────────────────────────────────────────────────────────
+  document.getElementById("introBtn").addEventListener("click", () => {
+    if (done) return; done = true;
+
+    iw.style.transition = "filter 1.4s ease, opacity 1.4s ease, transform 1.4s ease";
+    iw.style.filter     = "blur(14px)";
+    iw.style.opacity    = "0";
+    iw.style.transform  = "translateY(-28px) scale(1.04)";
+    cv.style.transition = "opacity 1.5s ease";
+    cv.style.opacity    = "0";
+
+    setTimeout(() => { fl.style.transition="opacity 0.3s"; fl.style.opacity="0.12"; }, 500);
+    setTimeout(() => { fl.style.transition="opacity 1.3s"; fl.style.opacity="0";    }, 820);
+    setTimeout(() => { ov.style.transition="opacity 1.3s"; ov.style.opacity="1";    }, 1100);
+    setTimeout(() => {
+      // Fade out welcome music
+      const wm = document.getElementById("welcomeMusic");
+      if (wm) {
+        const fadeOut = setInterval(() => {
+          if (wm.volume > 0.02) wm.volume = Math.max(0, wm.volume - 0.02);
+          else { wm.pause(); wm.currentTime = 0; clearInterval(fadeOut); }
+        }, 80);
+      }
+      screen.style.display = "none";
+      bgMusic.play().catch(()=>{});
+      document.dispatchEvent(new Event("introEnded"));
+      // Show cat + volume bar + typing cursor
+      setTimeout(() => {
+        const cat = document.getElementById("musicCat");
+        const vol = document.getElementById("volumeBar");
+        const cur = document.getElementById("typingCursor");
+        if (cat) cat.style.opacity = "1";
+        if (vol) vol.style.opacity = "1";
+        if (cur) cur.style.display = "inline";
+      }, 500);
+
+      // ── Reveal trang web từ từ sau intro ────────────────────────────────
+      function slideIn(el, delay, fromLeft) {
+        if (!el) return;
+        el.style.opacity   = "0";
+        el.style.transform = fromLeft ? "translateX(-40px)" : "translateX(40px)";
+        el.style.transition = "none";
+        setTimeout(() => {
+          el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
+          el.style.opacity    = "1";
+          el.style.transform  = "translateX(0)";
+        }, delay);
+      }
+
+      function typeEl(el, text, speed, delay, callback) {
+        if (!el) return;
+        setTimeout(() => {
+          el.textContent = "";
+          el.style.opacity = "1";
+          el.style.transform = "none";
+          let i = 0;
+          const iv = setInterval(() => {
+            el.textContent += text[i]; i++;
+            if (i >= text.length) { clearInterval(iv); if(callback) callback(); }
+          }, speed);
+        }, delay);
+      }
+
+      // 1. Khung gallery trôi vào từ trái
+      slideIn(document.getElementById("gallerySection"), 300, true);
+
+      // 2. Layout chính trôi vào từ dưới
+      const layout = document.querySelector(".main-layout");
+      if (layout) {
+        layout.style.opacity   = "0";
+        layout.style.transform = "translateY(30px)";
+        setTimeout(() => {
+          layout.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+          layout.style.opacity    = "1";
+          layout.style.transform  = "translateY(0)";
+        }, 600);
+      }
+
+      // 3. Countdown panel trôi từ phải
+      slideIn(document.querySelector(".side-panel"), 900, false);
+
+      // Ẩn tất cả text trước
+      const titleEl    = document.getElementById("mainTitle");
+      const subtitleEl = document.querySelector(".subtitle");
+      const msgEl      = document.getElementById("galleryMessage");
+      const galTitle   = document.querySelector("#galleryTitle");
+
+      if (titleEl)    { titleEl.style.opacity = "0"; typingEl.textContent = ""; }
+      if (subtitleEl) { subtitleEl.style.opacity = "0"; subtitleEl.textContent = ""; }
+      if (msgEl)      { msgEl.style.opacity = "0"; msgEl.textContent = ""; }
+      if (galTitle)   galTitle.style.opacity = "0";
+
+      // Delay rồi bắt đầu sequence gõ chữ
+      setTimeout(() => {
+        // Step 1: Title gõ (dùng typeTitle gốc)
+        if (titleEl) titleEl.style.opacity = "1";
+        typeTitle();
+
+        // Step 2: Subtitle sau title
+        const subDelay = TITLE_TEXT.length * 90 + 300;
+        setTimeout(() => {
+          if (subtitleEl) {
+            subtitleEl.style.opacity = "1";
+            const subText = "mong rằng sự đồng hành cùng em có thể giúp anh hiểu hơn về nó";
+            let i = 0;
+            const iv = setInterval(() => {
+              subtitleEl.textContent += subText[i]; i++;
+              if (i >= subText.length) clearInterval(iv);
+            }, 30);
+          }
+        }, subDelay);
+
+        // Step 3: Gallery title
+        const galDelay = subDelay + 60 * 30 + 300;
+        setTimeout(() => {
+          if (galTitle) {
+            galTitle.style.transition = "opacity 0.6s";
+            galTitle.style.opacity = "1";
+          }
+        }, galDelay);
+
+        // Step 4: Gallery message gõ
+        setTimeout(() => {
+          if (msgEl) {
+            msgEl.style.opacity = "1";
+            const msgText = "Vợ chồng mình chưa có nhiều câu chuyện chung để kể, chưa có quá nhiều khoảnh khắc đáng nhớ được lưu lại, nhưng chồng nghĩ điều đó không quan trọng bằng việc mình vẫn còn ở đây, vẫn còn muốn bước tiếp cùng nhau. Vì kỷ niệm không phải thứ tự nhiên có, mà là thứ được tạo ra từ những ngày mình chọn ở bên nhau. Vậy cùng chồng viết lên đây những câu chuyện riêng của bọn mình nhé!!";
+            let i = 0;
+            const iv = setInterval(() => {
+              msgEl.textContent += msgText[i]; i++;
+              if (i >= msgText.length) clearInterval(iv);
+            }, 16);
+          }
+        }, galDelay + 500);
+
+      }, 800);
+
+      // 6. Từng lá thư trượt vào stagger
+      setTimeout(() => {
+        document.querySelectorAll(".box").forEach((box, i) => {
+          box.style.opacity   = "0";
+          box.style.transform = "translateX(-16px)";
+          setTimeout(() => {
+            box.style.transition = "opacity 0.45s ease, transform 0.45s ease";
+            box.style.opacity    = "1";
+            box.style.transform  = "translateX(0)";
+          }, i * 25);
+        });
+      }, 1000);
+    }, 2600);
+  });
+})();

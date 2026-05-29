@@ -227,10 +227,10 @@ h1 {
   #volumeBar     { top: 72px; right: 6px; width: 130px; padding: 5px 10px; }
 
   /* Intro screen */
-  #introBig   { font-size: 26px; }
+  #introBig   { font-size: 20px; font-style: normal; font-weight: 300; word-break: normal; overflow-wrap: normal; }
   #introSmall { font-size: 13px; }
   #introBtn   { font-size: 11px; }
-  #introWrap  { padding: 0 24px; }
+  #introWrap  { padding: 0 20px; gap: 16px; }
 
   /* Pre-welcome */
   #preWelcomeHint { font-size: 11px; letter-spacing: 4px; }
@@ -622,7 +622,10 @@ input, textarea, #letterContent { user-select: text; }
 #introWrap.show { opacity: 1; transform: translateY(0); }
 
 #introBig {
-  font-size: 42px; font-weight: 300; font-style: italic;
+  font-size: 42px;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none; font-weight: 300; font-style: italic;
   color: rgba(230,210,255,0.92); letter-spacing: 0.5px; line-height: 1.4;
   text-shadow: 0 0 48px rgba(180,130,255,0.25);
   user-select: none;

@@ -1,7 +1,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #08050f;
   color: #e4c0c6;
   min-height: 100vh;
@@ -41,7 +41,7 @@ body {
 h1 {
   position: relative;
   z-index: 1;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif;
   font-style: italic;
   font-weight: 400;
   font-size: 2rem;
@@ -61,7 +61,7 @@ h1 {
 .subtitle {
   position: relative;
   z-index: 1;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 10px;
   font-weight: 300;
   letter-spacing: 5px;
@@ -157,15 +157,15 @@ h1 {
 }
 
 .cd-label { font-size: 11px; letter-spacing: 4px; color: rgba(160,140,200,0.4); font-family: sans-serif; text-transform: lowercase; text-align: center; }
-.cd-days { font-size: 68px; font-weight: 300; color: rgba(220,200,255,0.9); letter-spacing: -2px; line-height: 1; text-shadow: 0 0 40px rgba(240,150,170,0.25); font-family: 'Playfair Display', serif; }
+.cd-days { font-size: 68px; font-weight: 300; color: rgba(220,200,255,0.9); letter-spacing: -2px; line-height: 1; text-shadow: 0 0 40px rgba(240,150,170,0.25); font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif; }
 .cd-unit { font-size: 11px; letter-spacing: 3px; color: rgba(160,130,200,0.4); font-family: sans-serif; margin-top: 4px; }
 .cd-row { display: flex; gap: 24px; align-items: flex-end; }
 .cd-col { display: flex; flex-direction: column; align-items: center; }
-.cd-small { font-size: 32px; font-weight: 300; color: rgba(200,175,240,0.7); letter-spacing: -1px; line-height: 1; font-family: 'Playfair Display', serif; }
+.cd-small { font-size: 32px; font-weight: 300; color: rgba(200,175,240,0.7); letter-spacing: -1px; line-height: 1; font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif; }
 .cd-dot { font-size: 24px; color: rgba(220,130,150,0.25); padding-bottom: 4px; }
 .cd-separator { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, rgba(220,130,150,0.25), transparent); }
 .cd-badge { font-size: 11px; font-family: sans-serif; letter-spacing: 2px; color: rgba(200,160,255,0.55); border: 1px solid rgba(240,150,170,0.18); border-radius: 20px; padding: 4px 14px; }
-.cd-quote { font-size: 12px; font-style: italic; color: rgba(170,145,210,0.5); text-align: center; max-width: 240px; line-height: 1.75; font-family: 'Playfair Display', serif; }
+.cd-quote { font-size: 12px; font-style: italic; color: rgba(170,145,210,0.5); text-align: center; max-width: 240px; line-height: 1.75; font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif; }
 .cd-quote::before { content: '"'; color: rgba(150,100,210,0.35); }
 .cd-quote::after  { content: '"'; color: rgba(150,100,210,0.35); }
 .cd-date { font-size: 10px; color: rgba(130,110,170,0.3); font-family: sans-serif; letter-spacing: 1px; }
@@ -302,7 +302,7 @@ h1 {
 }
 
 .modal-content h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif;
   font-style: italic;
   font-weight: 400;
   font-size: 1.4rem;
@@ -350,7 +350,7 @@ input[type="password"] {
   padding: 10px 16px;
   color: #e4c0c6;
   font-size: 13px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   outline: none;
   width: 180px;
   transition: border 0.2s;
@@ -365,7 +365,7 @@ button {
   padding: 10px 20px;
   color: rgba(200,160,240,0.9);
   font-size: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 400;
   letter-spacing: 1px;
   cursor: none;
@@ -397,7 +397,7 @@ button:hover {
   text-align: left;
   line-height: 1.9;
   font-size: 14px;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Be Vietnam Pro', 'Playfair Display', Georgia, serif;
   color: #e8c0c8;
   white-space: pre-wrap;
   word-break: break-word;
@@ -581,14 +581,14 @@ input, textarea, #letterContent { user-select: text; }
   color: rgba(200,180,230,0.7);
   margin-top: 3px;
   font-style: italic;
-  font-family: Georgia, serif;
+  font-family: 'Be Vietnam Pro', Georgia, serif;
 }
 
 #galleryMessage {
   font-size: 18px;
   line-height: 2.1;
   color: rgba(200,180,230,0.65);
-  font-family: 'Crimson Pro', 'Be Vietnam Pro', Georgia, serif;
+  font-family: 'Be Vietnam Pro', Georgia, serif;
   font-style: italic;
   max-width: 800px;
   margin: 0 auto;
@@ -605,7 +605,7 @@ input, textarea, #letterContent { user-select: text; }
   position: fixed; inset: 0; z-index: 99999;
   background: #08050f;
   display: flex; align-items: center; justify-content: center;
-  font-family: Georgia, serif;
+  font-family: 'Be Vietnam Pro', Georgia, serif;
   pointer-events: auto;
   cursor: none;
 }
@@ -719,6 +719,6 @@ input, textarea, #letterContent { user-select: text; }
     font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
   }
   #galleryMessage, .letter-content, #letterContent {
-    font-family: 'Crimson Pro', Georgia, serif;
+    font-family: 'Be Vietnam Pro', Georgia, serif;
   }
 }

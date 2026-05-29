@@ -116,7 +116,7 @@ h1 {
   border-color: rgba(248,170,185,0.45);
   background: rgba(220,120,140,0.06);
   box-shadow:
-    0 0 30px rgba(240,150,165,0.15),
+    0 0 30px rgba(120,190,255,0.15),
     0 0 60px rgba(220,120,140,0.08),
     inset 0 0 30px rgba(220,100,130,0.04);
 }
@@ -125,7 +125,7 @@ h1 {
   color: rgba(240,220,255,1);
 }
 #countdown:hover .cd-small {
-  text-shadow: 0 0 20px rgba(200,160,255,0.6);
+  text-shadow: 0 0 20px rgba(120,200,255,0.6);
   color: rgba(225,200,255,0.95);
 }
 #countdown:hover .cd-badge {
@@ -171,41 +171,81 @@ h1 {
 .cd-date { font-size: 10px; color: rgba(130,110,170,0.3); font-family: sans-serif; letter-spacing: 1px; }
 
 @media (max-width: 768px) {
-  h1 { font-size: 1.4rem; margin-left: 20px; }
-  .subtitle { margin-left: 22px; }
+  /* Typography */
+  h1 { font-size: 1.5rem; margin-left: 16px; line-height: 1.3; }
+  .subtitle { margin-left: 18px; font-size: 9px; letter-spacing: 2px; }
+
+  /* Layout */
   .main-layout {
     flex-direction: column;
-    padding: 0 20px 60px;
+    padding: 0 14px 80px;
   }
   .side-panel {
     order: -1;
     width: 100%;
     position: static;
     padding-top: 0;
-    padding-bottom: 24px;
+    padding-bottom: 20px;
   }
   .letter-list {
     order: 1;
     width: 100%;
     padding-right: 0;
   }
+
+  /* Countdown */
   #countdown {
     max-width: 100%;
     pointer-events: auto;
     transition: all 0.4s ease;
+    padding: 24px 20px;
   }
+  .cd-days  { font-size: 52px; }
+  .cd-small { font-size: 26px; }
+  .cd-row   { gap: 16px; }
+
+  /* Gallery */
+  #gallerySection { margin: 16px 14px 24px; }
+  #galleryMessage { font-size: 15px; line-height: 1.9; }
+  #galleryHeader  { padding: 14px 16px; }
+
+  /* Letter boxes */
+  .box { padding: 14px 12px; gap: 12px; }
+  .box-title { font-size: 14px; }
+  .box-date  { font-size: 11px; }
+  .box-icon  { font-size: 16px; width: 22px; }
+
+  /* Modal */
+  .modal-content { width: 92vw; padding: 28px 20px 24px; }
+  #envelopeSVG   { width: 80%; }
+  #passwordInput { font-size: 15px; padding: 10px 14px; }
+  #letterContent { font-size: 14px; line-height: 1.9; }
+
+  /* Cat + Volume */
+  #musicCat img  { width: 48px; }
+  #musicCat      { top: 14px; right: 14px; }
+  #volumeBar     { top: 72px; right: 6px; width: 130px; padding: 5px 10px; }
+
+  /* Intro screen */
+  #introBig   { font-size: 26px; }
+  #introSmall { font-size: 13px; }
+  #introBtn   { font-size: 11px; }
+  #introWrap  { padding: 0 24px; }
+
+  /* Pre-welcome */
+  #preWelcomeHint { font-size: 11px; letter-spacing: 4px; }
 
   /* Hiệu ứng pulse khi tap trên mobile */
   @keyframes countdownPulse {
-    0%   { box-shadow: 0 0 0 rgba(240,150,165,0); border-color: rgba(220,130,150,0.12); }
-    20%  { box-shadow: 0 0 30px rgba(240,150,165,0.4), 0 0 60px rgba(200,120,140,0.2); border-color: rgba(240,150,165,0.7); }
-    50%  { box-shadow: 0 0 50px rgba(240,150,165,0.6), 0 0 90px rgba(200,120,140,0.3); border-color: rgba(255,180,195,1); }
-    80%  { box-shadow: 0 0 30px rgba(240,150,165,0.3), 0 0 50px rgba(200,120,140,0.15); border-color: rgba(240,150,165,0.5); }
-    100% { box-shadow: 0 0 0 rgba(240,150,165,0); border-color: rgba(220,130,150,0.12); }
+    0%   { box-shadow: 0 0 0 rgba(120,190,255,0); border-color: rgba(220,130,150,0.12); }
+    20%  { box-shadow: 0 0 30px rgba(120,190,255,0.4), 0 0 60px rgba(80,160,230,0.2); border-color: rgba(120,190,255,0.7); }
+    50%  { box-shadow: 0 0 50px rgba(120,190,255,0.6), 0 0 90px rgba(80,160,230,0.3); border-color: rgba(160,220,255,1); }
+    80%  { box-shadow: 0 0 30px rgba(120,190,255,0.3), 0 0 50px rgba(80,160,230,0.15); border-color: rgba(120,190,255,0.5); }
+    100% { box-shadow: 0 0 0 rgba(120,190,255,0); border-color: rgba(220,130,150,0.12); }
   }
   @keyframes numberPulse {
     0%   { color: rgba(220,200,255,0.9); text-shadow: none; }
-    50%  { color: rgba(255,220,240,1); text-shadow: 0 0 20px rgba(240,150,165,0.8), 0 0 40px rgba(220,120,150,0.4); }
+    50%  { color: rgba(255,220,240,1); text-shadow: 0 0 20px rgba(120,190,255,0.8), 0 0 40px rgba(80,160,230,0.4); }
     100% { color: rgba(220,200,255,0.9); text-shadow: none; }
   }
 
@@ -223,7 +263,7 @@ h1 {
   align-items: center;
   gap: 14px;
   padding: 12px 14px;
-  border-left: 3px solid rgb(240,150,165);
+  border-left: 3px solid rgb(120,190,255);
   border-radius: 0 8px 8px 0;
   cursor: none;
   transition: all 0.35s ease;
@@ -413,20 +453,20 @@ input, textarea, #letterContent { user-select: text; }
   background: rgba(255,255,255,0.07);
   border-color: rgba(240,220,255,0.6);
   box-shadow:
-    0 0 16px rgba(255,240,255,0.25),
-    0 0 32px rgba(220,200,255,0.15),
-    inset 0 0 12px rgba(255,255,255,0.04);
+    0 0 16px rgba(200,235,255,0.25),
+    0 0 32px rgba(160,215,255,0.15),
+    inset 0 0 12px rgba(200,230,255,0.04);
 }
 #volumeBar:hover .vol-icon {
-  color: rgba(255,245,255,0.9);
+  color: rgba(200,235,255,0.9);
   text-shadow: 0 0 8px rgba(255,255,255,0.6);
 }
 #volumeBar:hover #volumeSlider::-webkit-slider-thumb {
   background: rgba(255,255,255,1);
-  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  box-shadow: 0 0 8px rgba(200,235,255,0.8);
 }
 #volumeBar:hover #volumeSlider {
-  background: rgba(255,240,255,0.35);
+  background: rgba(140,205,255,0.35);
 }
 .vol-icon {
   font-size: 12px;
@@ -669,4 +709,16 @@ input, textarea, #letterContent { user-select: text; }
 @keyframes hintPulse {
   0%, 100% { opacity: 0.2; }
   50%       { opacity: 0.7; }
+}
+
+/* ── Mobile font fix ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  * { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif; }
+  h1, .modal-title, #introBig, #introSmall {
+    font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  }
+  #galleryMessage, .letter-content, #letterContent {
+    font-family: 'Crimson Pro', Georgia, serif;
+  }
 }

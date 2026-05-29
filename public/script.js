@@ -295,18 +295,18 @@ function getUnlockLabel(num) {
 // BUILD DANH SÁCH THƯ
 // ══════════════════════════════════════════════════════════════════════════════
 const BOX_COLORS = [
-  { border:"rgb(240,150,165)",  hover:"rgb(255,185,200)",  bg:"rgba(230,130,148,0.18)", glow:"rgba(240,150,165,0.7)"  }, // hồng bụi
-  { border:"rgb(100,200,255)",  hover:"rgb(140,225,255)",  bg:"rgba(90,185,240,0.15)",  glow:"rgba(100,200,255,0.7)"  }, // xanh băng
-  { border:"rgb(180,240,160)",  hover:"rgb(210,255,190)",  bg:"rgba(160,225,140,0.15)", glow:"rgba(180,240,160,0.7)"  }, // xanh mint
-  { border:"rgb(255,210,100)",  hover:"rgb(255,232,140)",  bg:"rgba(240,195,80,0.15)",  glow:"rgba(255,210,100,0.7)"  }, // vàng mật
-  { border:"rgb(200,140,255)",  hover:"rgb(225,175,255)",  bg:"rgba(185,120,245,0.15)", glow:"rgba(200,140,255,0.7)"  }, // tím lavender
-  { border:"rgb(255,160,100)",  hover:"rgb(255,192,140)",  bg:"rgba(240,145,85,0.15)",  glow:"rgba(255,160,100,0.7)"  }, // cam đào
-  { border:"rgb(100,235,210)",  hover:"rgb(140,255,230)",  bg:"rgba(85,220,195,0.15)",  glow:"rgba(100,235,210,0.7)"  }, // ngọc bích
-  { border:"rgb(255,140,180)",  hover:"rgb(255,175,210)",  bg:"rgba(240,120,162,0.15)", glow:"rgba(255,140,180,0.7)"  }, // hồng sen
-  { border:"rgb(160,200,255)",  hover:"rgb(195,225,255)",  bg:"rgba(140,185,245,0.15)", glow:"rgba(160,200,255,0.7)"  }, // xanh bầu trời
-  { border:"rgb(255,200,160)",  hover:"rgb(255,222,190)",  bg:"rgba(240,182,138,0.15)", glow:"rgba(255,200,160,0.7)"  }, // vàng hồng
-  { border:"rgb(210,160,255)",  hover:"rgb(235,190,255)",  bg:"rgba(195,140,248,0.15)", glow:"rgba(210,160,255,0.7)"  }, // tím hoa
-  { border:"rgb(120,240,180)",  hover:"rgb(155,255,210)",  bg:"rgba(100,225,162,0.15)", glow:"rgba(120,240,180,0.7)"  }, // xanh lá non
+  { border:"rgb(100,190,255)",  hover:"rgb(150,220,255)",  bg:"rgba(80,175,245,0.15)",  glow:"rgba(100,190,255,0.7)"  }, // xanh băng
+  { border:"rgb(80,220,210)",   hover:"rgb(120,248,235)",  bg:"rgba(70,210,200,0.15)",  glow:"rgba(80,220,210,0.7)"   }, // ngọc xanh
+  { border:"rgb(140,180,255)",  hover:"rgb(175,210,255)",  bg:"rgba(125,168,250,0.15)", glow:"rgba(140,180,255,0.7)"  }, // xanh lavender lạnh
+  { border:"rgb(80,200,240)",   hover:"rgb(120,228,255)",  bg:"rgba(68,190,232,0.15)",  glow:"rgba(80,200,240,0.7)"   }, // xanh cobalt
+  { border:"rgb(160,220,255)",  hover:"rgb(195,238,255)",  bg:"rgba(145,210,252,0.15)", glow:"rgba(160,220,255,0.7)"  }, // xanh trời
+  { border:"rgb(100,240,220)",  hover:"rgb(140,255,238)",  bg:"rgba(88,232,214,0.15)",  glow:"rgba(100,240,220,0.7)"  }, // aqua
+  { border:"rgb(120,160,255)",  hover:"rgb(158,195,255)",  bg:"rgba(108,150,248,0.15)", glow:"rgba(120,160,255,0.7)"  }, // xanh indigo
+  { border:"rgb(80,225,200)",   hover:"rgb(118,252,228)",  bg:"rgba(68,218,192,0.15)",  glow:"rgba(80,225,200,0.7)"   }, // teal
+  { border:"rgb(170,200,255)",  hover:"rgb(200,225,255)",  bg:"rgba(158,190,252,0.15)", glow:"rgba(170,200,255,0.7)"  }, // periwinkle
+  { border:"rgb(90,210,250)",   hover:"rgb(130,235,255)",  bg:"rgba(78,200,245,0.15)",  glow:"rgba(90,210,250,0.7)"   }, // sky
+  { border:"rgb(180,210,255)",  hover:"rgb(210,232,255)",  bg:"rgba(168,200,252,0.15)", glow:"rgba(180,210,255,0.7)"  }, // ice blue
+  { border:"rgb(70,230,195)",   hover:"rgb(108,255,220)",  bg:"rgba(60,222,188,0.15)",  glow:"rgba(70,230,195,0.7)"   }, // mint lạnh
 ];
 
 const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
@@ -745,10 +745,10 @@ function toggleGallery() {
   // ── 6. Màu nền theo giờ ─────────────────────────────────────────────────
   const hour = new Date().getHours();
   let bgColor;
-  if (hour >= 5  && hour < 9)  bgColor = "#0a0610"; // bình minh — xanh tím nhạt
-  else if (hour >= 9  && hour < 17) bgColor = "#08050f"; // ban ngày — đen tím
-  else if (hour >= 17 && hour < 20) bgColor = "#100608"; // hoàng hôn — đỏ tím
-  else                               bgColor = "#05030a"; // đêm — đen xanh
+  if      (hour >= 5  && hour < 9)  bgColor = "#050a12"; // bình minh — xanh navy nhạt
+  else if (hour >= 9  && hour < 17) bgColor = "#05080f"; // ban ngày — xanh đen
+  else if (hour >= 17 && hour < 20) bgColor = "#060a14"; // chiều — xanh đậm
+  else                               bgColor = "#03050e"; // đêm — xanh đen sâu
   screen.style.background = bgColor;
   screen.style.transition = "background 3s ease";
 
@@ -791,7 +791,7 @@ function toggleGallery() {
         life: 1,
         vx: (Math.random()-0.5)*1.2,
         vy: (Math.random()-0.5)*1.2 - 0.5,
-        c: ['255,255,255','220,200,255','200,230,255','255,220,240'][Math.floor(Math.random()*4)],
+        c: ['200,230,255','160,210,255','140,225,250','220,240,255'][Math.floor(Math.random()*4)],
       });
     }
   });
@@ -849,39 +849,54 @@ function toggleGallery() {
   const fl = document.getElementById("introFl");
 
   // ── 5. Typewriter sound ──────────────────────────────────────────────────
-  function playClick() {
+  // Dùng 1 AudioContext duy nhất
+  let _actx = null;
+  function getACtx() {
+    if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+    return _actx;
+  }
+
+  function playClick(ch) {
+    // Bỏ qua khoảng trắng và dấu câu
+    if (!ch || " .,!?…·–".includes(ch)) return;
     try {
-      const actx = new (window.AudioContext || window.webkitAudioContext)();
+      const actx = getACtx();
       const osc  = actx.createOscillator();
       const gain = actx.createGain();
       osc.connect(gain); gain.connect(actx.destination);
-      osc.frequency.setValueAtTime(800 + Math.random()*400, actx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(200, actx.currentTime+0.04);
-      gain.gain.setValueAtTime(0.04, actx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime+0.05);
-      osc.start(); osc.stop(actx.currentTime+0.05);
+      // Tần số ngẫu nhiên nhẹ — giống máy đánh chữ
+      const freq = 480 + Math.random() * 180;
+      osc.type = "square";
+      osc.frequency.setValueAtTime(freq, actx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, actx.currentTime + 0.03);
+      gain.gain.setValueAtTime(0.06, actx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.04);
+      osc.start(actx.currentTime);
+      osc.stop(actx.currentTime + 0.04);
     } catch(e){}
   }
 
-  // ── Typing function ──────────────────────────────────────────────────────
+  // ── Typing function — sound sync với chữ ────────────────────────────────
   function typeText(el, text, speed, callback) {
     el.textContent = "";
     let i = 0;
-    const interval = setInterval(() => {
-      el.textContent += text[i];
-      playClick();
-      i++;
-      if (i >= text.length) { clearInterval(interval); if(callback) callback(); }
-    }, speed);
+    function next() {
+      if (i >= text.length) { if(callback) callback(); return; }
+      const ch = text[i++];
+      el.textContent += ch;
+      playClick(ch);
+      setTimeout(next, speed + (ch === " " ? 0 : Math.random() * 15));
+    }
+    setTimeout(next, 0);
   }
 
   // ── 2. Glow theo cursor + màu theo giờ ─────────────────────────────────
   const h = new Date().getHours();
   let charColor;
-  if      (h >= 5  && h < 9)  charColor = "rgba(180,220,255,1)";  // sáng — xanh bầu trời
-  else if (h >= 9  && h < 17) charColor = "rgba(230,210,255,1)";  // trưa — tím nhạt
-  else if (h >= 17 && h < 20) charColor = "rgba(255,200,160,1)";  // chiều — cam ấm
-  else                         charColor = "rgba(200,170,255,1)";  // đêm — tím bạc
+  if      (h >= 5  && h < 9)  charColor = "rgba(140,210,255,1)";  // sáng — xanh băng
+  else if (h >= 9  && h < 17) charColor = "rgba(160,220,255,1)";  // trưa — xanh trời
+  else if (h >= 17 && h < 20) charColor = "rgba(140,190,255,1)";  // chiều — xanh cobalt
+  else                         charColor = "rgba(170,200,255,1)";  // đêm — xanh bạc
 
   function makeRipple(el) {
     const text = el.textContent;

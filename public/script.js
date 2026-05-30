@@ -315,6 +315,54 @@ const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","�
   "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
   "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃"];
 
+// Apply hover style
+function applyHover(box, c, on) {
+  if (on) {
+    box.style.paddingLeft     = "20px";
+    box.style.borderLeftColor = c.hover;
+    box.style.borderLeftWidth = "3px";
+    box.style.background      = c.bg;
+    box.style.boxShadow       = `2px 0 0 ${c.glow}, 4px 0 24px ${c.glow}, 8px 0 40px ${c.glow}`;
+    const title = box.querySelector(".box-title");
+    const icon  = box.querySelector(".box-icon");
+    if (title) { title.style.color = "#f0f5ff"; title.style.textShadow = `0 0 16px ${c.glow}`; }
+    if (icon)  { icon.style.transform = "scale(1.18)"; icon.style.filter = `drop-shadow(0 0 6px ${c.glow})`; }
+  } else {
+    box.style.paddingLeft     = "14px";
+    box.style.borderLeftColor = c.border;
+    box.style.borderLeftWidth = "3px";
+    box.style.background      = "transparent";
+    box.style.boxShadow       = "none";
+    const title = box.querySelector(".box-title");
+    const icon  = box.querySelector(".box-icon");
+    if (title) { title.style.color = "#b0c0da"; title.style.textShadow = "none"; }
+    if (icon)  { icon.style.transform = "scale(1)"; icon.style.filter = "none"; }
+  }
+}
+
+// Window mousemove — update hover real-time, no lag
+let _lastHovered = null;
+window.addEventListener("mousemove", (e) => {
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const box = el ? el.closest(".box") : null;
+
+  if (box === _lastHovered) return; // same box, skip
+
+  // Un-hover previous
+  if (_lastHovered && _lastHovered._color) {
+    _lastHovered._hovered = false;
+    applyHover(_lastHovered, _lastHovered._color, false);
+  }
+
+  // Hover new
+  if (box && box._color) {
+    box._hovered = true;
+    applyHover(box, box._color, true);
+  }
+
+  _lastHovered = box;
+}, { passive: true });
+
 const grid = document.getElementById("letterGrid");
 for (let i = 1; i <= 100; i++) {
   const box = document.createElement("div");
@@ -333,30 +381,10 @@ for (let i = 1; i <= 100; i++) {
       <div class="box-date">mở vào ${getUnlockLabel(i)}</div>
     </div>`;
 
-  // Hover effect — chỉ animate, không reset màu viền về tối
-  box.addEventListener("mouseenter", () => {
-    box.style.paddingLeft = "20px";
-    box.style.borderLeftColor = c.hover;
-    box.style.borderLeftWidth = "3px";
-    box.style.background = c.bg;
-    box.style.boxShadow = `2px 0 0 ${c.glow}, 4px 0 24px ${c.glow}, 8px 0 40px ${c.glow}`;
-    const title = box.querySelector(".box-title");
-    const icon  = box.querySelector(".box-icon");
-    if (title) { title.style.color = "#f0f5ff"; title.style.textShadow = `0 0 16px ${c.glow}`; }
-    if (icon)  { icon.style.transform = "scale(1.18)"; icon.style.filter = `drop-shadow(0 0 6px ${c.glow})`; }
-  });
-
-  box.addEventListener("mouseleave", () => {
-    box.style.paddingLeft = "14px";
-    box.style.borderLeftColor = c.border;  // luôn về màu sáng, không tối
-    box.style.borderLeftWidth = "3px";
-    box.style.background = "transparent";
-    box.style.boxShadow = "none";
-    const title = box.querySelector(".box-title");
-    const icon  = box.querySelector(".box-icon");
-    if (title) { title.style.color = "#b0c0da"; title.style.textShadow = "none"; }
-    if (icon)  { icon.style.transform = "scale(1)"; icon.style.filter = "none"; }
-  });
+  // Hover effect dùng window mousemove để không bị lag khi scroll
+  box._color = c;
+  box.addEventListener("mouseenter", () => { box._hovered = true; applyHover(box, c, true); });
+  box.addEventListener("mouseleave", () => { box._hovered = false; applyHover(box, c, false); });
 
   box.onclick = () => openModal(i);
   grid.appendChild(box);
@@ -385,15 +413,7 @@ async function loadUnlockedLetters() {
     });
   } catch (err) { console.error("Lỗi load thư:", err); }
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  gsap.utils.toArray(".box").forEach((box, i) => {
-    gsap.from(box, {
-      scrollTrigger: { trigger: box, start: "top 92%", toggleActions: "play none none none" },
-      x: -40, opacity: 0, duration: 0.6,
-      delay: (i % 8) * 0.04, ease: "power2.out",
-    });
-  });
+  // Box reveal handled by scroll event below
 }
 loadUnlockedLetters();
 
@@ -467,6 +487,8 @@ async function checkPassword() {
                   { opacity: 0, y: 20 },
                   { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
                 );
+                // 🎉 Confetti!
+                setTimeout(() => launchConfetti(), 300);
                 bgMusic.pause(); bgMusic.currentTime = 0;
                 if (data.music) {
                   letterMusic.src = data.music;
@@ -745,10 +767,10 @@ function toggleGallery() {
   // ── 6. Màu nền theo giờ ─────────────────────────────────────────────────
   const hour = new Date().getHours();
   let bgColor;
-  if      (hour >= 5  && hour < 9)  bgColor = "#050a12"; // bình minh — xanh navy nhạt
-  else if (hour >= 9  && hour < 17) bgColor = "#05080f"; // ban ngày — xanh đen
-  else if (hour >= 17 && hour < 20) bgColor = "#060a14"; // chiều — xanh đậm
-  else                               bgColor = "#03050e"; // đêm — xanh đen sâu
+  if      (hour >= 5  && hour < 9)  bgColor = "#071520"; // bình minh — xanh băng navy
+  else if (hour >= 9  && hour < 17) bgColor = "#080510"; // ban ngày — tím xanh trung tính
+  else if (hour >= 17 && hour < 20) bgColor = "#0a0618"; // chiều — tím đêm
+  else                               bgColor = "#020308"; // đêm — đen xanh sâu
   screen.style.background = bgColor;
   screen.style.transition = "background 3s ease";
 
@@ -1023,6 +1045,16 @@ function toggleGallery() {
       screen.style.display = "none";
       bgMusic.play().catch(()=>{});
       document.dispatchEvent(new Event("introEnded"));
+
+      // Đổi màu nền trang chính theo giờ
+      const hr = new Date().getHours();
+      let mainBg;
+      if      (hr >= 5  && hr < 9)  mainBg = "#071520"; // bình minh — xanh băng
+      else if (hr >= 9  && hr < 17) mainBg = "#080510"; // ban ngày — tím xanh
+      else if (hr >= 17 && hr < 20) mainBg = "#0a0618"; // chiều — tím đêm
+      else                           mainBg = "#020308"; // đêm — đen sâu
+      document.body.style.transition = "background 2s ease";
+      document.body.style.background = mainBg;
       // Show cat + volume bar + typing cursor
       setTimeout(() => {
         const cat = document.getElementById("musicCat");
@@ -1060,23 +1092,23 @@ function toggleGallery() {
         }, delay);
       }
 
-      // 1. Khung gallery trôi vào từ trái
-      slideIn(document.getElementById("gallerySection"), 300, true);
+      // 1. Gallery fade in
+      const galEl = document.getElementById("gallerySection");
+      if (galEl) { galEl.style.opacity="0"; setTimeout(()=>{ galEl.style.transition="opacity 0.7s ease"; galEl.style.opacity="1"; }, 300); }
 
       // 2. Layout chính trôi vào từ dưới
       const layout = document.querySelector(".main-layout");
       if (layout) {
-        layout.style.opacity   = "0";
-        layout.style.transform = "translateY(30px)";
+        layout.style.opacity = "0";
         setTimeout(() => {
-          layout.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+          layout.style.transition = "opacity 0.8s ease";
           layout.style.opacity    = "1";
-          layout.style.transform  = "translateY(0)";
         }, 600);
       }
 
-      // 3. Countdown panel trôi từ phải
-      slideIn(document.querySelector(".side-panel"), 900, false);
+      // 3. Countdown fade in
+      const spEl = document.querySelector(".side-panel");
+      if (spEl) { spEl.style.opacity="0"; setTimeout(()=>{ spEl.style.transition="opacity 0.7s ease"; spEl.style.opacity="1"; }, 900); }
 
       // Ẩn tất cả text trước
       const titleEl    = document.getElementById("mainTitle");
@@ -1133,32 +1165,104 @@ function toggleGallery() {
 
       }, 800);
 
-      // 6. Từng lá thư xuất hiện khi scroll tới (Intersection Observer)
+      // 6. Từng lá thư xuất hiện từ trên xuống, đúng thứ tự
       setTimeout(() => {
-        const boxes = document.querySelectorAll(".box");
+        const boxes = Array.from(document.querySelectorAll(".box"));
+        const revealed = new Set();
+
         boxes.forEach(box => {
-          box.style.opacity   = "0";
-          box.style.transform = "translateY(18px)";
+          box.style.opacity    = "0";
+          box.style.filter     = "blur(6px)";
           box.style.transition = "none";
         });
 
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const box = entry.target;
-              box.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-              box.style.opacity    = "1";
-              box.style.transform  = "translateY(0)";
-              observer.unobserve(box);
-            }
+        function revealBoxes() {
+          const vh = window.innerHeight;
+          // Lấy tất cả box chưa reveal và đang trong viewport, sort theo vị trí trên xuống
+          const toReveal = boxes.filter(box => {
+            if (revealed.has(box)) return false;
+            const rect = box.getBoundingClientRect();
+            return rect.top < vh + 40;
           });
-        }, {
-          threshold: 0,
-          rootMargin: "200px 0px 200px 0px"
-        });
 
-        boxes.forEach(box => observer.observe(box));
+          // Reveal theo thứ tự index với delay nhỏ
+          toReveal.forEach((box, i) => {
+            revealed.add(box);
+            setTimeout(() => {
+              box.style.transition = "opacity 0.6s ease, filter 0.6s ease";
+              box.style.opacity    = "1";
+              box.style.filter     = "blur(0px)";
+              box.style.transform  = "none";
+            }, i * 60);
+          });
+        }
+
+        revealBoxes();
+        window.addEventListener("scroll", revealBoxes, { passive: true });
       }, 1000);
     }, 2600);
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CONFETTI KHI MỞ THƯ
+// ══════════════════════════════════════════════════════════════════════════════
+function launchConfetti() {
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:99998;";
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+
+  const COLORS = [
+    "rgba(100,190,255,0.9)",  // xanh băng
+    "rgba(80,220,210,0.9)",   // ngọc
+    "rgba(160,200,255,0.9)",  // xanh nhạt
+    "rgba(200,220,255,0.9)",  // trắng xanh
+    "rgba(140,180,255,0.9)",  // lavender
+    "rgba(255,255,255,0.85)", // trắng
+  ];
+
+  const particles = Array.from({length: 80}, () => ({
+    x: window.innerWidth  * Math.random(),
+    y: window.innerHeight * Math.random() - window.innerHeight,
+    w: 5 + Math.random() * 7,
+    h: 3 + Math.random() * 4,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    rot: Math.random() * Math.PI * 2,
+    vx: (Math.random() - 0.5) * 3,
+    vy: 2 + Math.random() * 4,
+    vr: (Math.random() - 0.5) * 0.2,
+    alpha: 1,
+  }));
+
+  let frame = 0;
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    frame++;
+    let alive = false;
+
+    particles.forEach(p => {
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.vy  += 0.08; // gravity
+      p.rot += p.vr;
+      if (frame > 80) p.alpha -= 0.015;
+      if (p.alpha <= 0) return;
+      alive = true;
+
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+
+    if (alive) requestAnimationFrame(loop);
+    else canvas.remove();
+  }
+  loop();
+}

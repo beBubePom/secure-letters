@@ -487,8 +487,9 @@ async function checkPassword() {
                   { opacity: 0, y: 20 },
                   { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
                 );
-                // 🎉 Confetti!
+                // 🎉 Particles + border cycle
                 setTimeout(() => launchConfetti(), 300);
+                startModalBorderCycle();
                 bgMusic.pause(); bgMusic.currentTime = 0;
                 if (data.music) {
                   letterMusic.src = data.music;
@@ -518,6 +519,8 @@ function closeModal() {
     scale: 0.9, opacity: 0, y: 16, duration: 0.22, ease: "power2.in",
     onComplete: () => {
       document.getElementById("modal").style.display = "none";
+  stopConfetti();
+  clearInterval(_borderInterval);
       gsap.set(".modal-content", { clearProps: "all" });
       gsap.set("#envelopeWrap",  { clearProps: "all" });
       gsap.set("#envelopeFlap",  { clearProps: "all" });
@@ -685,6 +688,192 @@ function animateDust() {
   requestAnimationFrame(animateDust);
 }
 animateDust();
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BẦU TRỜI SAO TƯƠNG TÁC — click vào sao để hiện quote
+// ══════════════════════════════════════════════════════════════════════════════
+(function initStarClick() {
+  const STAR_QUOTES = [
+    "chồng nhớ vợ quá điiiiii",
+    "hôm nay điều chồng thích nhất là được nói chuyện với vợ đóoo",
+    "có những lúc chồng đang làm gì đó tự nhiên lại nhớ vợ ngang luôn á",
+    "vợ biết không, chồng thích được gọi em là vợ lắm luônnn",
+    "chồng nghĩ người làm chồng hạnh phúc nhất hiện tại chính là vợ đó nhaaa",
+    "nhiều khi chồng nhìn tin nhắn của vợ rồi cười một mình vậy đó!!!",
+    "chồng nhớ giọng vợ ghê luônnn",
+    "có những ngày chẳng có gì vui hết, nhưng có vợ ở cạnh làm chồng yên tâm hơn đó",
+    "chồng thích nhất là cảm giác được vợ quan tâm áaaa",
+    "vợ ơiiiii, sao vợ đáng yêu dữ vậy trời",
+    "chồng nghĩ mình nghiện vợ mất rồi đóoo",
+    "đôi lúc chồng chỉ muốn được ở bên vợ thật lâu thuiii",
+    "cảm giác được yêu vợ là một điều rất rất đẹp luôn ấy",
+    "chồng nhớ những lần hai đứa ngồi nói chuyện tới khuyaaaa",
+    "có những lúc đang đi đâu đó, tự nhiên chồng ước gì vợ ở cạnh",
+    "chồng thích nghe vợ kể linh tinh lắm luônnn",
+    "kể cả lúc vợ kể những chuyện chẳng đâu vào đâu áaa",
+    "chồng thấy may mắn ghê vì được gặp vợ",
+    "chồng thương em bé của chồng dữ lắm đó nhaaa",
+    "có khi nào vợ nhớ chồng nhiều như chồng nhớ vợ honggg",
+    "chồng thích những lần vợ gọi 'chồng ơi' lắm lắm",
+    "nghe vợ nói yêu xong trong lòng bình yên hẳn luôn á trờiii",
+    "nhiều lúc chồng chẳng biết diễn tả sao nữa, chỉ biết là thương vợ lắm",
+    "nếu được chọn nơi bình yên nhất thì chắc chồng chọn chỗ có vợ!!!",
+    "hôm nay chồng lại nhớ vợ thêm một chút nữaaaa",
+    "có những ngày chồng vui chỉ vì vợ cười thôi đó",
+    "chồng thích nhìn vợ hạnh phúc lắm luônnn",
+    "chồng yêu em lắm",
+    "chồng cảm thấy cuộc sống dễ thương hơn từ khi có vợ",
+    "đôi lúc chồng ngồi nghĩ về tương lai rồi lại thầm mong vợ vẫn ở trong đóooo",
+    "tự nhiên thấy vui ghê luôn á, vì có vợ yêu",
+    "chồng nhớ nụ cười của vợ quáaaa",
+    "nhớ cái cách vợ nói chuyện nữaaaa",
+    "nhớ tất cả mọi thứ thuộc về vợ luôn áaa",
+    "chồng thích được chăm sóc vợ lắm nhaaa",
+    "thấy vợ vui là chồng vui theo luôn",
+    "vợ là điều đẹp nhất xảy ra với chồng trong một khoảng thời gian rất dài đóoo",
+    "chồng vẫn còn bất ngờ vì mình lại yêu vợ nhiều như vậy",
+    "nhiều hơn chồng nghĩ luôn áaa",
+    "có những lúc chồng nhớ vợ tới mức chẳng muốn làm gì khác nữa",
+    "chỉ muốn tìm vợ thuiii",
+    "chồng thích những cuộc gọi dài thật dàiiii với vợ",
+    "chồng thích nghe vợ cười!!!",
+    "thích lắm luônnn",
+    "nhiều khi nhìn ảnh vợ thôi cũng thấy vui rồi",
+    "chồng nghĩ một trong những điều đúng đắn nhất mình từng làm là yêu vợ",
+    "vợ làm cho những ngày bình thường trở nên đặc biệt ghê á",
+    "chồng mong sau này mình có thật nhiều kỷ niệm cùng nhau nhaaa",
+    "chồng nhớ vợ òoooo",
+    "và chồng yêu vợ nữaaaa",
+    "chồng vừa thấy một thứ dễ thương, tự nhiên lại nghĩ tới vợ",
+    "không biết giờ này vợ đang làm gì nhỉii",
+    "chồng thích cái cảm giác được kể với vợ về những chuyện xảy ra trong ngày lắm",
+    "có những chuyện chẳng đáng để kể với ai hết, nhưng chồng vẫn muốn kể cho vợ nghe",
+    "nhiều khi chồng thấy một cảnh đẹp rồi tiếc vì vợ chưa ở đó cùng chồng",
+    "vợ có biết mình xuất hiện trong suy nghĩ của chồng nhiều tới mức nào honggg",
+    "chồng vừa định tập trung làm việc á, xong lại nhớ vợ",
+    "yêu vợ thiệt sự luôn đóoo",
+    "có những ngày chồng mở điện thoại lên chỉ để xem vợ có nhắn gì chưa",
+    "nhìn thấy tên vợ hiện lên là tâm trạng tốt hơn hẳn luôn á",
+    "chồng thích những lúc vợ kể về tuổi thơ của vợ",
+    "cảm giác như chồng đang được hiểu em nhiều hơn một chút",
+    "chồng mong sau này sẽ biết hết những câu chuyện mà vợ từng trải qua",
+    "kể cả những chuyện vui",
+    "kể cả những chuyện khiến vợ buồn",
+    "vì chồng muốn hiểu vợ thật nhiều",
+    "có những đêm chồng nằm nghĩ về vợ lâu hơn dự định",
+    "xong tới lúc nhìn đồng hồ mới giật mình luônnn",
+    "chồng thích nghe vợ cười tới mức khó giải thích luôn á",
+    "kiểu nghe một cái là thấy ngày hôm đó đáng giá rồi",
+    "đôi khi chồng thấy hạnh phúc chỉ vì được tồn tại trong cuộc sống của vợ",
+    "nghe hơi sến nhưng mà là thật đóooo",
+    "có những lúc chồng đọc lại tin nhắn cũ của hai đứa",
+    "rồi ngồi cười một mình!!!",
+    "chồng thích cách vợ xuất hiện trong những ngày bình thường nhất",
+    "chẳng cần làm gì đặc biệt hết",
+    "chỉ cần là vợ thôi",
+    "nhiều lúc chồng nghĩ nếu gặp vợ sớm hơn thì hay biết mấy",
+    "nhưng mà gặp đúng lúc thế này chắc cũng là điều đẹp nhất rồi",
+    "chồng mong sau này mình có thật nhiều ảnh chụp cùng nhau",
+    "để lúc già còn ngồi xem lại nữa",
+    "nghĩ tới thôi đã thấy dễ thương rồi đóoo",
+    "có những ngày chồng nhớ vợ nhiều tới mức chẳng biết phải làm sao luôn",
+    "chỉ biết tìm vợ thôi àaa",
+    "chồng thích nghe vợ kể hôm nay ăn gì lắm",
+    "nghe vô tri vậy thôi chứ chồng thích thiệt",
+    "vì đó là chuyện của vợ màaa",
+    "đôi lúc chồng tự hỏi không biết kiếp trước mình làm gì tốt mà gặp được vợ nữa",
+    "chồng thấy vợ đáng yêu nhất vào những lúc vợ không biết mình đáng yêu",
+    "mấy lúc đó tim chồng chịu không nổi luôn á",
+    "có những chuyện chồng chưa từng kể ai",
+    "nhưng lại muốn kể cho vợ nghe",
+    "chồng thích cảm giác được tin tưởng vợ",
+    "và được vợ tin tưởng nữa",
+    "nếu một ngày thật sự mệt mỏi, điều đầu tiên chồng nghĩ tới là tìm vợ",
+    "vì vợ làm chồng thấy yên tâm lắm",
+    "chồng mong những ngày không vui của vợ sẽ ngắn hơn một chút nhaaa",
+    "còn những ngày vui thì dài thật dàiiii",
+    "có em trong cuộc đời là điều khiến chồng biết ơn rất nhiều",
+    "vợ ơiiii, chồng thương vợ hơn những gì chồng nói ra nữa đóooo",
+  ];
+
+  let quoteIdx = Math.floor(Math.random() * STAR_QUOTES.length);
+
+  function showStarQuote(x, y) {
+    // Burst effect
+    const burst = document.createElement("div");
+    burst.style.cssText = `
+      position:fixed; left:${x}px; top:${y}px;
+      width:40px; height:40px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,200,0.9) 0%, rgba(255,230,100,0.3) 50%, transparent 70%);
+      transform:translate(-50%,-50%) scale(0);
+      pointer-events:none; z-index:9990;
+      transition: transform 0.4s cubic-bezier(0.2,0.8,0.3,1), opacity 0.4s ease;
+    `;
+    document.body.appendChild(burst);
+    requestAnimationFrame(() => {
+      burst.style.transform = "translate(-50%,-50%) scale(3)";
+      burst.style.opacity = "0";
+    });
+    setTimeout(() => burst.remove(), 500);
+
+    // Quote bubble
+    const quote = STAR_QUOTES[quoteIdx % STAR_QUOTES.length];
+    quoteIdx++;
+
+    const el = document.createElement("div");
+    // Position: keep inside viewport
+    const isLeft = x < window.innerWidth / 2;
+    el.style.cssText = `
+      position:fixed;
+      left:${isLeft ? x + 16 : x - 16}px;
+      top:${y - 10}px;
+      transform:${isLeft ? "translateY(-50%)" : "translate(-100%,-50%)"};
+      background:rgba(8,5,20,0.85);
+      border:1px solid rgba(220,210,255,0.25);
+      border-radius:12px;
+      padding:10px 14px;
+      font-size:12px;
+      font-family:'Be Vietnam Pro', sans-serif;
+      font-style:italic;
+      color:rgba(220,210,255,0.9);
+      max-width:220px;
+      line-height:1.6;
+      pointer-events:none;
+      z-index:9991;
+      opacity:0;
+      box-shadow: 0 0 20px rgba(180,160,255,0.15);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      white-space:normal;
+    `;
+    el.textContent = quote;
+    document.body.appendChild(el);
+
+    requestAnimationFrame(() => {
+      el.style.opacity = "1";
+      el.style.transform = isLeft
+        ? "translateY(calc(-50% - 6px))"
+        : "translate(-100%, calc(-50% - 6px))";
+    });
+
+    // Fade out after 3s
+    setTimeout(() => {
+      el.style.opacity = "0";
+      el.style.transform = isLeft
+        ? "translateY(calc(-50% - 18px))"
+        : "translate(-100%, calc(-50% - 18px))";
+      setTimeout(() => el.remove(), 500);
+    }, 3000);
+  }
+
+  // Click on particle canvas → find nearest star
+  document.addEventListener("click", (e) => {
+    // Bỏ qua click vào box thư, modal, button
+    if (e.target.closest(".box, #modal, button, input, #musicCat, #volumeBar, #introScreen, #preWelcome")) return;
+    showStarQuote(e.clientX, e.clientY);
+  });
+})();
 
 // ══════════════════════════════════════════════════════════════════════════════
 // GALLERY ẢNH KỶ NIỆM
@@ -1274,86 +1463,114 @@ function toggleGallery() {
   });
 })();
 
+
 // ══════════════════════════════════════════════════════════════════════════════
-// CONFETTI KHI MỞ THƯ — nhiều màu, nhiều kiểu
+// HẠT MÀU RƠI KHI MỞ THƯ — liên tục tới khi đóng
 // ══════════════════════════════════════════════════════════════════════════════
+let _particleCanvas = null;
+let _particleRunning = false;
+
+function getTimeColors() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 10) return [[255,150,200],[255,180,220],[255,120,180],[240,160,210],[255,200,230],[255,255,255]];
+  if (h >= 10 && h < 17) return [[100,200,255],[80,230,210],[140,210,255],[160,240,220],[200,230,255],[255,255,255]];
+  if (h >= 17 && h < 21) return [[180,120,255],[200,150,255],[160,100,240],[220,180,255],[140,100,220],[255,255,255]];
+  return [[80,160,240],[60,200,200],[120,180,255],[100,220,220],[160,200,255],[255,255,255]];
+}
+
 function launchConfetti() {
+  if (_particleCanvas) return;
+  _particleRunning = true;
   const canvas = document.createElement("canvas");
+  canvas.id = "particleRain";
   canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:99998;";
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   document.body.appendChild(canvas);
+  _particleCanvas = canvas;
   const ctx = canvas.getContext("2d");
+  const COLORS = getTimeColors();
+  const pool = [];
+  let spawnTimer = 0;
 
-  const COLORS = [
-    "#ff6eb4", "#ff9de2", "#ffb3f0", // hồng
-    "#6eb4ff", "#9de2ff", "#b3f0ff", // xanh băng
-    "#b46eff", "#d49eff", "#e8c3ff", // tím
-    "#6effb4", "#9effd4", "#b3ffe8", // ngọc
-    "#ffe06e", "#ffef9e", "#fff4c3", // vàng
-    "#ff6e6e", "#ff9e9e", "#ffc3c3", // đỏ hồng
-    "#ffffff", "#e0f0ff", "#f0e0ff", // trắng
-    "#6effe0", "#ff6eb4", "#ffe06e", // accent
-  ];
+  function spawnParticle() {
+    const [r,g,b] = COLORS[Math.floor(Math.random() * COLORS.length)];
+    pool.push({
+      x: Math.random() * canvas.width, y: -10,
+      r: 1.5 + Math.random() * 3,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: 1.2 + Math.random() * 2.5,
+      alpha: 0.7 + Math.random() * 0.3,
+      col: [r,g,b],
+      tw: Math.random() * Math.PI * 2,
+      twSpeed: 0.04 + Math.random() * 0.06,
+    });
+  }
 
-  // Tạo 200 mảnh với nhiều kiểu hình
-  const particles = Array.from({length: 200}, () => {
-    const type = Math.floor(Math.random() * 3); // 0=rect, 1=circle, 2=ribbon
-    return {
-      x: window.innerWidth * (0.1 + Math.random() * 0.8),
-      y: -20 - Math.random() * window.innerHeight * 0.5,
-      w: type === 2 ? 2 + Math.random() * 3 : 5 + Math.random() * 9,
-      h: type === 2 ? 12 + Math.random() * 18 : 4 + Math.random() * 6,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      rot: Math.random() * Math.PI * 2,
-      vx: (Math.random() - 0.5) * 5,
-      vy: 1.5 + Math.random() * 5,
-      vr: (Math.random() - 0.5) * 0.25,
-      alpha: 1,
-      type,
-      swing: Math.random() * Math.PI * 2,
-      swingSpeed: 0.05 + Math.random() * 0.08,
-    };
-  });
+  function drawP(p, a) {
+    const [r,g,b] = p.col;
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.shadowColor = `rgba(${r},${g},${b},0.6)`;
+    ctx.shadowBlur = 6;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
 
-  let frame = 0;
   function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    frame++;
-    let alive = false;
-
-    particles.forEach(p => {
-      p.swing += p.swingSpeed;
-      p.x  += p.vx + Math.sin(p.swing) * 0.8;
+    if (_particleRunning) {
+      spawnTimer++;
+      if (spawnTimer % 2 === 0) spawnParticle();
+    }
+    let anyAlive = false;
+    for (let i = pool.length-1; i >= 0; i--) {
+      const p = pool[i];
+      p.tw += p.twSpeed;
+      p.x  += p.vx + Math.sin(p.tw) * 0.5;
       p.y  += p.vy;
-      p.vy += 0.06;
-      p.rot += p.vr;
-      if (frame > 100) p.alpha -= 0.012;
-      if (p.alpha <= 0 || p.y > canvas.height + 20) return;
-      alive = true;
-
-      ctx.save();
-      ctx.globalAlpha = p.alpha;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.fillStyle = p.color;
-      ctx.shadowColor = p.color;
-      ctx.shadowBlur = 4;
-
-      if (p.type === 1) {
-        // Circle
-        ctx.beginPath();
-        ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        // Rect or ribbon
-        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-      }
-      ctx.restore();
-    });
-
-    if (alive) requestAnimationFrame(loop);
-    else canvas.remove();
+      if (!_particleRunning) p.alpha -= 0.03;
+      if (p.alpha <= 0 || p.y > canvas.height+10) { pool.splice(i,1); continue; }
+      anyAlive = true;
+      const twinkle = 0.45 + 0.55 * Math.abs(Math.sin(p.tw * 2.5));
+      drawP(p, p.alpha * twinkle);
+    }
+    if (!_particleRunning && !anyAlive) { canvas.remove(); _particleCanvas = null; return; }
+    requestAnimationFrame(loop);
   }
   loop();
+}
+
+function stopConfetti() { _particleRunning = false; }
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MODAL VIỀN ĐỔI MÀU MỖI 15S
+// ══════════════════════════════════════════════════════════════════════════════
+let _borderInterval = null;
+const BORDER_COLORS = [
+  "rgba(100,190,255,0.5)",  // xanh băng
+  "rgba(180,120,255,0.5)",  // tím
+  "rgba(240,150,200,0.5)",  // hồng
+  "rgba(80,220,210,0.5)",   // ngọc
+  "rgba(200,200,255,0.5)",  // lavender
+  "rgba(140,210,255,0.5)",  // sky
+];
+let _borderIdx = 0;
+
+function startModalBorderCycle() {
+  clearInterval(_borderInterval);
+  const modal = document.querySelector(".modal-content");
+  if (!modal) return;
+  modal.style.transition = "border-color 2s ease, box-shadow 2s ease";
+
+  function applyBorder() {
+    const c = BORDER_COLORS[_borderIdx % BORDER_COLORS.length];
+    const glow = c.replace("0.5)", "0.15)");
+    modal.style.borderColor = c;
+    modal.style.boxShadow   = `0 0 40px ${glow}, 0 0 80px ${glow}`;
+    _borderIdx++;
+  }
+  applyBorder();
+  _borderInterval = setInterval(applyBorder, 15000);
 }

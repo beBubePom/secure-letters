@@ -482,10 +482,27 @@ async function checkPassword() {
                 document.getElementById("passwordSection").style.display = "none";
                 const lc = document.getElementById("letterContent");
                 lc.style.display = "block";
-                lc.innerText = data.content;
+
+                // Thêm chữ ký vào cuối
+                const sigHtml = `<div id="letterSig" style="
+                  margin-top:32px; padding-top:20px;
+                  border-top:1px solid rgba(200,180,255,0.12);
+                  text-align:right; opacity:0;
+                  transition: opacity 1.2s ease 0.8s;
+                ">
+                  <div style="font-family:'Dancing Script',cursive;font-size:28px;color:rgba(210,190,255,0.8);line-height:1.4">Phong</div>
+                  <div style="font-size:10px;letter-spacing:3px;color:rgba(160,140,200,0.35);font-family:sans-serif;margin-top:4px">chồng yêu của vợ</div>
+                </div>`;
+                lc.innerHTML = data.content.replace(/\n/g,'<br>') + sigHtml;
+
                 gsap.fromTo(lc,
                   { opacity: 0, y: 20 },
-                  { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+                  { opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
+                    onComplete: () => {
+                      const sig = document.getElementById("letterSig");
+                      if (sig) sig.style.opacity = "1";
+                    }
+                  }
                 );
                 // 🎉 Particles + border cycle
                 setTimeout(() => launchConfetti(), 300);
@@ -1498,7 +1515,7 @@ function launchConfetti() {
       x: Math.random() * canvas.width, y: -10,
       r: 1.5 + Math.random() * 3,
       vx: (Math.random() - 0.5) * 1.5,
-      vy: 1.2 + Math.random() * 2.5,
+      vy: 0.4 + Math.random() * 0.8,
       alpha: 0.7 + Math.random() * 0.3,
       col: [r,g,b],
       tw: Math.random() * Math.PI * 2,

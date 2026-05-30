@@ -1133,17 +1133,31 @@ function toggleGallery() {
 
       }, 800);
 
-      // 6. Từng lá thư trượt vào stagger
+      // 6. Từng lá thư xuất hiện khi scroll tới (Intersection Observer)
       setTimeout(() => {
-        document.querySelectorAll(".box").forEach((box, i) => {
+        const boxes = document.querySelectorAll(".box");
+        boxes.forEach(box => {
           box.style.opacity   = "0";
-          box.style.transform = "translateX(-16px)";
-          setTimeout(() => {
-            box.style.transition = "opacity 0.45s ease, transform 0.45s ease";
-            box.style.opacity    = "1";
-            box.style.transform  = "translateX(0)";
-          }, i * 25);
+          box.style.transform = "translateY(18px)";
+          box.style.transition = "none";
         });
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const box = entry.target;
+              box.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+              box.style.opacity    = "1";
+              box.style.transform  = "translateY(0)";
+              observer.unobserve(box);
+            }
+          });
+        }, {
+          threshold: 0,
+          rootMargin: "200px 0px 200px 0px"
+        });
+
+        boxes.forEach(box => observer.observe(box));
       }, 1000);
     }, 2600);
   });

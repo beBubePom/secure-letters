@@ -1046,15 +1046,85 @@ function toggleGallery() {
       bgMusic.play().catch(()=>{});
       document.dispatchEvent(new Event("introEnded"));
 
-      // Đổi màu nền trang chính theo giờ
-      const hr = new Date().getHours();
-      let mainBg;
-      if      (hr >= 5  && hr < 9)  mainBg = "#071520"; // bình minh — xanh băng
-      else if (hr >= 9  && hr < 17) mainBg = "#080510"; // ban ngày — tím xanh
-      else if (hr >= 17 && hr < 20) mainBg = "#0a0618"; // chiều — tím đêm
-      else                           mainBg = "#020308"; // đêm — đen sâu
-      document.body.style.transition = "background 2s ease";
-      document.body.style.background = mainBg;
+      // Đổi màu theo giờ — 4 tone chủ đạo
+      (function applyTimeTheme() {
+        const hr = new Date().getHours();
+        let theme;
+
+        if (hr >= 5 && hr < 10) {
+          // Sáng — HỒNG nhẹ
+          theme = {
+            bg: "#080410",
+            accent: "rgba(240,150,200,VAL)",
+            glow: "rgba(220,120,180,VAL)",
+            text: "rgba(240,200,230,VAL)",
+            border1: "rgb(230,130,180)",
+            border2: "rgb(200,100,160)",
+          };
+        } else if (hr >= 10 && hr < 17) {
+          // Trưa — XANH
+          theme = {
+            bg: "#050810",
+            accent: "rgba(100,190,255,VAL)",
+            glow: "rgba(80,170,240,VAL)",
+            text: "rgba(190,225,255,VAL)",
+            border1: "rgb(100,190,255)",
+            border2: "rgb(80,220,210)",
+          };
+        } else if (hr >= 17 && hr < 21) {
+          // Chiều — TÍM
+          theme = {
+            bg: "#080510",
+            accent: "rgba(180,120,255,VAL)",
+            glow: "rgba(160,100,240,VAL)",
+            text: "rgba(220,190,255,VAL)",
+            border1: "rgb(180,120,255)",
+            border2: "rgb(140,100,240)",
+          };
+        } else {
+          // Đêm — ĐEN XANH
+          theme = {
+            bg: "#030308",
+            accent: "rgba(80,150,220,VAL)",
+            glow: "rgba(60,130,200,VAL)",
+            text: "rgba(160,200,240,VAL)",
+            border1: "rgb(80,150,220)",
+            border2: "rgb(60,200,190)",
+          };
+        }
+
+        // Apply bg
+        document.body.style.transition = "background 3s ease";
+        document.body.style.background = theme.bg;
+
+        // Apply CSS variables for dynamic theming
+        const root = document.documentElement;
+        root.style.setProperty("--time-accent", theme.accent.replace("VAL", "0.8"));
+        root.style.setProperty("--time-glow",   theme.glow.replace("VAL", "0.5"));
+        root.style.setProperty("--time-text",   theme.text.replace("VAL", "0.85"));
+
+        // Đổi màu BOX_COLORS theo theme — xoay vòng 2 màu chủ đạo
+        const boxes = document.querySelectorAll(".box");
+        boxes.forEach((box, i) => {
+          const c = BOX_COLORS[i % BOX_COLORS.length];
+          // Blend màu gốc với tone theme
+          box.style.borderLeftColor = i % 2 === 0 ? theme.border1 : (theme.border2 || c.border);
+        });
+
+        // Đổi màu chữ title + subtitle
+        const h1 = document.getElementById("mainTitle");
+        const sub = document.querySelector(".subtitle");
+        if (h1)  h1.style.color  = theme.text.replace("VAL", "0.92");
+        if (sub) sub.style.color = theme.text.replace("VAL", "0.4");
+
+        // Đổi màu countdown số
+        const cdDays = document.getElementById("cdDays");
+        if (cdDays) {
+          cdDays.style.color = theme.text.replace("VAL", "0.9");
+          cdDays.style.textShadow = `0 0 40px ${theme.glow.replace("VAL", "0.4")}`;
+        }
+
+      })();
       // Show cat + volume bar + typing cursor
       setTimeout(() => {
         const cat = document.getElementById("musicCat");

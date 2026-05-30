@@ -1275,7 +1275,7 @@ function toggleGallery() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// CONFETTI KHI MỞ THƯ
+// CONFETTI KHI MỞ THƯ — nhiều màu, nhiều kiểu
 // ══════════════════════════════════════════════════════════════════════════════
 function launchConfetti() {
   const canvas = document.createElement("canvas");
@@ -1286,26 +1286,35 @@ function launchConfetti() {
   const ctx = canvas.getContext("2d");
 
   const COLORS = [
-    "rgba(100,190,255,0.9)",  // xanh băng
-    "rgba(80,220,210,0.9)",   // ngọc
-    "rgba(160,200,255,0.9)",  // xanh nhạt
-    "rgba(200,220,255,0.9)",  // trắng xanh
-    "rgba(140,180,255,0.9)",  // lavender
-    "rgba(255,255,255,0.85)", // trắng
+    "#ff6eb4", "#ff9de2", "#ffb3f0", // hồng
+    "#6eb4ff", "#9de2ff", "#b3f0ff", // xanh băng
+    "#b46eff", "#d49eff", "#e8c3ff", // tím
+    "#6effb4", "#9effd4", "#b3ffe8", // ngọc
+    "#ffe06e", "#ffef9e", "#fff4c3", // vàng
+    "#ff6e6e", "#ff9e9e", "#ffc3c3", // đỏ hồng
+    "#ffffff", "#e0f0ff", "#f0e0ff", // trắng
+    "#6effe0", "#ff6eb4", "#ffe06e", // accent
   ];
 
-  const particles = Array.from({length: 80}, () => ({
-    x: window.innerWidth  * Math.random(),
-    y: window.innerHeight * Math.random() - window.innerHeight,
-    w: 5 + Math.random() * 7,
-    h: 3 + Math.random() * 4,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    rot: Math.random() * Math.PI * 2,
-    vx: (Math.random() - 0.5) * 3,
-    vy: 2 + Math.random() * 4,
-    vr: (Math.random() - 0.5) * 0.2,
-    alpha: 1,
-  }));
+  // Tạo 200 mảnh với nhiều kiểu hình
+  const particles = Array.from({length: 200}, () => {
+    const type = Math.floor(Math.random() * 3); // 0=rect, 1=circle, 2=ribbon
+    return {
+      x: window.innerWidth * (0.1 + Math.random() * 0.8),
+      y: -20 - Math.random() * window.innerHeight * 0.5,
+      w: type === 2 ? 2 + Math.random() * 3 : 5 + Math.random() * 9,
+      h: type === 2 ? 12 + Math.random() * 18 : 4 + Math.random() * 6,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      rot: Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 5,
+      vy: 1.5 + Math.random() * 5,
+      vr: (Math.random() - 0.5) * 0.25,
+      alpha: 1,
+      type,
+      swing: Math.random() * Math.PI * 2,
+      swingSpeed: 0.05 + Math.random() * 0.08,
+    };
+  });
 
   let frame = 0;
   function loop() {
@@ -1314,12 +1323,13 @@ function launchConfetti() {
     let alive = false;
 
     particles.forEach(p => {
-      p.x   += p.vx;
-      p.y   += p.vy;
-      p.vy  += 0.08; // gravity
+      p.swing += p.swingSpeed;
+      p.x  += p.vx + Math.sin(p.swing) * 0.8;
+      p.y  += p.vy;
+      p.vy += 0.06;
       p.rot += p.vr;
-      if (frame > 80) p.alpha -= 0.015;
-      if (p.alpha <= 0) return;
+      if (frame > 100) p.alpha -= 0.012;
+      if (p.alpha <= 0 || p.y > canvas.height + 20) return;
       alive = true;
 
       ctx.save();
@@ -1327,7 +1337,18 @@ function launchConfetti() {
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
-      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 4;
+
+      if (p.type === 1) {
+        // Circle
+        ctx.beginPath();
+        ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Rect or ribbon
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      }
       ctx.restore();
     });
 

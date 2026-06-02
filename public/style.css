@@ -730,27 +730,30 @@ input, textarea, #letterContent { user-select: text; }
 /* ══ TAB NAVIGATION ══════════════════════════════════════════════════════════ */
 #tabNav {
   display: flex; align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid rgba(160,140,220,0.12);
-  padding: 0 32px;
-  overflow-x: auto; scrollbar-width: none;
+  padding: 0 24px;
   position: sticky; top: 0; z-index: 500;
   background: rgba(8,5,15,0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   opacity: 0; transition: opacity 0.8s ease;
+  overflow-x: auto; scrollbar-width: none;
 }
 #tabNav.visible { opacity: 1; }
 #tabNav::-webkit-scrollbar { display: none; }
 
 .tab-btn {
-  padding: 14px 16px;
-  font-size: 10px; letter-spacing: 2.5px;
+  flex: 1;
+  padding: 14px 8px;
+  font-size: 10px; letter-spacing: 1.5px;
   color: rgba(160,140,200,0.38);
   cursor: none; white-space: nowrap;
   border: none; border-bottom: 2px solid transparent;
   background: none;
   transition: all 0.25s;
   font-family: 'Be Vietnam Pro', sans-serif;
+  text-align: center;
 }
 .tab-btn:hover { color: rgba(200,185,255,0.7); }
 .tab-btn.active {

@@ -1638,3 +1638,33 @@ function startModalBorderCycle() {
   applyBorder();
   _borderInterval = setInterval(applyBorder, 15000);
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ══════════════════════════════════════════════════════════════════════════════
+(function initTabs() {
+  // Show nav after intro ends
+  document.addEventListener("introEnded", () => {
+    setTimeout(() => {
+      const nav = document.getElementById("tabNav");
+      if (nav) nav.classList.add("visible");
+    }, 800);
+  });
+
+  // Tab switching
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.tab;
+
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-page").forEach(p => p.classList.remove("active"));
+
+      btn.classList.add("active");
+      const page = document.getElementById("page-" + tab);
+      if (page) page.classList.add("active");
+
+      // Scroll to top when switching tabs
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+})();

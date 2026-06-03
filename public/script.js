@@ -1668,3 +1668,293 @@ function startModalBorderCycle() {
     });
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HỘP BÍ MẬT — "khi em thật sự cần"
+// ══════════════════════════════════════════════════════════════════════════════
+(function initSecretBox() {
+  const SECRET_MSGS = [
+    "chồng muốn em biết rằng — dù hôm nay có nặng nề đến đâu, em vẫn không phải chịu một mình.",
+    "em đã cố gắng rất nhiều rồi. chồng thấy hết. và chồng tự hào về em lắm.",
+    "những lúc em thấy mình không đủ tốt — đó là lúc chồng thấy em đẹp nhất.",
+    "hôm nay có thể không ổn. nhưng ngày mai vẫn còn đó, và chồng vẫn ở đây.",
+    "em không cần phải mạnh mẽ mọi lúc. cứ để chồng mạnh hộ em lúc này.",
+    "chồng nhớ em. không phải vì một lý do gì đặc biệt. chỉ là nhớ em thôi.",
+    "dù em ở đâu, làm gì, trái tim chồng vẫn hướng về phía em.",
+    "cảm ơn em đã tiếp tục. mỗi ngày em chọn bước tiếp là chồng lại yêu em thêm một chút.",
+    "em xứng đáng được yêu thương — không phải vì em hoàn hảo, mà vì em là em.",
+    "chồng không biết em đang đọc điều này lúc nào. nhưng chồng muốn em biết: chồng đang nghĩ đến em.",
+    "có những ngày chẳng cần làm gì hết. cứ thở thôi. chồng ở đây.",
+    "em là điều tốt nhất xảy ra với cuộc sống của chồng. thật sự.",
+    "đừng quên rằng em đã vượt qua những ngày tệ hơn ngày hôm nay. em làm được.",
+    "chồng yêu em — ngay cả khi em không yêu bản thân em lắm.",
+    "hãy nghỉ ngơi một chút. em không cần phải ổn ngay bây giờ.",
+    "chồng ước có thể ở cạnh em lúc này. nhưng chồng hi vọng những dòng này làm em ấm hơn một chút.",
+    "em đang làm rất tốt — dù em có tin điều đó hay không.",
+    "kể cả những ngày em chẳng làm được gì, chồng vẫn thấy em đủ rồi.",
+    "nhớ uống nước, ăn gì đó, và cho chồng biết em có ổn không nhé.",
+    "chồng yêu em nhiều hơn những gì chồng có thể nói ra bằng lời.",
+  ];
+
+  let lastIdx = -1;
+
+  const btn     = document.getElementById("secretBtn");
+  const close   = document.getElementById("secretClose");
+  const lock    = document.getElementById("secretLock");
+  const reveal  = document.getElementById("secretReveal");
+  const msgEl   = document.getElementById("secretMsg");
+
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    // Pick random, không trùng lần trước
+    let idx;
+    do { idx = Math.floor(Math.random() * SECRET_MSGS.length); }
+    while (idx === lastIdx);
+    lastIdx = idx;
+
+    // Animate lock out
+    lock.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+    lock.style.opacity = "0";
+    lock.style.transform = "translateY(-16px) scale(0.95)";
+
+    setTimeout(() => {
+      lock.style.display = "none";
+      msgEl.textContent = SECRET_MSGS[idx];
+      reveal.classList.add("show");
+    }, 600);
+  });
+
+  close.addEventListener("click", () => {
+    reveal.classList.remove("show");
+    setTimeout(() => {
+      lock.style.display = "flex";
+      lock.style.opacity = "0";
+      lock.style.transform = "translateY(16px) scale(0.95)";
+      requestAnimationFrame(() => {
+        lock.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        lock.style.opacity = "1";
+        lock.style.transform = "translateY(0) scale(1)";
+      });
+    }, 300);
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HỘP BÍ MẬT — 299 LÁ THƯ "MỞ KHI"
+// ══════════════════════════════════════════════════════════════════════════════
+(function initOpenWhen() {
+  const EMOTIONS = [
+    // VỀ ANH
+    "em yêu anh","em không yêu anh","em nhớ anh","em muốn ở bên anh",
+    "em không cần anh","em giận anh","em thấy anh xa lạ","em thấy anh rất gần",
+    "em đang ngại nhắn cho anh","em muốn nghe giọng anh","em muốn được anh ôm",
+    "em cảm thấy được anh yêu","em nghi ngờ tình yêu của anh",
+    "em thấy anh không hiểu mình","em thấy anh hiểu mình hơn ai hết",
+    "em muốn nói điều gì đó với anh","em sợ mất anh",
+    "em cảm thấy may mắn vì có anh","em tự hỏi anh đang nghĩ gì",
+    "em chỉ muốn nhìn thấy anh",
+    // VUI VẺ & HẠNH PHÚC
+    "em vui","em hạnh phúc","em thấy bình yên","em thấy nhẹ nhàng",
+    "em thấy ấm áp","em thấy nhẹ lòng","em thấy hứng khởi","em thấy biết ơn",
+    "em thấy háo hức","em thấy tự do","em cảm thấy đầy năng lượng",
+    "em thấy thế giới này đẹp","em thấy ngày hôm nay thật đẹp",
+    "em đang cười một mình","em thấy mình may mắn","em thấy mình đặc biệt",
+    "em thấy được trân trọng","em thấy được kết nối","em thấy mình đẹp",
+    "em thấy cuộc sống đáng sống",
+    // BUỒN BÃ & KHÓ CHỊU
+    "em buồn","em cô đơn","em mệt mỏi","em thấy trống rỗng","em thấy tê liệt",
+    "em thấy đau","em thấy chán nản","em thất vọng","em thấy tuyệt vọng",
+    "em thấy ngày hôm nay thật tệ","em muốn khóc mà không biết vì sao",
+    "em thấy không thuộc về đâu","em thấy bị hiểu lầm","em thấy cô lập",
+    "em thấy không ai hiểu mình","em thấy thế giới này mệt mỏi",
+    "em thấy cuộc sống nặng nề","em thấy khó chịu mà không rõ lý do",
+    "em thấy bứt rứt","em thấy ngột ngạt",
+    // LO LẮNG & SỢ HÃI
+    "em lo lắng","em sợ hãi","em thấy bất an","em thấy choáng ngợp",
+    "em đang nghĩ quá nhiều","em thấy tương lai mờ mịt",
+    "em sợ mình không đủ giỏi","em sợ mọi thứ thay đổi",
+    "em sợ làm anh thất vọng","em sợ mình không xứng đáng",
+    "em lo về tương lai của mình","em đang phân vân","em thấy bối rối",
+    "em không biết phải làm gì","em thấy mọi thứ đang vượt tầm kiểm soát",
+    "em sợ mình đang mắc sai lầm","em lo lắng về sức khỏe","em thấy áp lực",
+    "em sợ bị bỏ lại","em đang lo về một điều không nói được",
+    // TỰ TI & NGHI NGỜ
+    "em thấy mình không đủ tốt","em đang nghi ngờ bản thân",
+    "em thấy mình vô dụng","em thấy mình không xứng đáng",
+    "em thấy mình hèn nhát","em thấy mình xấu","em thấy mình không may mắn",
+    "em đang hoài nghi về tình yêu","em thấy mình không được lắng nghe",
+    "em thấy mình đang đi sai đường","em tự trách bản thân",
+    "em thấy mình không thú vị","em thấy mình quá nhạy cảm",
+    "em thấy mình phiền phức","em thấy mình không đáng được yêu",
+    "em thấy mình luôn làm mọi thứ sai","em thấy mình đang giả vờ ổn",
+    "em thấy mình không bằng người khác",
+    "em thấy mình đã cố hết sức mà vẫn không đủ",
+    "em không tin vào bản thân",
+    // MẠNH MẼ & TỰ TIN
+    "em thấy mình mạnh mẽ","em thấy mình dũng cảm","em thấy mình xứng đáng",
+    "em thấy mình đẹp","em thấy mình đang lớn lên","em thấy mình đang tiến bộ",
+    "em thấy tự hào về bản thân","em thấy mình đã vượt qua được",
+    "em thấy tin vào tình yêu","em thấy mình đủ rồi",
+    "em thấy mình đang đi đúng đường","em thấy sẵn sàng cho điều gì đó mới",
+    "em thấy muốn cố thêm","em thấy mình kiên cường",
+    "em thấy mình đang được chữa lành","em thấy lành lại",
+    "em thấy muốn bắt đầu lại","em thấy mình quan trọng",
+    "em thấy mình được yêu đúng cách","em thấy rất được yêu",
+    // XÚC ĐỘNG & PHỨC TẠP
+    "em thấy hối hận","em thấy xấu hổ","em thấy ghen tuông","em thấy ghen tị",
+    "em đang tức giận","em thấy thất vọng về bản thân","em thấy nhớ nhà",
+    "em thấy cảm kích","em thấy nhẹ nhõm","em thấy tự hào",
+    "em đang mơ mộng","em thấy hoài niệm","em thấy bâng khuâng",
+    "em thấy lạc lõng","em thấy ngại ngùng","em thấy hy vọng",
+    "em thấy thất vọng về cuộc sống","em thấy vừa vui vừa buồn",
+    "em thấy cảm xúc lẫn lộn","em không biết mình đang cảm thấy gì",
+    // MUỐN LÀM GÌ ĐÓ
+    "em muốn một mình","em muốn được ôm","em muốn trốn khỏi mọi thứ",
+    "em muốn nói chuyện với ai đó","em muốn khóc","em muốn cười",
+    "em muốn đi đâu đó","em muốn ngủ quên","em muốn được chăm sóc",
+    "em muốn được hiểu","em muốn nói lời xin lỗi","em muốn nghe lời động viên",
+    "em muốn buông bỏ thứ gì đó","em muốn bắt đầu làm điều mình sợ",
+    "em muốn được khen","em muốn tha thứ cho bản thân",
+    "em muốn quên đi điều gì đó","em muốn nhớ lại điều gì đó đẹp",
+    "em muốn được nhìn thấy","em chỉ muốn mở một cái gì đó",
+    // VỀ CUỘC SỐNG
+    "em đang tự hỏi về tương lai","em thấy mọi thứ đang thay đổi",
+    "em thấy mình đang thay đổi","em thấy mình vẫn còn nhỏ bé",
+    "em thấy không muốn nghĩ gì cả","em thấy mình đang trưởng thành",
+    "em đang đối mặt với điều khó khăn","em thấy mình đang đứng ở ngã tư",
+    "em thấy thời gian trôi quá nhanh","em thấy mình đang lãng phí thời gian",
+    "em thấy mình chưa sống đủ","em thấy cuộc sống có ý nghĩa",
+    "em thấy mình may mắn được sống","em thấy mình đang mất phương hướng",
+    "em thấy mình đang tìm thấy bản thân","em thấy mình đang đứng vững",
+    "em cảm thấy được chữa lành","em thấy mình đang bắt đầu một chương mới",
+    "em thấy mình đã đủ trưởng thành để hiểu điều này",
+    "em thấy mình vừa mất đi điều gì đó",
+    // NHỮNG KHOẢNH KHẮC NHỎ
+    "em đang nhìn ra cửa sổ","em vừa nghe một bài nhạc khiến em nghĩ đến anh",
+    "em đang thức khuya một mình","em vừa có một ngày dài",
+    "em đang chờ điều gì đó","em vừa làm điều gì đó đáng tự hào",
+    "em vừa khóc xong","em không ngủ được",
+    "em vừa thức dậy và thấy mọi thứ nặng nề","em đang đi một mình",
+    "em vừa xem xong một bộ phim khiến em xúc động","em đang ở một nơi lạ",
+    "em vừa mất đi thứ gì đó nhỏ thôi nhưng buồn lắm","em đang ăn một mình",
+    "em vừa nhận được tin tốt","em vừa nhận được tin xấu",
+    "em đang nhớ về một kỷ niệm cũ",
+    "em thấy hôm nay thật bình thường mà cũng thật đặc biệt",
+    "em không biết vì sao nhưng em mở cái này ra",
+    "em vừa nhìn lên bầu trời và tự nhiên nghĩ đến anh",
+    "em đang ngồi im không làm gì","em vừa cười xong mà không biết tại sao",
+    "em đang trên đường về nhà","em vừa thấy một thứ dễ thương và nghĩ đến anh",
+    "em đang nghe mưa","em vừa tỉnh dậy giữa đêm","em đang nhìn ảnh cũ",
+    "em vừa đọc lại tin nhắn cũ của mình với anh",
+    "em đang chờ xe buýt một mình","em vừa bị ai đó làm tổn thương",
+    "em đang ngồi trong quán cà phê một mình",
+    "em vừa nhận ra mình đã thay đổi","em đang đứng trước gương",
+    "em vừa kết thúc một ngày tệ","em vừa kết thúc một ngày tuyệt vời",
+    "em đang nhìn ra biển","em đang đứng dưới mưa",
+    "em vừa bước ra ngoài và thấy trời đẹp lắm",
+    "em vừa nấu ăn cho chính mình","em đang nghe podcast một mình",
+    "em vừa gặp lại người cũ","em đang ở trên máy bay",
+    "em vừa nói chuyện với mẹ","em vừa nhận ra mình đang rất cô đơn",
+    "em đang nhìn những người xung quanh và thấy lạ lẫm",
+    "em vừa hoàn thành điều gì đó khó","em đang đọc sách một mình",
+    "em vừa thức dậy sớm và thấy bình yên","em đang nhìn hoàng hôn",
+    "em vừa ngủ một giấc dài","em đang đi dạo không có điểm đến",
+    "em vừa mua thứ gì đó cho chính mình","em đang ngồi trong im lặng",
+    "em vừa tha thứ cho bản thân điều gì đó","em vừa xin lỗi ai đó",
+    "em đang trên đường đến nơi mình không muốn đến",
+    "em vừa nhận ra mình đã bỏ lỡ điều gì đó","em đang nhìn những ngôi sao",
+    "em vừa tắm xong và cảm thấy nhẹ hơn","em đang cuộn mình dưới chăn",
+    "em vừa mở điện thoại ra rồi không biết làm gì",
+    "em đang nghe tiếng mưa trên mái nhà",
+    "em vừa thấy một đứa trẻ cười và thấy ấm lòng",
+    "em đang nhìn ảnh của mình và anh","em vừa nói chuyện với người bạn thân",
+    "em đang ở một nơi em yêu thích","em vừa làm điều gì đó lần đầu tiên",
+    "em đang nghĩ về ngày mai","em vừa nhớ ra điều gì đó đẹp",
+    "em đang trong khoảnh khắc rất bình thường","em vừa bị trễ hẹn",
+    "em đang ở trên tàu nhìn ra ngoài cửa sổ",
+    "em vừa nhận ra mình không ổn dù cứ nghĩ mình ổn",
+    "em đang thở chậm lại","em vừa xem ảnh cũ của mình",
+    "em đang ngồi trong bóng tối","em vừa nghe một câu nói chạm đúng tim",
+    "em đang viết gì đó cho chính mình","em vừa hát một mình",
+    "em đang nhớ mùi hương của điều gì đó",
+    "em vừa nhìn bầu trời và thấy nó thật rộng","em đang đứng ở ban công",
+    "em vừa nhận ra mình đã lớn hơn một chút","em đang ngồi trên sàn nhà",
+    "em vừa ngủ được và cảm thấy tốt hơn","em đang đợi ai đó nhắn lại",
+    "em vừa thấy mặt trời mọc","em đang nhìn ánh đèn thành phố",
+    "em vừa kết thúc một thứ gì đó quan trọng",
+    "em đang trong khoảnh khắc giữa ngủ và thức",
+    "em vừa đặt điện thoại xuống và ngồi im",
+    "em đang nhìn những chiếc lá rơi",
+    "em vừa nghĩ đến anh mà không có lý do",
+    "em đang cảm nhận không khí xung quanh",
+    "em vừa dọn phòng và thấy nhẹ lòng","em đang nhìn bàn tay mình",
+    "em vừa quyết định điều gì đó quan trọng",
+    "em đang trong một buổi chiều rất dài",
+    "em vừa tìm lại thứ gì đó đã mất",
+    "em đang ở giữa đám đông mà thấy cô đơn","em vừa ngắm một bông hoa",
+    "em đang nghĩ về điều mình chưa nói","em vừa bước qua cơn giận",
+    "em đang ngồi nhìn đồng hồ",
+    "em vừa ăn thứ gì đó ngon và muốn kể cho anh",
+    "em đang trong khoảnh khắc rất tĩnh lặng",
+    "em vừa thấy ai đó hạnh phúc và thấy ấm lòng",
+    "em vừa nhận ra mình cần nghỉ ngơi",
+    "em đang trong khoảnh khắc cuối ngày","em vừa thấy cầu vồng",
+    "em đang nghe tiếng gió",
+    "em vừa nhìn thấy điều gì đó đẹp mà không chụp lại được",
+    "em đang trong khoảng thời gian chờ đợi",
+    "em vừa nói chuyện với bản thân","em đang thả trôi suy nghĩ",
+    "em vừa nhận ra mình đang ổn hơn trước",
+    "em đang trong khoảnh khắc chỉ có mình em",
+    "em vừa nghĩ đến tương lai và thấy nhẹ hơn",
+    "em đang ở đây và thấy điều đó là đủ rồi",
+  ];
+
+  const PASSWORD = "yeuem100"; // đổi password ở đây
+
+  const grid    = document.getElementById("secretGrid");
+  const modal   = document.getElementById("secretModal");
+  const label   = document.getElementById("secretModalLabel");
+  const input   = document.getElementById("secretPassInput");
+  const error   = document.getElementById("secretPassError");
+  const submit  = document.getElementById("secretPassSubmit");
+  const closeBtn= document.getElementById("secretPassClose");
+
+  if (!grid) return;
+
+  // Render grid
+  EMOTIONS.forEach((em, i) => {
+    const card = document.createElement("div");
+    card.className = "secret-card";
+    card.innerHTML = `<div class="secret-num">${String(i+1).padStart(3,"0")}</div><div class="secret-label">${em}</div>`;
+    card.addEventListener("click", () => openModal(em));
+    grid.appendChild(card);
+  });
+
+  function openModal(emotion) {
+    label.textContent = emotion;
+    input.value = "";
+    error.textContent = "";
+    modal.classList.add("show");
+    setTimeout(() => input.focus(), 300);
+  }
+
+  closeBtn.addEventListener("click", () => modal.classList.remove("show"));
+  modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("show"); });
+
+  submit.addEventListener("click", checkPass);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") checkPass(); });
+
+  function checkPass() {
+    if (input.value.trim() === PASSWORD) {
+      error.style.color = "rgba(130,220,180,0.7)";
+      error.textContent = "✓ đúng rồi em ơi 🖤";
+      setTimeout(() => modal.classList.remove("show"), 1200);
+    } else {
+      error.style.color = "rgba(255,130,130,0.6)";
+      error.textContent = "chưa đúng — quay về bên anh để lấy mã nhé";
+      input.style.borderColor = "rgba(255,130,130,0.4)";
+      setTimeout(() => { input.style.borderColor = ""; }, 1000);
+    }
+  }
+})();

@@ -108,7 +108,20 @@
 
   <!-- SECRET BOX -->
   <div id="page-secret" class="tab-page">
-    <div class="tab-coming"><p class="tab-coming-label">HỘP BÍ MẬT</p><p class="tab-coming-text">Mỗi tuần mở ra một điều. Đừng mở sớm nhé.</p><div id="secretBox"></div></div>
+    <div id="secretGrid"></div>
+    <!-- Password modal -->
+    <div id="secretModal">
+      <div id="secretModalInner">
+        <div id="secretModalLabel"></div>
+        <p id="secretModalHint">em sẽ cảm thấy như thế, nhưng anh sẽ không để em một mình — quay về bên anh để lấy mật mã nhé 🖤</p>
+        <input id="secretPassInput" type="password" placeholder="mật mã từ anh...">
+        <p id="secretPassError"></p>
+        <div id="secretModalBtns">
+          <button id="secretPassSubmit">mở</button>
+          <button id="secretPassClose">đóng</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Modal -->

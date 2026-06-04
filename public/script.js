@@ -1815,3 +1815,68 @@ function startModalBorderCycle() {
     }
   }
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// EXIT INTENT — hiện khi chuột rời khỏi màn hình phía trên
+// ══════════════════════════════════════════════════════════════════════════════
+(function initExitIntent() {
+  const modal  = document.getElementById("exitModal");
+  const yesBtn = document.getElementById("exitYes");
+  const noBtn  = document.getElementById("exitNo");
+  const reply  = document.getElementById("exitReply");
+  const btns   = document.getElementById("exitBtns");
+  if (!modal) return;
+
+  let shown = false;
+
+  // Desktop — chuột ra khỏi viewport phía trên
+  document.addEventListener("mouseleave", (e) => {
+    if (e.clientY <= 0 && !shown) {
+      shown = true;
+      showExit();
+    }
+  });
+
+  // Mobile — visibilitychange (chuyển tab/app)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && !shown) {
+      shown = true;
+      showExit();
+    }
+  });
+
+  function showExit() {
+    reply.textContent = "";
+    reply.classList.remove("show");
+    btns.style.display = "flex";
+    modal.classList.add("show");
+  }
+
+  yesBtn.addEventListener("click", () => {
+    btns.style.display = "none";
+    reply.textContent = "chồng lúc nào cũng đợi em ở đây";
+    reply.classList.add("show");
+    setTimeout(() => {
+      modal.classList.remove("show");
+      shown = false;
+    }, 3000);
+  });
+
+  noBtn.addEventListener("click", () => {
+    btns.style.display = "none";
+    reply.textContent = "anh hiểu rồi, mong em vững vàng với lựa chọn của chính mình nhé, chúc em hạnh phúc";
+    reply.classList.add("show");
+    setTimeout(() => {
+      modal.classList.remove("show");
+      shown = false;
+    }, 4000);
+  });
+
+  // Click ngoài modal để đóng
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      modal.classList.remove("show");
+      shown = false;
+    }
+  });
+})();

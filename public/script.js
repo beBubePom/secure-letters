@@ -510,7 +510,7 @@ async function checkPassword() {
     errorEl.style.color = "rgba(180,255,200,0.95)";
     errorEl.style.fontSize = "15px";
     errorEl.style.fontStyle = "italic";
-    errorEl.innerText = "vợ yêu mở thư được rồi nhé!! 🖤";
+    errorEl.innerText = "vợ yêu mở thư được rồi nhé!!";
     document.getElementById("passwordInput").style.opacity = "0";
     document.querySelector("#passwordSection button").style.opacity = "0";
 
@@ -1948,7 +1948,7 @@ function startModalBorderCycle() {
   function checkPass() {
     if (input.value.trim() === PASSWORD) {
       error.style.color = "rgba(130,220,180,0.7)";
-      error.textContent = "✓ đúng rồi em ơi 🖤";
+      error.textContent = "✓ đúng rồi em ơi";
       setTimeout(() => modal.classList.remove("show"), 1200);
     } else {
       error.style.color = "rgba(255,130,130,0.6)";

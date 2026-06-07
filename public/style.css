@@ -1026,3 +1026,84 @@ input, textarea, #letterContent { user-select: text; }
   opacity: 0; transition: opacity 0.6s ease;
 }
 #exitReply.show { opacity: 1; }
+
+/* ══ MOOD BUBBLES ════════════════════════════════════════════════════════════ */
+#moodWrap { padding: 28px 24px 60px; }
+
+#moodWho { display: flex; gap: 8px; margin-bottom: 20px; }
+.mood-who-btn {
+  padding: 7px 22px; border-radius: 20px;
+  font-size: 11px; letter-spacing: 2px;
+  border: 1px solid rgba(200,180,255,0.2);
+  background: transparent; color: rgba(180,160,220,0.45);
+  cursor: none; transition: all 0.25s;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.mood-who-btn.on {
+  background: rgba(160,130,255,0.15);
+  border-color: rgba(180,150,255,0.55);
+  color: rgba(215,200,255,0.95);
+}
+
+#moodHint {
+  font-size: 11px; font-style: italic;
+  color: rgba(160,140,200,0.38); margin-bottom: 24px;
+  font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1px;
+}
+
+#moodPicker {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  justify-content: center; margin-bottom: 40px;
+}
+.mood-pick {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 5px; cursor: none;
+}
+.mood-bubble {
+  width: 58px; height: 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.mood-bubble::after {
+  content: ""; position: absolute;
+  top: 10%; left: 18%; width: 32%; height: 22%;
+  background: rgba(255,255,255,0.3); border-radius: 50%;
+  transform: rotate(-30deg); pointer-events: none;
+}
+.mood-pick:hover .mood-bubble { transform: scale(1.1); }
+.mood-pick.sel .mood-bubble { transform: scale(1.18); outline: 2px solid rgba(255,255,255,0.45); outline-offset: 3px; }
+.mood-pick.sel .mood-label { color: rgba(220,200,255,0.9); }
+.mood-label { font-size: 9px; color: rgba(160,140,200,0.4); letter-spacing: 0.5px; text-align: center; max-width: 58px; transition: color 0.2s; font-family: 'Be Vietnam Pro', sans-serif; }
+
+#moodCols { display: flex; gap: 10px; }
+.mood-col { flex: 1; padding: 14px 10px; border-radius: 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(160,140,220,0.08); }
+.mood-col-label { font-size: 10px; letter-spacing: 3px; color: rgba(160,140,200,0.35); margin-bottom: 14px; text-align: center; font-family: 'Be Vietnam Pro', sans-serif; }
+.mood-feed { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: flex-end; min-height: 100px; }
+.mf-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.mf-bubble { border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: all 0.35s cubic-bezier(0.2,0.8,0.3,1); }
+.mf-bubble::after { content:""; position:absolute; top:10%; left:20%; width:30%; height:20%; background:rgba(255,255,255,0.26); border-radius:50%; transform:rotate(-30deg); }
+.mf-pct { font-size: 10px; color: rgba(180,160,220,0.5); font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.35s; }
+.mood-empty { font-size: 11px; color: rgba(140,120,180,0.3); font-style: italic; width: 100%; text-align: center; font-family: 'Be Vietnam Pro', sans-serif; }
+
+/* Toast */
+#moodToast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: rgba(15,10,32,0.95);
+  border: 1px solid rgba(180,150,255,0.25);
+  border-radius: 30px; padding: 10px 24px;
+  font-size: 12px; font-style: italic;
+  color: rgba(210,195,255,0.85);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  letter-spacing: 1px; opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.2,0.8,0.3,1), opacity 0.4s;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+}
+#moodToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media (max-width: 768px) {
+  #moodWrap { padding: 16px 14px 60px; }
+  #moodPicker { gap: 10px; }
+  .mood-bubble { width: 50px; height: 50px; font-size: 22px; }
+}

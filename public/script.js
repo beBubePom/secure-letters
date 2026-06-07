@@ -1858,7 +1858,7 @@ function startModalBorderCycle() {
     reply.classList.add("show");
     setTimeout(() => {
       modal.classList.remove("show");
-      shown = false;
+      // shown stays true — không hiện lần 2
     }, 3000);
   });
 
@@ -1868,7 +1868,7 @@ function startModalBorderCycle() {
     reply.classList.add("show");
     setTimeout(() => {
       modal.classList.remove("show");
-      shown = false;
+      // shown stays true — không hiện lần 2
     }, 4000);
   });
 
@@ -1876,7 +1876,137 @@ function startModalBorderCycle() {
   modal.addEventListener("click", e => {
     if (e.target === modal) {
       modal.classList.remove("show");
-      shown = false;
+      // shown stays true
     }
   });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BONG BÓNG TÂM TRẠNG
+// ══════════════════════════════════════════════════════════════════════════════
+(function initMoodBubbles() {
+  const MOODS = [
+    { name:"hạnh phúc",   emoji:"😊", c1:"#ff85b3", c2:"#ff4488", glow:"rgba(255,80,140,0.5)"  },
+    { name:"yêu người ấy",emoji:"🥰", c1:"#ff6b9d", c2:"#e0006a", glow:"rgba(220,0,100,0.5)"   },
+    { name:"vui vẻ",      emoji:"😄", c1:"#ffe066", c2:"#ffaa00", glow:"rgba(255,180,0,0.5)"    },
+    { name:"bình yên",    emoji:"😌", c1:"#7de8ff", c2:"#00b4d8", glow:"rgba(0,180,220,0.5)"   },
+    { name:"xúc động",    emoji:"🥺", c1:"#ffb3d9", c2:"#d4006a", glow:"rgba(210,0,100,0.45)"  },
+    { name:"nhớ người ấy",emoji:"💜", c1:"#c77dff", c2:"#7b2fff", glow:"rgba(150,50,255,0.5)"  },
+    { name:"buồn",        emoji:"😢", c1:"#6a85c9", c2:"#1a3a7a", glow:"rgba(30,60,160,0.5)"   },
+    { name:"mệt mỏi",     emoji:"😮‍💨",c1:"#9b8ec4", c2:"#4a3880", glow:"rgba(80,50,160,0.4)" },
+    { name:"lo lắng",     emoji:"😰", c1:"#ffb347", c2:"#b05a00", glow:"rgba(180,80,0,0.45)"   },
+    { name:"tức giận",    emoji:"😤", c1:"#ff6b6b", c2:"#c00000", glow:"rgba(200,0,0,0.5)"     },
+    { name:"cô đơn",      emoji:"🌧️", c1:"#5a6ea0", c2:"#1e2a50", glow:"rgba(40,50,120,0.4)" },
+    { name:"trống rỗng",  emoji:"🫙", c1:"#909098", c2:"#303040", glow:"rgba(60,60,100,0.35)"  },
+  ];
+
+  const MAX_SELECT = 12; // không giới hạn thực tế
+  let who = "vo";
+  // Store selected moods per person (array, multiple allowed)
+  const picks = { vo: [], chong: [] };
+  const pickerEl = document.getElementById("moodPicker");
+  const hintEl   = document.getElementById("moodHint");
+
+  if (!pickerEl) return;
+
+  // Build picker
+  const pickEls = [];
+  MOODS.forEach((m, i) => {
+    const wrap = document.createElement("div"); wrap.className = "mood-pick";
+    const bub  = document.createElement("div"); bub.className = "mood-bubble";
+    bub.style.background = `radial-gradient(circle at 35% 35%, ${m.c1}, ${m.c2})`;
+    bub.style.boxShadow  = `0 4px 18px ${m.glow}`;
+    bub.textContent = m.emoji;
+    const lbl = document.createElement("div"); lbl.className = "mood-label"; lbl.textContent = m.name;
+    wrap.appendChild(bub); wrap.appendChild(lbl);
+
+    wrap.addEventListener("click", () => {
+      const arr = picks[who];
+      const idx = arr.indexOf(m);
+      if (idx > -1) {
+        arr.splice(idx, 1); // deselect
+      } else {
+        arr.push(m); // select thêm
+      }
+      updatePickerUI();
+      renderFeed("vo");
+      renderFeed("chong");
+      const n = picks[who].length;
+      showToast(n === 0
+        ? "đã bỏ chọn"
+        : picks[who].map(x => x.emoji).join(" "));
+    });
+
+    pickEls.push({ el: wrap, mood: m });
+    pickerEl.appendChild(wrap);
+  });
+
+  function updatePickerUI() {
+    const arr = picks[who];
+    pickEls.forEach(({ el, mood }) => {
+      el.classList.toggle("sel", arr.includes(mood));
+    });
+    const n = arr.length;
+    hintEl.textContent = n === 0
+      ? "chạm vào tâm trạng hôm nay — chọn bao nhiêu cũng được"
+      : `đã chọn ${n} tâm trạng · chạm lại để bỏ`;
+  }
+
+  // Who buttons
+  document.querySelectorAll(".mood-who-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      who = btn.dataset.who;
+      document.querySelectorAll(".mood-who-btn").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      updatePickerUI();
+    });
+  });
+
+  // Render feed — bong bóng to nhỏ theo tỉ lệ
+  function renderFeed(w) {
+    const el = document.getElementById(w + "Feed");
+    if (!el) return;
+    el.innerHTML = "";
+    const arr = picks[w];
+    if (!arr.length) {
+      el.innerHTML = `<span class="mood-empty">chưa chọn</span>`;
+      return;
+    }
+    const total = arr.length;
+    // Count
+    const counts = {};
+    arr.forEach(m => { counts[m.name] = (counts[m.name] || 0) + 1; });
+    Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([name, cnt]) => {
+        const m = MOODS.find(x => x.name === name);
+        const pct  = Math.round(cnt / total * 100);
+        // size: nhiều chọn → to, ít → nhỏ
+        const size = Math.max(36, Math.min(90, 36 + pct * 0.65));
+        const wrap = document.createElement("div"); wrap.className = "mf-wrap";
+        const bub  = document.createElement("div"); bub.className = "mf-bubble";
+        bub.style.cssText = `width:${size}px;height:${size}px;background:radial-gradient(circle at 35% 35%, ${m.c1}, ${m.c2});box-shadow:0 4px 20px ${m.glow};font-size:${Math.round(size * 0.44)}px`;
+        bub.textContent = m.emoji;
+        const p = document.createElement("div"); p.className = "mf-pct";
+        p.textContent = pct + "%";
+        wrap.appendChild(bub); wrap.appendChild(p);
+        el.appendChild(wrap);
+      });
+  }
+
+  // Toast
+  let toastTimer;
+  function showToast(msg) {
+    let t = document.getElementById("moodToast");
+    if (!t) {
+      t = document.createElement("div"); t.id = "moodToast";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+  }
+
+  renderFeed("vo");
+  renderFeed("chong");
 })();

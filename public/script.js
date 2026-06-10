@@ -931,10 +931,24 @@ animateDust();
     }, 3000);
   }
 
-  // Click on particle canvas → find nearest star
+  // Click trên nền sao — bỏ qua tất cả UI elements
   document.addEventListener("click", (e) => {
-    // Bỏ qua click vào box thư, modal, button
-    if (e.target.closest(".box, #modal, button, input, #musicCat, #volumeBar, #introScreen, #preWelcome")) return;
+    const ignore = [
+      ".box", "#modal", "button", "input", "textarea",
+      "#musicCat", "#volumeBar", "#introScreen", "#preWelcome",
+      "#tabNav", "#countdown", ".side-panel",
+      "#weatherWrap", "#weatherCard-fremont", "#weatherCard-spokane",
+      ".weather-city-card", ".weatherMsg", ".wReminder",
+      "#gallerySection", "#galleryHeader", "#galleryBody",
+      ".modal-content", "#exitModal", "#secretModal",
+      "#secretGrid", ".secret-card",
+      "#moodWrap", "#moodPicker", ".mood-pick",
+      "nav", "a", "select",
+    ].join(", ");
+
+    if (e.target.closest(ignore)) return;
+
+    // Chỉ hiện khi click trên background / canvas / letter-list
     showStarQuote(e.clientX, e.clientY);
   });
 })();
@@ -2009,4 +2023,220 @@ function startModalBorderCycle() {
 
   renderFeed("vo");
   renderFeed("chong");
+})();
+
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// THỜI TIẾT — Fremont CA + Spokane Valley WA
+// ══════════════════════════════════════════════════════════════════════════════
+(function initWeather() {
+  const REMINDERS = {
+    rain: [
+      "đừng ra ngoài nếu không cần thiết nha em — mưa ở Spokane hay to lắm",
+      "nhớ để dù trong xe lúc nào cũng có nha em",
+      "đường Spokane mưa dễ trơn, lái xe cẩn thận nha",
+    ],
+    sun: [
+      "nắng Spokane mùa hè nóng lắm, nhớ bôi kem chống nắng trước khi ra ngoài",
+      "nhớ để chai nước trong túi mọi lúc nha em",
+      "nắng đẹp thế này đi dạo một chút cũng tốt — nhưng nhớ đội nón",
+    ],
+    cloud: [
+      "Spokane nhiều mây kiểu này hay mưa bất chợt, mang theo áo khoác nha em",
+      "trời âm u mà độ ẩm cao thì dễ mệt lắm, nhớ uống nước nha",
+      "nhiều mây ở Spokane hay chuyển thành mưa hoặc tuyết bất ngờ đó em",
+    ],
+    snow: [
+      "đường Spokane tuyết rất trơn, đi cẩn thận hoặc ở nhà nha em",
+      "nhớ làm ấm xe trước khi lái và cạo tuyết trên kính nha em",
+      "mặc đủ lớp áo ấm — áo trong, áo giữa rồi áo ngoài chống gió nha em",
+    ],
+    fog: [
+      "sương mù Spokane dày lắm, lái xe chậm và bật đèn nha em",
+      "sương mù này ra ngoài nhớ mặc ấm — ẩm lạnh khó chịu lắm",
+    ],
+  };
+
+  const CITIES = [
+    { id: "fremont", lat: 37.5485, lon: -121.9886, name: "Fremont, CA" },
+    { id: "spokane", lat: 47.6732, lon: -117.2394, name: "Spokane Valley, WA" },
+  ];
+
+  const MSGS = {
+    rain: [
+      "nhớ mang dù theo nha em, trời mưa rồi đó",
+      "mưa rồi em ơi, cẩn thận không bị cảm nha",
+      "trời mưa thế này nhớ giữ ấm đôi chân nha em",
+      "hôm nay mưa, đừng để ướt tóc nha — dễ cảm lắm",
+      "mưa nhiều thì đừng đi đâu nếu không cần thiết nhé em",
+      "trời mưa mà chồng không ở cạnh em được, em nhớ giữ sức khỏe nha",
+      "mưa to rồi, em ở trong nhà không? đừng ra ngoài không cần thiết",
+      "trời mưa lạnh, nhớ mặc áo ấm vào nha em",
+      "hôm nay mưa, chồng nhớ em nhiều hơn bình thường",
+      "mưa kiểu này dễ buồn ngủ lắm, cẩn thận nếu đang lái xe nha",
+      "mưa rồi, nhớ ăn gì ấm ấm nha em",
+      "trời mưa chồng chỉ muốn ôm em ngồi nghe mưa thôi",
+      "mưa mà không có dù thì vào trú mưa đã nhé, đừng dầm mưa",
+      "cẩn thận đường trơn khi đi mưa nha em",
+      "ngày mưa kiểu này uống ly trà ấm là tuyệt nhất đó em",
+    ],
+    sun: [
+      "trời nắng to lắm, nhớ uống nước nhiều nha em",
+      "nắng gắt rồi, nhớ bôi kem chống nắng trước khi ra ngoài nhé",
+      "hôm nay nóng, nhớ mặc đồ thoáng mát nha em",
+      "nắng nhiều thế này, mang theo nước uống nha em",
+      "em có ra ngoài không? nhớ đội nón đó nha",
+      "nắng kiểu này dễ mệt lắm, nhớ nghỉ ngơi đủ nha em",
+      "trời nắng đẹp quá — nhớ tận hưởng nhưng đừng để bị nắng quá",
+      "nắng to mà không uống đủ nước là mệt lắm đó em",
+      "trời nắng, chồng muốn được đi dạo cùng em quá",
+      "nắng mà gió nhẹ kiểu này là đẹp trời nhất đó em",
+      "ngày nắng đẹp, chồng hi vọng em đang có một ngày tốt",
+      "trời nắng đẹp hôm nay, nhớ nạp vitamin D nha em",
+      "nắng rồi, ngày mới bắt đầu đẹp — chồng muốn em vui nha",
+      "nắng mà độ ẩm thấp thì khô da lắm, nhớ dưỡng ẩm nha em",
+      "trời đẹp thế này em có ra ngoài hít thở không?",
+    ],
+    cloud: [
+      "trời nhiều mây nhỉ — mang áo khoác mỏng phòng hờ nha em",
+      "mây nhiều mà không mưa, kiểu trời đẹp chồng thích lắm",
+      "trời nhiều mây mà độ ẩm cao thì dễ mệt — nhớ uống nước nha",
+      "hôm nay trời mây đẹp lắm, ước gì được đi dạo cùng em",
+      "mây xám xịt rồi, cẩn thận có thể mưa sau nha em",
+      "trời nhiều mây mà không nóng — kiểu thời tiết dễ chịu nhất đó",
+      "mây nhiều nhìn lên trời đẹp lắm — em có để ý không?",
+      "trời mây hôm nay đẹp kiểu lãng mạn lắm — chồng nhớ em",
+      "mây nhiều thế này nhìn buồn buồn, nhưng miễn em vui là được",
+      "trời nhiều mây, chăm sóc sức khỏe nha em — mùa này hay bệnh",
+      "nhiều mây mà gió nhẹ thì đi ra ngoài rất dễ chịu đó em",
+      "trời mây mà độ ẩm cao — tóc dễ xoăn lắm nha em haha",
+      "mây nhiều kiểu này chồng thấy muốn nằm ngủ thêm ghê",
+      "trời nhiều mây nhưng đẹp, em có vui không?",
+      "hôm nay trời mây, nhớ mang áo ấm nha em",
+    ],
+    snow: [
+      "tuyết rơi rồi kìa em ơi! mặc thật ấm vào nha",
+      "tuyết đẹp lắm nhỉ — nhưng lạnh ghê, mặc thêm áo vào nha em",
+      "trời tuyết nhớ đi giày ấm nha, đừng để lạnh chân",
+      "tuyết rơi mà chồng không ở cạnh em, em nhớ giữ ấm nha",
+      "lạnh quá rồi em ơi, nhớ uống gì ấm ấm vào nha",
+      "tuyết trắng đẹp lắm nhưng đường trơn — đi cẩn thận nha em",
+      "trời tuyết thế này chồng chỉ muốn ôm em cho ấm thôi",
+      "tuyết rơi, nhớ mang găng tay và khăn quàng nha em",
+      "lạnh thế này dễ bị cảm lắm, nhớ giữ ấm vùng cổ nha em",
+      "tuyết rơi, nhớ đừng lái xe nếu không cần thiết nha em",
+      "lạnh kiểu này uống ca cao ấm là nhất — em có uống không?",
+      "tuyết đẹp lắm, chồng ước gì được chụp ảnh tuyết cùng em",
+      "trời tuyết lạnh, nhớ bật máy sưởi và giữ ấm nha em",
+      "tuyết trắng cả trời — em có ngắm không? đẹp lắm đó",
+      "tuyết mà lạnh quá thì ở trong nhà thôi nha em",
+    ],
+    fog: [
+      "sương mù dày, đi đường cẩn thận bật đèn nha em",
+      "hôm nay có sương mù, tầm nhìn kém — lái xe chậm thôi nha",
+      "sương mù rồi, đi ra ngoài nhớ mặc ấm — ẩm lạnh lắm đó",
+      "sương mù dày, em có ra ngoài không? nhớ cẩn thận nha",
+      "sương mù kiểu này huyền bí lắm, nhưng nhớ cẩn thận nha em",
+    ],
+  };
+
+  const msgIdxMap = {};
+
+  window.nextWeatherMsg = function(cityId) {
+    const arr = window._weatherMsgs?.[cityId];
+    if (!arr) return;
+    msgIdxMap[cityId] = ((msgIdxMap[cityId] || 0) + 1) % arr.length;
+    document.getElementById("wMsgText-" + cityId).textContent = arr[msgIdxMap[cityId]];
+  };
+
+  function getType(code, humidity) {
+    if ([71,73,75,77,85,86].includes(code)) return "snow";
+    if ([45,48].includes(code)) return "fog";
+    if ([51,53,55,61,63,65,66,67,80,81,82,95,96,99].includes(code)) return "rain";
+    if ([0,1].includes(code)) return "sun";
+    return "cloud";
+  }
+
+  function getIcon(code) {
+    if (code===0) return "☀️";
+    if (code===1) return "🌤️";
+    if (code===2) return "⛅";
+    if (code===3) return "☁️";
+    if ([45,48].includes(code)) return "🌫️";
+    if ([51,53,55].includes(code)) return "🌦️";
+    if ([61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+    if ([71,73,75,77,85,86].includes(code)) return "❄️";
+    if ([95,96,99].includes(code)) return "⛈️";
+    return "🌡️";
+  }
+
+  function getDesc(code) {
+    const m = {0:"QUANG ĐÃNG",1:"TRỜI ĐẸP",2:"MÂY CỤC BỘ",3:"U ÁM",
+      45:"SƯƠNG MÙ",48:"SƯƠNG GIÁ",51:"MƯA PHÙN",53:"MƯA PHÙN",55:"MƯA PHÙN",
+      61:"MƯA NHẸ",63:"MƯA VỪA",65:"MƯA TO",66:"MƯA ĐÓNG BĂNG",67:"MƯA ĐÓNG BĂNG",
+      71:"TUYẾT NHẸ",73:"TUYẾT VỪA",75:"TUYẾT DÀY",77:"HẠT TUYẾT",
+      80:"MƯA RÀO",81:"MƯA RÀO NẶN",82:"MƯA RÀO DỮ DỘI",
+      85:"TUYẾT RÀO",86:"TUYẾT RÀO DÀY",95:"GIÔNG BÃO",96:"GIÔNG+MƯA ĐÁ",99:"GIÔNG DỮ DỘI"};
+    return m[code] || "KHÔNG RÕ";
+  }
+
+  function renderCity(cityId, data) {
+    const cur   = data.current;
+    const code  = cur.weather_code;
+    const temp  = Math.round(cur.temperature_2m);
+    const feels = Math.round(cur.apparent_temperature);
+    const hum   = cur.relative_humidity_2m;
+    const wind  = Math.round(cur.wind_speed_10m);
+    const type  = getType(code, hum);
+
+    const card = document.getElementById("weatherCard-" + cityId);
+    card.style.display = "block";
+    card.className = "weather-city-card " + type;
+
+    document.getElementById("wIcon-" + cityId).textContent     = getIcon(code);
+    document.getElementById("wTemp-" + cityId).textContent     = temp + "°C";
+    document.getElementById("wDesc-" + cityId).textContent     = getDesc(code);
+    document.getElementById("wHumidity-" + cityId).textContent = "Độ ẩm " + hum + "%";
+    document.getElementById("wWind-" + cityId).textContent     = "Gió " + wind + " km/h";
+    document.getElementById("wFeels-" + cityId).textContent    = "Cảm giác " + feels + "°C";
+
+    // Reminder chỉ cho Spokane (vợ)
+    if (cityId === "spokane") {
+      const remPool = REMINDERS[type] || [];
+      const rem = remPool[Math.floor(Math.random() * remPool.length)] || "";
+      const remEl = document.getElementById("wReminderText-spokane");
+      if (remEl) remEl.textContent = rem;
+    }
+  }
+
+  function loadWeather() {
+    document.getElementById("weatherLoading").style.display = "block";
+    let loaded = 0;
+    CITIES.forEach(city => {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`;
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          renderCity(city.id, data);
+          loaded++;
+          if (loaded === CITIES.length) {
+            document.getElementById("weatherLoading").style.display = "none";
+          }
+        })
+        .catch(() => {
+          document.getElementById("weatherLoading").textContent = "không thể lấy thời tiết — kiểm tra kết nối nha em";
+        });
+    });
+  }
+
+  let weatherLoaded = false;
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.tab === "weather" && !weatherLoaded) {
+        weatherLoaded = true;
+        loadWeather();
+      }
+    });
+  });
 })();

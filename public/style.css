@@ -1108,84 +1108,162 @@ input, textarea, #letterContent { user-select: text; }
   .mood-bubble { width: 50px; height: 50px; font-size: 22px; }
 }
 
-/* ══ WEATHER ═════════════════════════════════════════════════════════════════ */
-#weatherWrap { padding: 32px 24px 60px; max-width: 600px; margin: 0 auto; }
 
+/* ══ WEATHER — BEAUTIFUL ══════════════════════════════════════════════════════ */
+#weatherWrap {
+  padding: 28px 24px 80px;
+}
+#weatherRow {
+  display: flex; gap: 16px; align-items: flex-start;
+}
+#weatherRow .weather-city-card { flex: 1; }
+@media (max-width: 640px) {
+  #weatherRow { flex-direction: column; }
+}
 #weatherLoading {
   text-align: center; padding: 60px 0;
   font-size: 12px; letter-spacing: 3px;
-  color: rgba(160,140,200,0.4); font-family: 'Be Vietnam Pro', sans-serif;
+  color: rgba(160,140,200,0.4);
+  font-family: 'Be Vietnam Pro', sans-serif;
   font-style: italic;
 }
-
-#weatherCard {
-  border-radius: 20px; padding: 28px 24px; margin-bottom: 24px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(160,140,220,0.15);
-  transition: background 1s ease, border-color 1s ease;
-}
-#wTop { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-#wIcon { font-size: 72px; line-height: 1; }
-#wRight { text-align: right; }
-#wTemp { font-size: 56px; font-weight: 300; color: rgba(220,210,255,0.95); font-family: 'GFS Didot', Georgia, serif; line-height: 1; }
-#wDesc { font-size: 11px; letter-spacing: 3px; color: rgba(180,160,220,0.55); font-family: 'Be Vietnam Pro', sans-serif; margin-top: 4px; }
-#wLoc  { font-size: 10px; letter-spacing: 2px; color: rgba(140,120,180,0.38); font-family: 'Be Vietnam Pro', sans-serif; margin-top: 4px; }
-#wDetails { display: flex; gap: 20px; flex-wrap: wrap; }
-.w-detail { font-size: 11px; color: rgba(160,140,200,0.5); font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1px; }
-.w-detail span { color: rgba(200,185,240,0.85); }
-
-#weatherMsg {
-  padding: 22px 24px; border-radius: 16px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(160,140,220,0.1);
-}
-#wMsgLabel { font-size: 9px; letter-spacing: 3px; color: rgba(140,120,180,0.35); margin-bottom: 12px; font-family: 'Be Vietnam Pro', sans-serif; }
-#wMsgText { font-size: 17px; font-style: italic; color: rgba(200,185,240,0.82); font-family: 'Cormorant Garamond', Georgia, serif; line-height: 1.85; min-height: 52px; }
-#wMsgNext { margin-top: 14px; font-size: 11px; color: rgba(140,120,180,0.38); cursor: none; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1px; text-align: right; transition: color 0.2s; }
-#wMsgNext:hover { color: rgba(180,160,220,0.7); }
-
-/* weather card themes */
-#weatherCard.rain  { background: linear-gradient(135deg, rgba(30,50,120,0.35), rgba(15,25,70,0.55)); border-color: rgba(80,120,220,0.2); }
-#weatherCard.sun   { background: linear-gradient(135deg, rgba(100,70,15,0.35), rgba(70,50,8,0.5)); border-color: rgba(220,160,60,0.2); }
-#weatherCard.cloud { background: linear-gradient(135deg, rgba(55,55,90,0.35), rgba(35,35,65,0.5)); border-color: rgba(140,140,200,0.15); }
-#weatherCard.snow  { background: linear-gradient(135deg, rgba(70,90,150,0.35), rgba(45,65,120,0.5)); border-color: rgba(160,200,255,0.2); }
-#weatherCard.fog   { background: linear-gradient(135deg, rgba(80,80,100,0.3), rgba(50,50,70,0.5)); border-color: rgba(160,160,200,0.12); }
-
-@media (max-width: 768px) {
-  #weatherWrap { padding: 20px 14px 60px; }
-  #wIcon { font-size: 56px; }
-  #wTemp { font-size: 44px; }
-}
-
-/* ── Two city weather layout ─────────────────────────────────────────────── */
-#weatherWrap { display: flex; flex-direction: column; gap: 20px; }
-
 .weather-city-card {
-  border-radius: 20px; padding: 24px 22px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(160,140,220,0.15);
-  transition: background 1s ease, border-color 1s ease;
+  border-radius: 24px; overflow: hidden;
+  position: relative; padding: 28px 24px 22px;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  transition: all 0.5s ease;
 }
-.weather-city-card.rain  { background: linear-gradient(135deg, rgba(30,50,120,0.35), rgba(15,25,70,0.55)); border-color: rgba(80,120,220,0.2); }
-.weather-city-card.sun   { background: linear-gradient(135deg, rgba(100,70,15,0.35), rgba(70,50,8,0.5)); border-color: rgba(220,160,60,0.2); }
-.weather-city-card.cloud { background: linear-gradient(135deg, rgba(55,55,90,0.35), rgba(35,35,65,0.5)); border-color: rgba(140,140,200,0.15); }
-.weather-city-card.snow  { background: linear-gradient(135deg, rgba(70,90,150,0.35), rgba(45,65,120,0.5)); border-color: rgba(160,200,255,0.2); }
-.weather-city-card.fog   { background: linear-gradient(135deg, rgba(80,80,100,0.3), rgba(50,50,70,0.5)); border-color: rgba(160,160,200,0.12); }
+/* Glow blob */
+.weather-city-card::before {
+  content: ""; position: absolute;
+  width: 200px; height: 200px; border-radius: 50%;
+  opacity: 0.15; filter: blur(55px);
+  top: -40px; right: -40px; pointer-events: none;
+  transition: background 1s ease;
+}
 
-.wTop    { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-.wIcon   { font-size: 64px; line-height: 1; }
-.wRight  { text-align: right; }
-.wTemp   { font-size: 50px; font-weight: 300; color: rgba(220,210,255,0.95); font-family: 'GFS Didot', Georgia, serif; line-height: 1; }
-.wDesc   { font-size: 10px; letter-spacing: 3px; color: rgba(180,160,220,0.55); font-family: 'Be Vietnam Pro', sans-serif; margin-top: 4px; }
-.wLoc    { font-size: 10px; letter-spacing: 2px; color: rgba(140,120,180,0.4); font-family: 'Be Vietnam Pro', sans-serif; margin-top: 4px; }
-.wDetails { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
-.weatherMsg { padding: 16px 18px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(160,140,220,0.08); }
-.wMsgLabel { font-size: 9px; letter-spacing: 3px; color: rgba(140,120,180,0.35); margin-bottom: 10px; font-family: 'Be Vietnam Pro', sans-serif; }
-.wMsgText  { font-size: 16px; font-style: italic; color: rgba(200,185,240,0.82); font-family: 'Cormorant Garamond', Georgia, serif; line-height: 1.8; min-height: 48px; }
-.wMsgNext  { margin-top: 10px; font-size: 11px; color: rgba(140,120,180,0.38); cursor: none; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1px; text-align: right; transition: color 0.2s; }
-.wMsgNext:hover { color: rgba(180,160,220,0.7); }
+/* ── NẮNG — vàng/cam ấm ── */
+.weather-city-card.sun {
+  background: linear-gradient(145deg, #1c1200 0%, #241800 50%, #1a1000 100%);
+  border-color: rgba(220,160,50,0.15);
+}
+.weather-city-card.sun::before { background: #ffa500; }
+.sun .wTemp  { color: rgba(255,210,110,0.95); text-shadow: 0 0 30px rgba(255,160,0,0.3); }
+.sun .wDesc  { color: rgba(220,160,60,0.5); }
+.sun .wLoc   { color: rgba(180,130,40,0.4); }
+.sun .w-detail    { color: rgba(200,150,60,0.55); }
+.sun .w-detail span { color: rgba(255,200,110,0.88); }
+.sun .wDivider { background: linear-gradient(90deg, transparent, rgba(220,150,40,0.22), transparent); }
+.sun .weatherMsg { background: rgba(140,90,0,0.14); border-color: rgba(220,150,40,0.12); }
+.sun .wMsgLabel  { color: rgba(180,130,40,0.35); }
+.sun .wMsgText   { color: rgba(245,205,140,0.85); }
+.sun .wMsgNext   { color: rgba(220,170,80,0.5); }
+.sun .wMsgNext:hover { color: rgba(240,190,100,0.85); }
+.sun .wReminder  { background: rgba(180,100,0,0.1); border-color: rgba(220,140,30,0.12); }
+.sun .wReminderText { color: rgba(240,195,120,0.75); }
+
+/* ── MƯA — xanh tím ── */
+.weather-city-card.rain {
+  background: linear-gradient(145deg, #080e28 0%, #0a1035 50%, #06091e 100%);
+  border-color: rgba(80,120,255,0.15);
+}
+.weather-city-card.rain::before { background: #4060ff; }
+.rain .wTemp  { color: rgba(150,195,255,0.95); text-shadow: 0 0 30px rgba(80,140,255,0.25); }
+.rain .wDesc  { color: rgba(100,150,255,0.5); }
+.rain .wLoc   { color: rgba(80,120,220,0.4); }
+.rain .w-detail    { color: rgba(100,150,240,0.5); }
+.rain .w-detail span { color: rgba(160,200,255,0.88); }
+.rain .wDivider { background: linear-gradient(90deg, transparent, rgba(80,130,255,0.2), transparent); }
+.rain .weatherMsg { background: rgba(30,60,180,0.12); border-color: rgba(80,130,255,0.12); }
+.rain .wMsgLabel  { color: rgba(90,140,255,0.35); }
+.rain .wMsgText   { color: rgba(175,210,255,0.85); }
+.rain .wMsgNext   { color: rgba(120,170,255,0.5); }
+.rain .wMsgNext:hover { color: rgba(160,205,255,0.85); }
+.rain .wReminder  { background: rgba(20,40,150,0.15); border-color: rgba(70,120,255,0.12); }
+.rain .wReminderText { color: rgba(160,200,255,0.75); }
+
+/* ── TUYẾT — trắng lạnh ── */
+.weather-city-card.snow {
+  background: linear-gradient(145deg, #0a0e18 0%, #0c1020 50%, #080c16 100%);
+  border-color: rgba(180,220,255,0.15);
+}
+.weather-city-card.snow::before { background: #aaddff; opacity: 0.12; }
+.snow .wTemp  { color: rgba(220,240,255,0.97); text-shadow: 0 0 30px rgba(160,210,255,0.3); }
+.snow .wDesc  { color: rgba(160,210,255,0.5); }
+.snow .wLoc   { color: rgba(130,180,230,0.4); }
+.snow .w-detail    { color: rgba(140,190,240,0.5); }
+.snow .w-detail span { color: rgba(200,230,255,0.9); }
+.snow .wDivider { background: linear-gradient(90deg, transparent, rgba(160,210,255,0.2), transparent); }
+.snow .weatherMsg { background: rgba(50,90,180,0.1); border-color: rgba(150,200,255,0.12); }
+.snow .wMsgLabel  { color: rgba(130,185,240,0.35); }
+.snow .wMsgText   { color: rgba(200,230,255,0.85); }
+.snow .wMsgNext   { color: rgba(150,200,255,0.5); }
+.snow .wMsgNext:hover { color: rgba(190,225,255,0.85); }
+.snow .wReminder  { background: rgba(40,80,160,0.12); border-color: rgba(140,195,255,0.12); }
+.snow .wReminderText { color: rgba(195,225,255,0.75); }
+
+/* ── MÂY — tím xanh trung ── */
+.weather-city-card.cloud {
+  background: linear-gradient(145deg, #0e0e1e 0%, #111120 50%, #0c0c1a 100%);
+  border-color: rgba(140,135,220,0.12);
+}
+.weather-city-card.cloud::before { background: #7070cc; }
+.cloud .wTemp  { color: rgba(200,195,245,0.95); }
+.cloud .wDesc  { color: rgba(155,150,215,0.5); }
+.cloud .wLoc   { color: rgba(130,125,195,0.4); }
+.cloud .w-detail    { color: rgba(145,140,210,0.5); }
+.cloud .w-detail span { color: rgba(200,195,245,0.88); }
+.cloud .wDivider { background: linear-gradient(90deg, transparent, rgba(140,135,220,0.18), transparent); }
+.cloud .weatherMsg { background: rgba(70,70,140,0.1); border-color: rgba(140,130,220,0.1); }
+.cloud .wMsgLabel  { color: rgba(130,125,200,0.35); }
+.cloud .wMsgText   { color: rgba(200,195,240,0.85); }
+.cloud .wMsgNext   { color: rgba(160,155,230,0.5); }
+.cloud .wMsgNext:hover { color: rgba(190,185,245,0.85); }
+.cloud .wReminder  { background: rgba(60,60,120,0.1); border-color: rgba(130,125,210,0.1); }
+.cloud .wReminderText { color: rgba(190,185,240,0.72); }
+
+/* ── SƯƠNG MÙ ── */
+.weather-city-card.fog {
+  background: linear-gradient(145deg, #0e0e14 0%, #111118 50%, #0c0c12 100%);
+  border-color: rgba(160,160,200,0.1);
+}
+.weather-city-card.fog::before { background: #9090aa; opacity: 0.1; }
+.fog .wTemp   { color: rgba(190,190,220,0.9); }
+.fog .wDesc   { color: rgba(150,150,190,0.45); }
+.fog .wLoc    { color: rgba(130,130,170,0.38); }
+.fog .w-detail     { color: rgba(140,140,185,0.48); }
+.fog .w-detail span { color: rgba(185,185,220,0.85); }
+.fog .wDivider { background: linear-gradient(90deg, transparent, rgba(150,150,200,0.15), transparent); }
+.fog .weatherMsg { background: rgba(60,60,100,0.1); border-color: rgba(140,140,200,0.1); }
+.fog .wMsgLabel  { color: rgba(130,130,185,0.32); }
+.fog .wMsgText   { color: rgba(185,185,225,0.82); }
+.fog .wMsgNext   { color: rgba(150,150,210,0.45); }
+.fog .wReminder  { background: rgba(55,55,95,0.1); border-color: rgba(135,135,195,0.1); }
+.fog .wReminderText { color: rgba(180,180,220,0.7); }
+
+/* Shared elements */
+.wTop { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.wIcon { font-size: 70px; line-height: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); }
+.wRight { text-align: right; }
+.wTemp { font-size: 56px; font-weight: 300; line-height: 1; font-family: 'GFS Didot', Georgia, serif; letter-spacing: -2px; }
+.wDesc { font-size: 10px; letter-spacing: 3px; margin-top: 4px; font-family: 'Be Vietnam Pro', sans-serif; }
+.wLoc  { font-size: 10px; letter-spacing: 2px; margin-top: 3px; font-family: 'Be Vietnam Pro', sans-serif; }
+.wDivider { height: 1px; margin-bottom: 14px; }
+.wDetails { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
+.w-detail { font-size: 11px; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 0.5px; }
+.weatherMsg { border-radius: 14px; padding: 16px 18px; margin-bottom: 10px; }
+.wMsgLabel { font-size: 8px; letter-spacing: 3px; margin-bottom: 8px; font-family: 'Be Vietnam Pro', sans-serif; }
+.wMsgText  { font-size: 15px; font-style: italic; line-height: 1.85; font-family: 'Cormorant Garamond', Georgia, serif; min-height: 48px; }
+.wMsgNext  { margin-top: 10px; font-size: 10px; text-align: right; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1.5px; cursor: none; transition: color 0.2s; }
+
+/* Reminder box — chỉ Spokane */
+.wReminder { border-radius: 12px; padding: 13px 16px; }
+.wReminderLabel { font-size: 8px; letter-spacing: 3px; margin-bottom: 6px; font-family: 'Be Vietnam Pro', sans-serif; color: rgba(160,155,200,0.32); }
+.wReminderText { font-size: 13px; font-style: italic; line-height: 1.75; font-family: 'Cormorant Garamond', Georgia, serif; }
 
 @media (max-width: 768px) {
-  .wIcon { font-size: 48px; }
-  .wTemp { font-size: 40px; }
+  #weatherWrap { padding: 16px 14px 60px; }
+  .wIcon { font-size: 54px; }
+  .wTemp { font-size: 44px; }
 }

@@ -53,7 +53,7 @@
     <button class="tab-btn active" data-tab="home">THƯ</button>
     <button class="tab-btn" data-tab="diary">NHẬT KÝ</button>
     <button class="tab-btn" data-tab="reasons">VÌ SAO ANH YÊU EM</button>
-    <button class="tab-btn" data-tab="mood">BONG BÓNG</button>
+    <button class="tab-btn" data-tab="weather">THỜI TIẾT</button>
     <button class="tab-btn" data-tab="things">100 ĐIỀU VỀ EM</button>
     <button class="tab-btn" data-tab="timeline">HÀNH TRÌNH CỦA MÌNH</button>
     <button class="tab-btn" data-tab="gallery">KỶ NIỆM</button>
@@ -86,18 +86,53 @@
     <div class="tab-coming"><p class="tab-coming-label">VÌ SAO ANH YÊU EM</p><p class="tab-coming-text">Không phải vì một lý do lớn. Mà vì rất nhiều điều nhỏ cộng lại.</p><div id="reasonsList"></div></div>
   </div>
 
-  <!-- MOOD BUBBLES -->
-  <div id="page-mood" class="tab-page">
-    <div id="moodWrap">
-      <div id="moodWho">
-        <button class="mood-who-btn on" data-who="vo">vợ</button>
-        <button class="mood-who-btn" data-who="chong">chồng</button>
+  <!-- WEATHER -->
+  <div id="page-weather" class="tab-page">
+    <div id="weatherWrap">
+      <div id="weatherLoading">đang lấy thời tiết...</div>
+
+      <!-- Fremont -->
+      <div id="weatherCard-fremont" class="weather-city-card" style="display:none">
+        <div class="wTop">
+          <div class="wIcon" id="wIcon-fremont"></div>
+          <div class="wRight">
+            <div class="wTemp" id="wTemp-fremont"></div>
+            <div class="wDesc" id="wDesc-fremont"></div>
+            <div class="wLoc">📍 Fremont, CA</div>
+          </div>
+        </div>
+        <div class="wDetails">
+          <div class="w-detail">💧 <span id="wHumidity-fremont"></span></div>
+          <div class="w-detail">💨 <span id="wWind-fremont"></span></div>
+          <div class="w-detail">🌡 <span id="wFeels-fremont"></span></div>
+        </div>
+        <div class="weatherMsg">
+          <div class="wMsgLabel">CHỒNG MUỐN NÓI</div>
+          <div class="wMsgText" id="wMsgText-fremont"></div>
+          <div class="wMsgNext" onclick="nextWeatherMsg('fremont')">câu khác →</div>
+        </div>
       </div>
-      <p id="moodHint">chạm vào tâm trạng hôm nay — chọn tối đa 3</p>
-      <div id="moodPicker"></div>
-      <div id="moodCols">
-        <div class="mood-col"><div class="mood-col-label">VỢ</div><div class="mood-feed" id="voFeed"></div></div>
-        <div class="mood-col"><div class="mood-col-label">CHỒNG</div><div class="mood-feed" id="chongFeed"></div></div>
+
+      <!-- Spokane Valley -->
+      <div id="weatherCard-spokane" class="weather-city-card" style="display:none">
+        <div class="wTop">
+          <div class="wIcon" id="wIcon-spokane"></div>
+          <div class="wRight">
+            <div class="wTemp" id="wTemp-spokane"></div>
+            <div class="wDesc" id="wDesc-spokane"></div>
+            <div class="wLoc">📍 Spokane Valley, WA</div>
+          </div>
+        </div>
+        <div class="wDetails">
+          <div class="w-detail">💧 <span id="wHumidity-spokane"></span></div>
+          <div class="w-detail">💨 <span id="wWind-spokane"></span></div>
+          <div class="w-detail">🌡 <span id="wFeels-spokane"></span></div>
+        </div>
+        <div class="weatherMsg">
+          <div class="wMsgLabel">CHỒNG MUỐN NÓI</div>
+          <div class="wMsgText" id="wMsgText-spokane"></div>
+          <div class="wMsgNext" onclick="nextWeatherMsg('spokane')">câu khác →</div>
+        </div>
       </div>
     </div>
   </div>

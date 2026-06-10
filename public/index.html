@@ -54,6 +54,7 @@
     <button class="tab-btn" data-tab="diary">NHẬT KÝ</button>
     <button class="tab-btn" data-tab="reasons">VÌ SAO ANH YÊU EM</button>
     <button class="tab-btn" data-tab="weather">THỜI TIẾT</button>
+    <button class="tab-btn" data-tab="mood">BONG BÓNG</button>
     <button class="tab-btn" data-tab="things">100 ĐIỀU VỀ EM</button>
     <button class="tab-btn" data-tab="timeline">HÀNH TRÌNH CỦA MÌNH</button>
     <button class="tab-btn" data-tab="gallery">KỶ NIỆM</button>
@@ -75,6 +76,22 @@
   </div>
 
   </div><!-- end page-home -->
+
+  <!-- MOOD BUBBLES -->
+  <div id="page-mood" class="tab-page">
+    <div id="moodWrap">
+      <div id="moodWho">
+        <button class="mood-who-btn on" data-who="vo">vợ</button>
+        <button class="mood-who-btn" data-who="chong">chồng</button>
+      </div>
+      <p id="moodHint">chạm vào tâm trạng hôm nay — chọn bao nhiêu cũng được</p>
+      <div id="moodPicker"></div>
+      <div id="moodCols">
+        <div class="mood-col"><div class="mood-col-label">VỢ</div><div class="mood-feed" id="voFeed"></div></div>
+        <div class="mood-col"><div class="mood-col-label">CHỒNG</div><div class="mood-feed" id="chongFeed"></div></div>
+      </div>
+    </div>
+  </div>
 
   <!-- DIARY -->
   <div id="page-diary" class="tab-page">
@@ -171,18 +188,6 @@
           <button id="secretPassClose">đóng</button>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Exit Intent Modal -->
-  <div id="exitModal">
-    <div id="exitInner">
-      <p id="exitMsg">vợ thật sự sẽ rời đi à.<br>lần tới, vợ còn trở lại đây chứ?</p>
-      <div id="exitBtns">
-        <button id="exitYes">dạ</button>
-        <button id="exitNo">không</button>
-      </div>
-      <p id="exitReply"></p>
     </div>
   </div>
 

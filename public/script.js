@@ -1830,70 +1830,7 @@ function startModalBorderCycle() {
   }
 })();
 
-// ══════════════════════════════════════════════════════════════════════════════
-// EXIT INTENT — hiện khi chuột rời khỏi màn hình phía trên
-// ══════════════════════════════════════════════════════════════════════════════
-(function initExitIntent() {
-  const modal  = document.getElementById("exitModal");
-  const yesBtn = document.getElementById("exitYes");
-  const noBtn  = document.getElementById("exitNo");
-  const reply  = document.getElementById("exitReply");
-  const btns   = document.getElementById("exitBtns");
-  if (!modal) return;
 
-  let shown = false;
-
-  // Desktop — chuột ra khỏi viewport phía trên
-  document.addEventListener("mouseleave", (e) => {
-    if (e.clientY <= 0 && !shown) {
-      shown = true;
-      showExit();
-    }
-  });
-
-  // Mobile — visibilitychange (chuyển tab/app)
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden && !shown) {
-      shown = true;
-      showExit();
-    }
-  });
-
-  function showExit() {
-    reply.textContent = "";
-    reply.classList.remove("show");
-    btns.style.display = "flex";
-    modal.classList.add("show");
-  }
-
-  yesBtn.addEventListener("click", () => {
-    btns.style.display = "none";
-    reply.textContent = "chồng lúc nào cũng đợi em ở đây";
-    reply.classList.add("show");
-    setTimeout(() => {
-      modal.classList.remove("show");
-      // shown stays true — không hiện lần 2
-    }, 3000);
-  });
-
-  noBtn.addEventListener("click", () => {
-    btns.style.display = "none";
-    reply.textContent = "anh hiểu rồi, mong em vững vàng với lựa chọn của chính mình nhé, chúc em hạnh phúc";
-    reply.classList.add("show");
-    setTimeout(() => {
-      modal.classList.remove("show");
-      // shown stays true — không hiện lần 2
-    }, 4000);
-  });
-
-  // Click ngoài modal để đóng
-  modal.addEventListener("click", e => {
-    if (e.target === modal) {
-      modal.classList.remove("show");
-      // shown stays true
-    }
-  });
-})();
 
 // ══════════════════════════════════════════════════════════════════════════════
 // BONG BÓNG TÂM TRẠNG
@@ -2238,5 +2175,130 @@ function startModalBorderCycle() {
         loadWeather();
       }
     });
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ĐẾM NGÀY BÊN NHAU
+// ══════════════════════════════════════════════════════════════════════════════
+(function initDaysTogether() {
+  // ĐỔI NGÀY NÀY KHI TỎ TÌNH THÀNH CÔNG (định dạng: "YYYY-MM-DD")
+  // Để null = chưa bắt đầu, sẽ hiện 0
+  const START_DATE = null; // ví dụ: "2026-08-28"
+
+  const numEl = document.getElementById("daysNum");
+  if (!numEl) return;
+
+  if (!START_DATE) {
+    numEl.textContent = "0";
+    return;
+  }
+
+  const start = new Date(START_DATE);
+  const now = new Date();
+  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  const days = Math.max(0, diff);
+
+  // Đếm animation từ 0 lên
+  let current = 0;
+  const step = Math.max(1, Math.ceil(days / 40));
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= days) { current = days; clearInterval(timer); }
+    numEl.textContent = current;
+  }, 30);
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PARALLAX SAO KHI SCROLL
+// ══════════════════════════════════════════════════════════════════════════════
+(function initParallaxStars() {
+  // Tìm canvas/layer sao nền hiện có
+  document.addEventListener("introEnded", () => {
+    let ticking = false;
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+
+          // Di chuyển các lớp sao với tốc độ khác nhau
+          const starCanvas = document.querySelector("#starCanvas, #starfield, .star-layer, #bgCanvas");
+          if (starCanvas) {
+            starCanvas.style.transform = `translateY(${scrollY * 0.15}px)`;
+          }
+
+          // Tầng sao xa di chuyển chậm hơn (nếu có nhiều canvas)
+          const layers = document.querySelectorAll("canvas");
+          layers.forEach((layer, i) => {
+            if (layer.id === "particleRain") return; // bỏ qua hạt mưa
+            const speed = 0.1 + i * 0.05;
+            layer.style.transform = `translateY(${scrollY * speed}px)`;
+          });
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RADIO ♡
+// ══════════════════════════════════════════════════════════════════════════════
+(function initRadio() {
+  // Thêm bài hát ở đây — id lấy từ link YouTube (phần sau v=)
+  const TRACKS = [
+    {
+      id: "LIKOvbJ-DZg",
+      name: "Any Way You Want — Journey",
+      note: "bài này chồng chọn cho em đó",
+    },
+    // Thêm bài mới theo mẫu:
+    // { id: "VIDEO_ID", name: "Tên bài", note: "ghi chú của chồng" },
+  ];
+
+  const list = document.getElementById("radioList");
+  if (!list) return;
+
+  TRACKS.forEach((t, i) => {
+    const track = document.createElement("div");
+    track.className = "radio-track";
+    track.innerHTML = `
+      <div class="radio-head">
+        <div class="radio-play">▶</div>
+        <div class="radio-info">
+          <div class="radio-name">${t.name}</div>
+          <div class="radio-note">${t.note}</div>
+        </div>
+      </div>
+      <div class="radio-embed" id="embed-${i}"></div>
+    `;
+
+    const head  = track.querySelector(".radio-head");
+    const play  = track.querySelector(".radio-play");
+    const embed = track.querySelector(".radio-embed");
+    let loaded = false;
+
+    head.addEventListener("click", () => {
+      const isOpen = embed.classList.contains("open");
+
+      // Đóng tất cả track khác
+      document.querySelectorAll(".radio-embed.open").forEach(e => {
+        e.classList.remove("open");
+        e.innerHTML = "";
+        const p = e.closest(".radio-track").querySelector(".radio-play");
+        if (p) p.textContent = "▶";
+      });
+
+      if (!isOpen) {
+        embed.innerHTML = `<iframe src="https://www.youtube.com/embed/${t.id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        embed.classList.add("open");
+        play.textContent = "❚❚";
+      }
+    });
+
+    list.appendChild(track);
   });
 })();

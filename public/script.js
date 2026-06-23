@@ -182,6 +182,12 @@ bgMusic.addEventListener("ended", () => nextTrack());
     lastX = mx; lastY = my;
   });
 
+  // Khi scroll, clear trail cũ để tránh vệt nằm sai chỗ (cursor vẫn fixed theo viewport)
+  window.addEventListener("scroll", () => {
+    SEGMENTS.length = 0;
+    lastX = -1; lastY = -1;
+  }, { passive: true });
+
   function loop() {
     requestAnimationFrame(loop);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2228,13 +2234,8 @@ function startModalBorderCycle() {
             starCanvas.style.transform = `translateY(${scrollY * 0.15}px)`;
           }
 
-          // Tầng sao xa di chuyển chậm hơn (nếu có nhiều canvas)
-          const layers = document.querySelectorAll("canvas");
-          layers.forEach((layer, i) => {
-            if (layer.id === "particleRain") return; // bỏ qua hạt mưa
-            const speed = 0.1 + i * 0.05;
-            layer.style.transform = `translateY(${scrollY * speed}px)`;
-          });
+          // KHÔNG áp parallax lên canvas cursor (gây lệch con trỏ khi scroll)
+          // Chỉ áp lên star canvas nền nếu có id cụ thể (đã xử lý ở trên)
 
           ticking = false;
         });

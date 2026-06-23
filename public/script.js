@@ -1681,7 +1681,14 @@ function startModalBorderCycle() {
 
       btn.classList.add("active");
       const page = document.getElementById("page-" + tab);
-      if (page) page.classList.add("active");
+      if (page) {
+        page.classList.add("active");
+        // Fade + slide nhẹ
+        page.style.animation = "none";
+        requestAnimationFrame(() => {
+          page.style.animation = "tabFadeIn 0.5s ease";
+        });
+      }
 
       // Scroll to top when switching tabs
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2253,8 +2260,8 @@ function startModalBorderCycle() {
   const TRACKS = [
     {
       id: "LIKOvbJ-DZg",
-      name: "Any Way You Want — Journey",
-      note: "bài này chồng chọn cho em đó",
+      name: "Vết Thương — fishy",
+      note: "bài chồng hay nghe khi buồn",
     },
     // Thêm bài mới theo mẫu:
     // { id: "VIDEO_ID", name: "Tên bài", note: "ghi chú của chồng" },
@@ -2301,5 +2308,286 @@ function startModalBorderCycle() {
     });
 
     list.appendChild(track);
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SAO BĂNG NGẪU NHIÊN
+// ══════════════════════════════════════════════════════════════════════════════
+(function initShootingStars() {
+  document.addEventListener("introEnded", () => {
+    const canvas = document.createElement("canvas");
+    canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:2;";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const stars = [];
+
+    function spawnStar() {
+      // Bắt đầu từ vùng trên, bay chéo xuống
+      const startX = Math.random() * canvas.width * 0.7 + canvas.width * 0.2;
+      const startY = Math.random() * canvas.height * 0.3;
+      const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.4; // ~45 độ
+      const speed = 6 + Math.random() * 5;
+      stars.push({
+        x: startX, y: startY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        len: 60 + Math.random() * 80,
+        life: 1,
+        hue: 250 + Math.random() * 60, // tím-xanh
+      });
+    }
+
+    function loop() {
+      requestAnimationFrame(loop);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = stars.length - 1; i >= 0; i--) {
+        const s = stars[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.012;
+        if (s.life <= 0 || s.x > canvas.width + 100 || s.y > canvas.height + 100) {
+          stars.splice(i, 1);
+          continue;
+        }
+
+        // Vẽ đuôi sao băng
+        const tailX = s.x - s.vx * (s.len / 10);
+        const tailY = s.y - s.vy * (s.len / 10);
+        const grad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
+        grad.addColorStop(0, `hsla(${s.hue}, 80%, 85%, ${s.life})`);
+        grad.addColorStop(1, `hsla(${s.hue}, 80%, 70%, 0)`);
+
+        ctx.save();
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.shadowColor = `hsla(${s.hue}, 90%, 80%, ${s.life * 0.6})`;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        // Đầu sáng
+        ctx.fillStyle = `hsla(${s.hue}, 90%, 92%, ${s.life})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    loop();
+
+    // Spawn ngẫu nhiên mỗi 4-12 giây
+    function scheduleNext() {
+      const delay = 4000 + Math.random() * 8000;
+      setTimeout(() => {
+        spawnStar();
+        scheduleNext();
+      }, delay);
+    }
+    scheduleNext();
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MẶT TRĂNG THEO GIỜ (chỉ hiện ban đêm)
+// ══════════════════════════════════════════════════════════════════════════════
+(function initMoon() {
+  document.addEventListener("introEnded", () => {
+    const hour = new Date().getHours();
+    const isNight = hour >= 19 || hour < 6;
+    if (!isNight) return;
+
+    const moon = document.createElement("div");
+    moon.style.cssText = `
+      position: fixed; top: 60px; right: 60px;
+      width: 70px; height: 70px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,250,235,0.95), rgba(220,215,200,0.7));
+      box-shadow: 0 0 50px rgba(255,250,230,0.35), 0 0 100px rgba(255,245,220,0.15);
+      z-index: 1; pointer-events: none; opacity: 0;
+      transition: opacity 3s ease;
+    `;
+    // Crater nhẹ
+    moon.innerHTML = `
+      <div style="position:absolute;top:20%;left:25%;width:14px;height:14px;border-radius:50%;background:rgba(200,195,180,0.4)"></div>
+      <div style="position:absolute;top:50%;left:55%;width:10px;height:10px;border-radius:50%;background:rgba(200,195,180,0.35)"></div>
+      <div style="position:absolute;top:62%;left:28%;width:8px;height:8px;border-radius:50%;background:rgba(200,195,180,0.3)"></div>
+    `;
+    document.body.appendChild(moon);
+    requestAnimationFrame(() => { moon.style.opacity = "1"; });
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// AURORA NỀN MỜ ẢO
+// ══════════════════════════════════════════════════════════════════════════════
+(function initAurora() {
+  document.addEventListener("introEnded", () => {
+    const aurora = document.createElement("div");
+    aurora.id = "auroraBg";
+    aurora.style.cssText = `
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; opacity: 0;
+      transition: opacity 4s ease;
+      overflow: hidden;
+    `;
+    aurora.innerHTML = `
+      <div class="aurora-band aurora-1"></div>
+      <div class="aurora-band aurora-2"></div>
+      <div class="aurora-band aurora-3"></div>
+    `;
+    document.body.appendChild(aurora);
+    requestAnimationFrame(() => { aurora.style.opacity = "1"; });
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LỜI CHÀO THEO THỜI ĐIỂM
+// ══════════════════════════════════════════════════════════════════════════════
+(function initGreeting() {
+  document.addEventListener("introEnded", () => {
+    const hour = new Date().getHours();
+    let greeting;
+    if      (hour >= 5  && hour < 11) greeting = "chào buổi sáng của chồng";
+    else if (hour >= 11 && hour < 14) greeting = "buổi trưa rồi, em ăn gì chưa?";
+    else if (hour >= 14 && hour < 18) greeting = "buổi chiều dịu dàng nha em";
+    else if (hour >= 18 && hour < 22) greeting = "buổi tối an lành nha em yêu";
+    else                              greeting = "khuya rồi đó, nhớ ngủ sớm nha em";
+
+    const el = document.createElement("div");
+    el.id = "greetingToast";
+    el.textContent = greeting;
+    el.style.cssText = `
+      position: fixed; top: 24px; left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      background: rgba(15,10,32,0.92);
+      border: 1px solid rgba(180,150,255,0.2);
+      border-radius: 30px; padding: 10px 26px;
+      font-size: 14px; font-style: italic;
+      color: rgba(215,200,255,0.85);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      letter-spacing: 1px; z-index: 9998;
+      opacity: 0; pointer-events: none; white-space: nowrap;
+      backdrop-filter: blur(10px);
+      transition: transform 0.7s cubic-bezier(0.2,0.8,0.3,1), opacity 0.7s ease;
+      box-shadow: 0 4px 30px rgba(160,120,255,0.12);
+    `;
+    document.body.appendChild(el);
+
+    setTimeout(() => {
+      el.style.transform = "translateX(-50%) translateY(0)";
+      el.style.opacity = "1";
+    }, 1500);
+
+    setTimeout(() => {
+      el.style.transform = "translateX(-50%) translateY(-60px)";
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 800);
+    }, 6000);
+  });
+})();
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// NÚT "NẾU EM ĐANG BUỒN"
+// ══════════════════════════════════════════════════════════════════════════════
+(function initComfortButton() {
+  document.addEventListener("introEnded", () => {
+    const COMFORT = [
+      "dù chuyện gì xảy ra, chồng vẫn ở đây với em.",
+      "em đã rất cố gắng rồi. nghỉ một chút cũng không sao đâu.",
+      "không sao đâu em, mọi chuyện rồi sẽ ổn thôi.",
+      "chồng biết em mệt. nhưng em không hề một mình.",
+      "hít một hơi thật sâu nha em. chồng đang ở đây.",
+      "em xứng đáng được yêu thương và nghỉ ngơi.",
+      "hôm nay khó khăn, nhưng em đã vượt qua những ngày tệ hơn rồi.",
+      "chồng thương em nhiều lắm, kể cả những lúc em thấy mình không ổn.",
+      "khóc cũng được nha em, rồi mình lại đứng dậy tiếp.",
+      "em là điều quý giá nhất với chồng. đừng quên điều đó.",
+    ];
+    let lastIdx = -1;
+
+    const btn = document.createElement("button");
+    btn.id = "comfortBtn";
+    btn.innerHTML = "nếu em đang buồn ♡";
+    btn.style.cssText = `
+      position: fixed; bottom: 20px; left: 20px;
+      padding: 10px 18px; border-radius: 30px;
+      background: rgba(15,10,32,0.85);
+      border: 1px solid rgba(255,150,200,0.25);
+      color: rgba(255,180,210,0.7);
+      font-size: 11px; letter-spacing: 1px;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      cursor: none; z-index: 9997;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      opacity: 0;
+    `;
+    document.body.appendChild(btn);
+    setTimeout(() => { btn.style.opacity = "1"; }, 2000);
+
+    btn.addEventListener("mouseenter", () => {
+      btn.style.borderColor = "rgba(255,170,210,0.6)";
+      btn.style.color = "rgba(255,200,225,0.95)";
+      btn.style.boxShadow = "0 0 20px rgba(255,150,200,0.15)";
+    });
+    btn.addEventListener("mouseleave", () => {
+      btn.style.borderColor = "rgba(255,150,200,0.25)";
+      btn.style.color = "rgba(255,180,210,0.7)";
+      btn.style.boxShadow = "none";
+    });
+
+    // Modal
+    const modal = document.createElement("div");
+    modal.id = "comfortModal";
+    modal.style.cssText = `
+      position: fixed; inset: 0; z-index: 99995;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(4,2,12,0.85); backdrop-filter: blur(14px);
+    `;
+    modal.innerHTML = `
+      <div id="comfortInner" style="
+        max-width: 440px; width: 88%; text-align: center;
+        padding: 48px 36px;
+        background: rgba(12,8,22,0.95);
+        border: 1px solid rgba(255,150,200,0.18);
+        border-radius: 22px;
+        box-shadow: 0 0 60px rgba(255,130,180,0.1);
+      ">
+        <div id="comfortIcon" style="font-size:40px;margin-bottom:20px">♡</div>
+        <p id="comfortMsg" style="
+          font-size: 20px; font-style: italic; line-height: 1.85;
+          color: rgba(255,210,230,0.9);
+          font-family: 'Cormorant Garamond', Georgia, serif;
+        "></p>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const msgEl = modal.querySelector("#comfortMsg");
+    btn.addEventListener("click", () => {
+      let idx;
+      do { idx = Math.floor(Math.random() * COMFORT.length); }
+      while (idx === lastIdx && COMFORT.length > 1);
+      lastIdx = idx;
+      msgEl.textContent = COMFORT[idx];
+      modal.style.display = "flex";
+    });
+
+    // Click ngoài để đóng (không có nút cảm ơn chồng)
+    modal.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
   });
 })();

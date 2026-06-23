@@ -1345,3 +1345,47 @@ input, textarea, #letterContent { user-select: text; }
 @media (max-width: 768px) {
   #radioWrap { padding: 20px 14px 60px; }
 }
+
+/* ══ AURORA NỀN ══════════════════════════════════════════════════════════════ */
+#auroraBg .aurora-band {
+  position: absolute;
+  width: 140%; height: 300px;
+  left: -20%;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.12;
+  mix-blend-mode: screen;
+}
+.aurora-1 {
+  top: 5%;
+  background: linear-gradient(90deg, transparent, rgba(120,90,255,0.5), rgba(80,180,255,0.5), transparent);
+  animation: auroraDrift1 18s ease-in-out infinite;
+}
+.aurora-2 {
+  top: 25%;
+  background: linear-gradient(90deg, transparent, rgba(180,100,255,0.4), rgba(100,220,200,0.4), transparent);
+  animation: auroraDrift2 24s ease-in-out infinite;
+}
+.aurora-3 {
+  top: 0%;
+  background: linear-gradient(90deg, transparent, rgba(100,150,255,0.4), rgba(160,100,255,0.4), transparent);
+  animation: auroraDrift3 30s ease-in-out infinite;
+}
+@keyframes auroraDrift1 {
+  0%,100% { transform: translateX(-8%) translateY(0) scaleY(1); }
+  50%     { transform: translateX(8%) translateY(20px) scaleY(1.3); }
+}
+@keyframes auroraDrift2 {
+  0%,100% { transform: translateX(6%) translateY(10px) scaleY(1.1); }
+  50%     { transform: translateX(-6%) translateY(-10px) scaleY(0.9); }
+}
+@keyframes auroraDrift3 {
+  0%,100% { transform: translateX(-4%) scaleY(1); }
+  50%     { transform: translateX(10%) scaleY(1.4); }
+}
+
+/* ══ TAB TRANSITION ══════════════════════════════════════════════════════════ */
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

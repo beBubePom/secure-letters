@@ -20,17 +20,9 @@ if (volumeSlider) {
 }
 
 // ── Playlist shuffle ─────────────────────────────────────────────────────────
+// Thêm nhạc nền của bạn vào đây (đặt file vào thư mục music/)
 const PLAYLIST = [
-  "music/background.mp3",
-  "music/background2.mp3",
-  "music/background3.mp3",
-  "music/background4.mp3",
-  "music/background5.mp3",
-  "music/background6.mp3",
-  "music/background7.mp3",
-  "music/background8.mp3",
-  "music/background9.mp3",
-  "music/background10.mp3",
+  // "music/tên-bài-của-bạn.mp3",
 ];
 
 // Shuffle playlist ngẫu nhiên
@@ -45,12 +37,15 @@ function shuffleArray(arr) {
 
 let shuffled = shuffleArray(PLAYLIST);
 // Bắt đầu từ vị trí random trong playlist
-let currentTrack = Math.floor(Math.random() * shuffled.length);
+let currentTrack = Math.floor(Math.random() * Math.max(1, shuffled.length));
 
-// Load bài random ngay từ đầu
-bgMusic.src = shuffled[currentTrack];
+// Load bài random ngay từ đầu (nếu có nhạc)
+if (shuffled.length > 0) {
+  bgMusic.src = shuffled[currentTrack];
+}
 
 function loadTrack(idx) {
+  if (shuffled.length === 0) return;
   const wasPlaying = !bgMusic.paused;
   bgMusic.src = shuffled[idx];
   bgMusic.load();
@@ -58,6 +53,7 @@ function loadTrack(idx) {
 }
 
 function nextTrack() {
+  if (shuffled.length === 0) return;
   currentTrack = (currentTrack + 1) % shuffled.length;
   // Hết 1 vòng → shuffle lại
   if (currentTrack === 0) shuffled = shuffleArray(PLAYLIST);
@@ -242,10 +238,12 @@ catImg.addEventListener("mouseenter", () => { catImg.src = "images/pop2.png"; })
 catImg.addEventListener("mouseleave", () => { catImg.src = "images/pop1.png"; });
 catImg.addEventListener("click", () => {
   // Đổi sang bài tiếp theo (hoặc phát nếu đang dừng)
-  if (bgMusic.paused) {
-    bgMusic.play();
-  } else {
-    nextTrack();
+  if (shuffled.length > 0) {
+    if (bgMusic.paused) {
+      bgMusic.play();
+    } else {
+      nextTrack();
+    }
   }
   // Nhấp nháy pop2 rồi về pop1 sau 200ms
   catImg.src = "images/pop2.png";
@@ -582,7 +580,7 @@ document.getElementById("passwordInput").addEventListener("keydown", e => {
 
 function closeModal() {
   letterMusic.pause(); letterMusic.currentTime = 0;
-  bgMusic.play().catch(() => {});
+  if (shuffled.length > 0) bgMusic.play().catch(() => {});
 
   // Animation đóng modal
   gsap.to(".modal-content", {
@@ -1316,7 +1314,7 @@ function toggleGallery() {
         }, 80);
       }
       screen.style.display = "none";
-      bgMusic.play().catch(()=>{});
+      if (shuffled.length > 0) bgMusic.play().catch(()=>{});
       document.dispatchEvent(new Event("introEnded"));
 
       // Đổi màu theo giờ — 4 tone chủ đạo
@@ -2192,34 +2190,33 @@ function startModalBorderCycle() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// ĐẾM NGÀY BÊN NHAU
+// ĐẾM THỜI GIAN BÊN NHAU (từ lúc tỏ tình)
 // ══════════════════════════════════════════════════════════════════════════════
 (function initDaysTogether() {
-  // ĐỔI NGÀY NÀY KHI TỎ TÌNH THÀNH CÔNG (định dạng: "YYYY-MM-DD")
-  // Để null = chưa bắt đầu, sẽ hiện 0
-  const START_DATE = null; // ví dụ: "2026-08-28"
+  // Ngày giờ tỏ tình: 30/06/2026 lúc 11:00 (giờ Spokane / Pacific Time)
+  const START_DATE = new Date("2026-06-30T11:00:00-07:00");
 
   const numEl = document.getElementById("daysNum");
+  const labelEl = document.getElementById("daysLabel");
   if (!numEl) return;
 
-  if (!START_DATE) {
-    numEl.textContent = "0";
-    return;
+  function update() {
+    const now = new Date();
+    let diff = Math.floor((now - START_DATE) / 1000); // giây
+    if (diff < 0) diff = 0;
+
+    const days    = Math.floor(diff / 86400);
+    const hours   = Math.floor((diff % 86400) / 3600);
+    const minutes = Math.floor((diff % 3600) / 60);
+
+    numEl.textContent = days;
+    if (labelEl) {
+      labelEl.innerHTML = `ngày bên nhau<br><span style="font-size:12px;opacity:0.7">${hours} giờ ${minutes} phút</span>`;
+    }
   }
 
-  const start = new Date(START_DATE);
-  const now = new Date();
-  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  const days = Math.max(0, diff);
-
-  // Đếm animation từ 0 lên
-  let current = 0;
-  const step = Math.max(1, Math.ceil(days / 40));
-  const timer = setInterval(() => {
-    current += step;
-    if (current >= days) { current = days; clearInterval(timer); }
-    numEl.textContent = current;
-  }, 30);
+  update();
+  setInterval(update, 1000 * 30); // cập nhật mỗi 30 giây
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════

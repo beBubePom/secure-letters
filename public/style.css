@@ -1272,72 +1272,49 @@ input, textarea, #letterContent { user-select: text; }
 
 /* ══ ĐẾM NGÀY BÊN NHAU ════════════════════════════════════════════════════════ */
 #daysTogether {
+  position: relative;
   margin-top: 20px;
   width: 100%; max-width: 340px;
-  padding: 32px 28px;
+  padding: 36px 28px;
   text-align: center;
-  position: relative;
-  border-radius: 20px;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(255,150,190,0.06), transparent 70%),
-    rgba(255,255,255,0.015);
-  border: 1px solid rgba(255,150,190,0.15);
-  box-shadow:
-    0 0 30px rgba(255,130,180,0.06),
-    inset 0 0 40px rgba(255,120,170,0.03);
-  overflow: hidden;
-  transition: all 0.4s ease;
+  border-radius: 24px; overflow: hidden;
+  background: rgba(20,12,32,0.6);
+  border: 1px solid rgba(180,150,255,0.2);
+  box-shadow: 0 0 40px rgba(140,110,255,0.1);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
 }
-/* Viền gradient chạy nhẹ */
+/* Aurora xoay bên trong */
 #daysTogether::before {
   content: "";
-  position: absolute; inset: -1px;
-  border-radius: 20px;
-  padding: 1px;
-  background: linear-gradient(135deg,
-    rgba(255,150,200,0.4),
-    rgba(180,130,255,0.25),
-    rgba(120,190,255,0.3),
-    rgba(255,150,200,0.4));
-  background-size: 300% 300%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: daysBorder 8s ease infinite;
+  position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(from 0deg,
+    transparent,
+    rgba(255,150,200,0.15),
+    transparent,
+    rgba(120,190,255,0.15),
+    transparent);
+  animation: daysAurora 12s linear infinite;
   pointer-events: none;
 }
-@keyframes daysBorder {
-  0%,100% { background-position: 0% 50%; }
-  50%     { background-position: 100% 50%; }
+@keyframes daysAurora {
+  to { transform: rotate(360deg); }
 }
+#daysTogether > * { position: relative; z-index: 1; }
 #daysTogether:hover {
-  border-color: rgba(255,170,205,0.35);
-  box-shadow:
-    0 0 40px rgba(255,130,180,0.12),
-    inset 0 0 50px rgba(255,120,170,0.05);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 50px rgba(140,110,255,0.25);
 }
-
-/* Trái tim nhỏ phía trên */
-#daysTogether::after {
-  content: "♡";
-  position: absolute; top: 14px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  color: rgba(255,160,200,0.4);
-  animation: heartPulse 2.5s ease-in-out infinite;
-}
-@keyframes heartPulse {
-  0%,100% { transform: translateX(-50%) scale(1); opacity: 0.4; }
-  50%     { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
+#daysTogether:active {
+  transform: translateY(-3px) scale(1.01);
 }
 
 #daysNum {
   font-size: 64px; font-weight: 300;
-  color: rgba(255,220,240,0.92);
+  color: rgba(255,225,242,0.94);
   font-family: 'GFS Didot', Georgia, serif;
   line-height: 1; letter-spacing: -2px;
   text-shadow: 0 0 40px rgba(255,140,190,0.35);
-  margin-top: 12px;
 }
 #daysLabel {
   font-size: 11px; letter-spacing: 4px;

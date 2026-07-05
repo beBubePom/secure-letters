@@ -1694,152 +1694,7 @@ function startModalBorderCycle() {
   });
 })();
 
-// ══════════════════════════════════════════════════════════════════════════════
-// HỘP BÍ MẬT — "khi em thật sự cần"
-// ══════════════════════════════════════════════════════════════════════════════
-(function initSecretBox() {
-  const SECRET_MSGS = [
-    "chồng muốn em biết rằng — dù hôm nay có nặng nề đến đâu, em vẫn không phải chịu một mình.",
-    "em đã cố gắng rất nhiều rồi. chồng thấy hết. và chồng tự hào về em lắm.",
-    "những lúc em thấy mình không đủ tốt — đó là lúc chồng thấy em đẹp nhất.",
-    "hôm nay có thể không ổn. nhưng ngày mai vẫn còn đó, và chồng vẫn ở đây.",
-    "em không cần phải mạnh mẽ mọi lúc. cứ để chồng mạnh hộ em lúc này.",
-    "chồng nhớ em. không phải vì một lý do gì đặc biệt. chỉ là nhớ em thôi.",
-    "dù em ở đâu, làm gì, trái tim chồng vẫn hướng về phía em.",
-    "cảm ơn em đã tiếp tục. mỗi ngày em chọn bước tiếp là chồng lại yêu em thêm một chút.",
-    "em xứng đáng được yêu thương — không phải vì em hoàn hảo, mà vì em là em.",
-    "chồng không biết em đang đọc điều này lúc nào. nhưng chồng muốn em biết: chồng đang nghĩ đến em.",
-    "có những ngày chẳng cần làm gì hết. cứ thở thôi. chồng ở đây.",
-    "em là điều tốt nhất xảy ra với cuộc sống của chồng. thật sự.",
-    "đừng quên rằng em đã vượt qua những ngày tệ hơn ngày hôm nay. em làm được.",
-    "chồng yêu em — ngay cả khi em không yêu bản thân em lắm.",
-    "hãy nghỉ ngơi một chút. em không cần phải ổn ngay bây giờ.",
-    "chồng ước có thể ở cạnh em lúc này. nhưng chồng hi vọng những dòng này làm em ấm hơn một chút.",
-    "em đang làm rất tốt — dù em có tin điều đó hay không.",
-    "kể cả những ngày em chẳng làm được gì, chồng vẫn thấy em đủ rồi.",
-    "nhớ uống nước, ăn gì đó, và cho chồng biết em có ổn không nhé.",
-    "chồng yêu em nhiều hơn những gì chồng có thể nói ra bằng lời.",
-  ];
 
-  let lastIdx = -1;
-
-  const btn     = document.getElementById("secretBtn");
-  const close   = document.getElementById("secretClose");
-  const lock    = document.getElementById("secretLock");
-  const reveal  = document.getElementById("secretReveal");
-  const msgEl   = document.getElementById("secretMsg");
-
-  if (!btn) return;
-
-  btn.addEventListener("click", () => {
-    // Pick random, không trùng lần trước
-    let idx;
-    do { idx = Math.floor(Math.random() * SECRET_MSGS.length); }
-    while (idx === lastIdx);
-    lastIdx = idx;
-
-    // Animate lock out
-    lock.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-    lock.style.opacity = "0";
-    lock.style.transform = "translateY(-16px) scale(0.95)";
-
-    setTimeout(() => {
-      lock.style.display = "none";
-      msgEl.textContent = SECRET_MSGS[idx];
-      reveal.classList.add("show");
-    }, 600);
-  });
-
-  close.addEventListener("click", () => {
-    reveal.classList.remove("show");
-    setTimeout(() => {
-      lock.style.display = "flex";
-      lock.style.opacity = "0";
-      lock.style.transform = "translateY(16px) scale(0.95)";
-      requestAnimationFrame(() => {
-        lock.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-        lock.style.opacity = "1";
-        lock.style.transform = "translateY(0) scale(1)";
-      });
-    }, 300);
-  });
-})();
-
-// ══════════════════════════════════════════════════════════════════════════════
-// HỘP BÍ MẬT — 299 LÁ THƯ "MỞ KHI"
-// ══════════════════════════════════════════════════════════════════════════════
-(function initOpenWhen() {
-  const EMOTIONS = [
-    "em vui",
-    "em buồn",
-    "em nhớ anh",
-    "em yêu anh",
-    "em giận anh",
-    "em cô đơn",
-    "em mệt mỏi",
-    "em lo lắng",
-    "em hạnh phúc",
-    "em sợ hãi",
-    "em thấy bình yên",
-    "em thấy trống rỗng",
-    "em thấy biết ơn",
-    "em muốn khóc",
-    "em thấy ấm áp",
-    "em thấy nhẹ lòng",
-    "em thấy cô lập",
-    "em thấy hy vọng",
-    "em thấy mệt mỏi với tất cả",
-    "em không biết mình đang cảm thấy gì",
-  ];
-
-  const PASSWORD = "yeuem100"; // đổi password ở đây
-
-  const grid    = document.getElementById("secretGrid");
-  const modal   = document.getElementById("secretModal");
-  const label   = document.getElementById("secretModalLabel");
-  const input   = document.getElementById("secretPassInput");
-  const error   = document.getElementById("secretPassError");
-  const submit  = document.getElementById("secretPassSubmit");
-  const closeBtn= document.getElementById("secretPassClose");
-
-  if (!grid) return;
-
-  // Render grid
-  EMOTIONS.forEach((em, i) => {
-    const card = document.createElement("div");
-    card.className = "secret-card";
-    card.innerHTML = `<div class="secret-num">${String(i+1).padStart(3,"0")}</div><div class="secret-label">${em}</div>`;
-    card.addEventListener("click", () => openModal(em));
-    grid.appendChild(card);
-  });
-
-  function openModal(emotion) {
-    label.textContent = emotion;
-    input.value = "";
-    error.textContent = "";
-    modal.classList.add("show");
-    setTimeout(() => input.focus(), 300);
-  }
-
-  closeBtn.addEventListener("click", () => modal.classList.remove("show"));
-  modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("show"); });
-
-  submit.addEventListener("click", checkPass);
-  input.addEventListener("keydown", e => { if (e.key === "Enter") checkPass(); });
-
-  function checkPass() {
-    if (input.value.trim() === PASSWORD) {
-      error.style.color = "rgba(130,220,180,0.7)";
-      error.textContent = "✓ đúng rồi em ơi";
-      setTimeout(() => modal.classList.remove("show"), 1200);
-    } else {
-      error.style.color = "rgba(255,130,130,0.6)";
-      error.textContent = "chưa đúng — quay về bên anh để lấy mã nhé";
-      input.style.borderColor = "rgba(255,130,130,0.4)";
-      setTimeout(() => { input.style.borderColor = ""; }, 1000);
-    }
-  }
-})();
 
 
 
@@ -2654,6 +2509,61 @@ function startModalBorderCycle() {
   document.querySelectorAll(".tab-btn").forEach(btn => {
     if (btn.dataset.tab === "timeline") {
       btn.addEventListener("click", () => setTimeout(revealTimeline, 100));
+    }
+  });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LẦN ĐẦU — những lần đầu tiên của anh
+// ══════════════════════════════════════════════════════════════════════════════
+(function initFirsts() {
+  // Thêm/sửa "lần đầu" của bạn ở đây
+  const FIRSTS = [
+    {
+      title: "lần đầu anh mua trà sữa cho một ai đó",
+      desc: "trước em, anh chưa từng nghĩ đến việc mua trà sữa cho ai. em là người đầu tiên.",
+    },
+    {
+      title: "lần đầu anh uống nhiều trà sữa đến thế",
+      desc: "chỉ vì được ở cạnh em, anh làm cả những điều mình chưa từng làm.",
+    },
+    {
+      title: "lần đầu anh đi ăn Haidilao cùng ai đó",
+      desc: "lần đầu tiên của anh — và anh mừng vì người ngồi đối diện là em.",
+    },
+    {
+      title: "lần đầu anh lái xe xuyên đêm vì một người",
+      desc: "cả quãng đường dài từ Seattle về Spokane, chỉ để được ở bên em thêm chút nữa.",
+    },
+    {
+      title: "lần đầu anh tỏ tình với ai đó",
+      desc: "và cũng là lần đầu anh chắc chắn đến vậy về cảm xúc của mình.",
+    },
+  ];
+
+  const list = document.getElementById("firstsList");
+  if (!list) return;
+
+  FIRSTS.forEach((f, i) => {
+    const card = document.createElement("div");
+    card.className = "first-card";
+    card.innerHTML = `
+      <div class="first-num">${String(i+1).padStart(2,"0")}</div>
+      <div class="first-title">${f.title}</div>
+      <div class="first-desc">${f.desc}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  function revealFirsts() {
+    list.querySelectorAll(".first-card").forEach((c, i) => {
+      setTimeout(() => c.classList.add("show"), i * 120);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "firsts") {
+      btn.addEventListener("click", () => setTimeout(revealFirsts, 100));
     }
   });
 })();

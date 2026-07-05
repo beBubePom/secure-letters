@@ -2588,3 +2588,72 @@ function startModalBorderCycle() {
     });
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TIMELINE — HÀNH TRÌNH CỦA MÌNH
+// ══════════════════════════════════════════════════════════════════════════════
+(function initTimeline() {
+  const EVENTS = [
+    {
+      date: "29 THÁNG 6, 2026",
+      title: "lần đầu gặp nhau ở Seattle",
+      desc: "ngày đầu tiên mình thật sự đứng cạnh nhau — khởi đầu của mọi thứ.",
+    },
+    {
+      date: "30 THÁNG 6, 2026",
+      title: "ngày chồng tỏ tình với em",
+      desc: "khoảnh khắc chồng nói ra những điều giấu trong lòng — và em đã đồng ý ở lại bên chồng.",
+      badge: "ngày bắt đầu ♡",
+    },
+    {
+      date: "SEATTLE",
+      title: "mình đi ăn Jollibee cùng nhau",
+      desc: "chồng biết em ít khi được ăn, nên muốn cùng em có một bữa thật vui.",
+    },
+    {
+      date: "SEATTLE",
+      title: "lần đầu chồng đi ăn Haidilao với em",
+      desc: "lần đầu tiên của chồng — và chồng mừng vì người ngồi cạnh là em.",
+    },
+    {
+      date: "SEATTLE",
+      title: "lần đầu chồng mua trà sữa cho một ai đó",
+      desc: "cũng là lần đầu chồng uống nhiều trà sữa đến thế — vì em mà chồng làm được nhiều điều lần đầu.",
+    },
+    {
+      date: "SEATTLE → SPOKANE",
+      title: "lái xe xuyên đêm đưa em về",
+      desc: "cả một quãng đường dài trong đêm, chỉ để được ở bên em thêm một chút.",
+    },
+  ];
+
+  const list = document.getElementById("timelineList");
+  if (!list) return;
+
+  EVENTS.forEach((ev, i) => {
+    const item = document.createElement("div");
+    item.className = "tl-item";
+    item.innerHTML = `
+      <div class="tl-dot ${i === 1 ? "first" : ""}"></div>
+      <div class="tl-date">${ev.date}</div>
+      <div class="tl-title">${ev.title}</div>
+      <div class="tl-desc">${ev.desc}</div>
+      ${ev.badge ? `<div class="tl-badge">${ev.badge}</div>` : ""}
+    `;
+    list.appendChild(item);
+  });
+
+  // Reveal khi tab timeline được mở
+  function revealTimeline() {
+    const items = list.querySelectorAll(".tl-item");
+    items.forEach((item, i) => {
+      setTimeout(() => item.classList.add("show"), i * 120);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "timeline") {
+      btn.addEventListener("click", () => setTimeout(revealTimeline, 100));
+    }
+  });
+})();

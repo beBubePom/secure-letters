@@ -507,7 +507,7 @@ async function checkPassword() {
 
     if (response.status === 401) { document.getElementById("error").innerText = "sai mật khẩu rồi vợ yêu ơi ^^"; return; }
     if (response.status === 403) { document.getElementById("error").innerText = data.message || "sắp mở rồi, đợi thêm xíu nha vợ yêu"; return; }
-    if (!response.ok) { document.getElementById("error").innerText = "lỗi — thử lại nhé em"; return; }
+    if (!response.ok) { document.getElementById("error").innerText = "lỗi rồi, thử lại nhé em"; return; }
 
     // Step 1: Thông báo thành công
     const errorEl = document.getElementById("error");
@@ -1765,8 +1765,8 @@ function startModalBorderCycle() {
     });
     const n = arr.length;
     hintEl.textContent = n === 0
-      ? "chạm vào tâm trạng hôm nay — chọn bao nhiêu cũng được"
-      : `đã chọn ${n} tâm trạng · chạm lại để bỏ`;
+      ? "chạm vào tâm trạng hôm nay, chọn bao nhiêu cũng được"
+      : `đã chọn ${n} tâm trạng, chạm lại để bỏ`;
   }
 
   // Who buttons
@@ -1836,14 +1836,14 @@ function startModalBorderCycle() {
 (function initWeather() {
   const REMINDERS = {
     rain: [
-      "đừng ra ngoài nếu không cần thiết nha em — mưa ở Spokane hay to lắm",
+      "đừng ra ngoài nếu không cần thiết nha em, mưa ở Spokane hay to lắm",
       "nhớ để dù trong xe lúc nào cũng có nha em",
       "đường Spokane mưa dễ trơn, lái xe cẩn thận nha",
     ],
     sun: [
       "nắng Spokane mùa hè nóng lắm, nhớ bôi kem chống nắng trước khi ra ngoài",
       "nhớ để chai nước trong túi mọi lúc nha em",
-      "nắng đẹp thế này đi dạo một chút cũng tốt — nhưng nhớ đội nón",
+      "nắng đẹp thế này đi dạo một chút cũng tốt, nhưng nhớ đội nón",
     ],
     cloud: [
       "Spokane nhiều mây kiểu này hay mưa bất chợt, mang theo áo khoác nha em",
@@ -1853,11 +1853,11 @@ function startModalBorderCycle() {
     snow: [
       "đường Spokane tuyết rất trơn, đi cẩn thận hoặc ở nhà nha em",
       "nhớ làm ấm xe trước khi lái và cạo tuyết trên kính nha em",
-      "mặc đủ lớp áo ấm — áo trong, áo giữa rồi áo ngoài chống gió nha em",
+      "mặc đủ lớp áo ấm nha em: áo trong, áo giữa rồi áo ngoài chống gió",
     ],
     fog: [
       "sương mù Spokane dày lắm, lái xe chậm và bật đèn nha em",
-      "sương mù này ra ngoài nhớ mặc ấm — ẩm lạnh khó chịu lắm",
+      "sương mù này ra ngoài nhớ mặc ấm, ẩm lạnh khó chịu lắm",
     ],
   };
 
@@ -1871,7 +1871,7 @@ function startModalBorderCycle() {
       "nhớ mang dù theo nha em, trời mưa rồi đó",
       "mưa rồi em ơi, cẩn thận không bị cảm nha",
       "trời mưa thế này nhớ giữ ấm đôi chân nha em",
-      "hôm nay mưa, đừng để ướt tóc nha — dễ cảm lắm",
+      "hôm nay mưa, đừng để ướt tóc nha, dễ cảm lắm",
       "mưa nhiều thì đừng đi đâu nếu không cần thiết nhé em",
       "trời mưa mà chồng không ở cạnh em được, em nhớ giữ sức khỏe nha",
       "mưa to rồi, em ở trong nhà không? đừng ra ngoài không cần thiết",
@@ -1891,54 +1891,54 @@ function startModalBorderCycle() {
       "nắng nhiều thế này, mang theo nước uống nha em",
       "em có ra ngoài không? nhớ đội nón đó nha",
       "nắng kiểu này dễ mệt lắm, nhớ nghỉ ngơi đủ nha em",
-      "trời nắng đẹp quá — nhớ tận hưởng nhưng đừng để bị nắng quá",
+      "trời nắng đẹp quá, nhớ tận hưởng nhưng đừng để bị nắng nha",
       "nắng to mà không uống đủ nước là mệt lắm đó em",
       "trời nắng, chồng muốn được đi dạo cùng em quá",
       "nắng mà gió nhẹ kiểu này là đẹp trời nhất đó em",
       "ngày nắng đẹp, chồng hi vọng em đang có một ngày tốt",
       "trời nắng đẹp hôm nay, nhớ nạp vitamin D nha em",
-      "nắng rồi, ngày mới bắt đầu đẹp — chồng muốn em vui nha",
+      "nắng rồi, ngày mới bắt đầu đẹp, chồng muốn em vui nha",
       "nắng mà độ ẩm thấp thì khô da lắm, nhớ dưỡng ẩm nha em",
       "trời đẹp thế này em có ra ngoài hít thở không?",
     ],
     cloud: [
-      "trời nhiều mây nhỉ — mang áo khoác mỏng phòng hờ nha em",
+      "trời nhiều mây nhỉ, mang áo khoác mỏng phòng hờ nha em",
       "mây nhiều mà không mưa, kiểu trời đẹp chồng thích lắm",
-      "trời nhiều mây mà độ ẩm cao thì dễ mệt — nhớ uống nước nha",
+      "trời nhiều mây mà độ ẩm cao thì dễ mệt, nhớ uống nước nha",
       "hôm nay trời mây đẹp lắm, ước gì được đi dạo cùng em",
       "mây xám xịt rồi, cẩn thận có thể mưa sau nha em",
-      "trời nhiều mây mà không nóng — kiểu thời tiết dễ chịu nhất đó",
-      "mây nhiều nhìn lên trời đẹp lắm — em có để ý không?",
-      "trời mây hôm nay đẹp kiểu lãng mạn lắm — chồng nhớ em",
+      "trời nhiều mây mà không nóng là kiểu thời tiết dễ chịu nhất đó",
+      "mây nhiều nhìn lên trời đẹp lắm, em có để ý không?",
+      "trời mây hôm nay đẹp kiểu lãng mạn lắm, tự nhiên chồng nhớ em",
       "mây nhiều thế này nhìn buồn buồn, nhưng miễn em vui là được",
-      "trời nhiều mây, chăm sóc sức khỏe nha em — mùa này hay bệnh",
+      "trời nhiều mây, chăm sóc sức khỏe nha em vì mùa này hay bệnh",
       "nhiều mây mà gió nhẹ thì đi ra ngoài rất dễ chịu đó em",
-      "trời mây mà độ ẩm cao — tóc dễ xoăn lắm nha em haha",
+      "trời mây mà độ ẩm cao thì tóc dễ xoăn lắm nha em haha",
       "mây nhiều kiểu này chồng thấy muốn nằm ngủ thêm ghê",
       "trời nhiều mây nhưng đẹp, em có vui không?",
       "hôm nay trời mây, nhớ mang áo ấm nha em",
     ],
     snow: [
       "tuyết rơi rồi kìa em ơi! mặc thật ấm vào nha",
-      "tuyết đẹp lắm nhỉ — nhưng lạnh ghê, mặc thêm áo vào nha em",
+      "tuyết đẹp lắm nhỉ, nhưng lạnh ghê, mặc thêm áo vào nha em",
       "trời tuyết nhớ đi giày ấm nha, đừng để lạnh chân",
       "tuyết rơi mà chồng không ở cạnh em, em nhớ giữ ấm nha",
       "lạnh quá rồi em ơi, nhớ uống gì ấm ấm vào nha",
-      "tuyết trắng đẹp lắm nhưng đường trơn — đi cẩn thận nha em",
+      "tuyết trắng đẹp lắm nhưng đường trơn, đi cẩn thận nha em",
       "trời tuyết thế này chồng chỉ muốn ôm em cho ấm thôi",
       "tuyết rơi, nhớ mang găng tay và khăn quàng nha em",
       "lạnh thế này dễ bị cảm lắm, nhớ giữ ấm vùng cổ nha em",
       "tuyết rơi, nhớ đừng lái xe nếu không cần thiết nha em",
-      "lạnh kiểu này uống ca cao ấm là nhất — em có uống không?",
+      "lạnh kiểu này uống ca cao ấm là nhất, em có uống không?",
       "tuyết đẹp lắm, chồng ước gì được chụp ảnh tuyết cùng em",
       "trời tuyết lạnh, nhớ bật máy sưởi và giữ ấm nha em",
-      "tuyết trắng cả trời — em có ngắm không? đẹp lắm đó",
+      "tuyết trắng cả trời luôn, em có ngắm không? đẹp lắm đó",
       "tuyết mà lạnh quá thì ở trong nhà thôi nha em",
     ],
     fog: [
       "sương mù dày, đi đường cẩn thận bật đèn nha em",
-      "hôm nay có sương mù, tầm nhìn kém — lái xe chậm thôi nha",
-      "sương mù rồi, đi ra ngoài nhớ mặc ấm — ẩm lạnh lắm đó",
+      "hôm nay có sương mù, tầm nhìn kém nên lái xe chậm thôi nha",
+      "sương mù rồi, đi ra ngoài nhớ mặc ấm vì ẩm lạnh lắm đó",
       "sương mù dày, em có ra ngoài không? nhớ cẩn thận nha",
       "sương mù kiểu này huyền bí lắm, nhưng nhớ cẩn thận nha em",
     ],
@@ -2028,7 +2028,7 @@ function startModalBorderCycle() {
           }
         })
         .catch(() => {
-          document.getElementById("weatherLoading").textContent = "không thể lấy thời tiết — kiểm tra kết nối nha em";
+          document.getElementById("weatherLoading").textContent = "không thể lấy thời tiết, kiểm tra kết nối nha em";
         });
     });
   }
@@ -2112,7 +2112,7 @@ function startModalBorderCycle() {
   const TRACKS = [
     {
       id: "LIKOvbJ-DZg",
-      name: "Vết Thương — fishy",
+      name: "Vết Thương - fishy",
       note: "bài chồng hay nghe khi buồn",
     },
     // Thêm bài mới theo mẫu:
@@ -2452,18 +2452,18 @@ function startModalBorderCycle() {
     {
       date: "29 THÁNG 6, 2026",
       title: "lần đầu gặp nhau ở Spokane",
-      desc: "ngày đầu tiên anh thật sự được đứng cạnh em. cảm giác là lạ, nhưng cũng vui lắm — vì cuối cùng anh cũng gặp được người mà anh thương trong lòng.",
+      desc: "ngày đầu tiên anh thật sự được đứng cạnh em. cảm giác là lạ, nhưng cũng vui lắm, vì cuối cùng anh cũng gặp được người mà anh thương trong lòng.",
     },
     {
       date: "30 THÁNG 6, 2026",
       title: "anh tỏ tình với em",
-      desc: "cuối cùng anh cũng nói ra được điều giấu trong lòng bấy lâu, theo đúng cách mà em muốn được nghe nhất. và sau tất cả, em đã chọn bước ra khỏi quá khứ để đi tiếp cùng anh. cảm ơn em vì đã tin tưởng anh — anh sẽ không để em phải hối hận đâu.",
+      desc: "cuối cùng anh cũng nói ra được điều giấu trong lòng bấy lâu, theo đúng cách mà em muốn được nghe nhất. và sau tất cả, em đã chọn bước ra khỏi quá khứ để đi tiếp cùng anh. cảm ơn em vì đã tin tưởng anh, anh sẽ không để em phải hối hận đâu.",
       badge: "ngày bắt đầu ♡",
     },
     {
       date: "4 THÁNG 7, 2026",
       title: "anh phải về rồi",
-      desc: "tạm biệt em bé của anh nhá. tới giờ anh phải về rồi. anh yêu em nhiều lắm — lần gặp tiếp theo sẽ tới nhanh thôi.",
+      desc: "tạm biệt em bé của anh nhá. tới giờ anh phải về rồi. anh yêu em nhiều lắm, và lần gặp tiếp theo sẽ tới nhanh thôi.",
     },
   ];
 
@@ -2514,7 +2514,7 @@ function startModalBorderCycle() {
     },
     {
       title: "lần đầu anh đi ăn Haidilao cùng ai đó",
-      desc: "lần đầu tiên của anh — và anh mừng vì người ngồi đối diện là em.",
+      desc: "lần đầu tiên của anh, và anh mừng vì người ngồi đối diện là em.",
     },
     {
       title: "lần đầu anh lái xe xuyên đêm vì một người",

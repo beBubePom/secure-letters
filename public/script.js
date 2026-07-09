@@ -925,14 +925,14 @@ animateDust();
         : "translate(-100%, calc(-50% - 6px))";
     });
 
-    // Fade out after 3s
+    // Fade out after 6s (để vợ kịp đọc)
     setTimeout(() => {
       el.style.opacity = "0";
       el.style.transform = isLeft
         ? "translateY(calc(-50% - 18px))"
         : "translate(-100%, calc(-50% - 18px))";
       setTimeout(() => el.remove(), 500);
-    }, 3000);
+    }, 6000);
   }
 
   // Click trên nền sao — bỏ qua tất cả UI elements

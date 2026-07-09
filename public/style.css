@@ -1538,3 +1538,88 @@ input, textarea, #letterContent { user-select: text; }
 @media (max-width: 768px) {
   #firstsWrap { padding: 20px 14px 60px; }
 }
+
+/* ══ 100 ĐIỀU TỰ HÀO ══════════════════════════════════════════════════════════ */
+#thingsWrap { padding: 32px 24px 80px; max-width: 640px; margin: 0 auto; }
+#thingsIntro {
+  font-size: 16px; font-style: italic;
+  color: rgba(185,170,225,0.6); text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.9; max-width: 520px; margin: 0 auto 44px;
+}
+#thingsList { display: flex; flex-direction: column; gap: 14px; }
+.thing-card {
+  position: relative;
+  padding: 18px 22px 18px 56px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(180,150,255,0.12);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+}
+.thing-card.show { opacity: 1; transform: translateY(0); }
+.thing-card:hover { border-color: rgba(200,170,255,0.3); }
+.thing-num {
+  position: absolute; left: 18px; top: 17px;
+  font-size: 16px; font-weight: 300;
+  color: rgba(200,170,255,0.5);
+  font-family: 'GFS Didot', Georgia, serif;
+}
+.thing-text {
+  font-size: 15px; font-style: italic;
+  color: rgba(210,195,235,0.85);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  #thingsWrap { padding: 20px 14px 60px; }
+}
+
+/* ══ SỐ LẦN GHÉ THĂM ══════════════════════════════════════════════════════════ */
+#visitBox {
+  margin-top: 20px;
+  width: 100%; max-width: 340px;
+  padding: 26px 24px;
+  text-align: center;
+  border-radius: 24px;
+  background: rgba(20,12,32,0.5);
+  border: 1px solid rgba(150,180,255,0.15);
+  box-shadow: 0 0 30px rgba(110,140,255,0.08);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+#visitBox:hover {
+  border-color: rgba(170,200,255,0.35);
+  box-shadow: 0 0 40px rgba(120,160,255,0.15);
+}
+.visit-title {
+  font-size: 10px; letter-spacing: 4px;
+  color: rgba(170,180,220,0.45);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  text-transform: lowercase;
+  margin-bottom: 18px;
+}
+.visit-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 22px;
+}
+.visit-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.visit-num {
+  font-size: 34px; font-weight: 300;
+  color: rgba(210,225,255,0.92);
+  font-family: 'GFS Didot', Georgia, serif;
+  line-height: 1; letter-spacing: -1px;
+  text-shadow: 0 0 30px rgba(140,180,255,0.3);
+}
+.visit-label {
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(170,160,215,0.5);
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.visit-divider {
+  width: 1px; height: 38px;
+  background: linear-gradient(180deg, transparent, rgba(160,180,255,0.3), transparent);
+}
+@media (max-width: 768px) {
+  #visitBox { max-width: 100%; padding: 20px 18px; }
+  .visit-num { font-size: 28px; }
+}

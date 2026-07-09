@@ -1694,9 +1694,43 @@ function startModalBorderCycle() {
   });
 })();
 
+// ══════════════════════════════════════════════════════════════════════════════
+// 100 ĐIỀU ANH TỰ HÀO VỀ EM
+// ══════════════════════════════════════════════════════════════════════════════
+(function initThings() {
+  // Thêm từng điều tự hào vào đây, mỗi dòng 1 item
+  const THINGS = [
+    "em bé tình cảm lắm",
+    // "điều thứ 2...",
+    // "điều thứ 3...",
+    // ... tiếp tục tới 100
+  ];
 
+  const list = document.getElementById("thingsList");
+  if (!list) return;
 
+  THINGS.forEach((text, i) => {
+    const card = document.createElement("div");
+    card.className = "thing-card";
+    card.innerHTML = `
+      <div class="thing-num">${String(i + 1).padStart(2, "0")}</div>
+      <div class="thing-text">${text}</div>
+    `;
+    list.appendChild(card);
+  });
 
+  function revealThings() {
+    list.querySelectorAll(".thing-card").forEach((c, i) => {
+      setTimeout(() => c.classList.add("show"), i * 60);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "things") {
+      btn.addEventListener("click", () => setTimeout(revealThings, 100));
+    }
+  });
+})();
 
 // ══════════════════════════════════════════════════════════════════════════════
 // BONG BÓNG TÂM TRẠNG
@@ -2253,35 +2287,6 @@ function startModalBorderCycle() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// MẶT TRĂNG THEO GIỜ (chỉ hiện ban đêm)
-// ══════════════════════════════════════════════════════════════════════════════
-(function initMoon() {
-  document.addEventListener("introEnded", () => {
-    const hour = new Date().getHours();
-    const isNight = hour >= 19 || hour < 6;
-    if (!isNight) return;
-
-    const moon = document.createElement("div");
-    moon.style.cssText = `
-      position: fixed; top: 60px; right: 60px;
-      width: 70px; height: 70px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, rgba(255,250,235,0.95), rgba(220,215,200,0.7));
-      box-shadow: 0 0 50px rgba(255,250,230,0.35), 0 0 100px rgba(255,245,220,0.15);
-      z-index: 1; pointer-events: none; opacity: 0;
-      transition: opacity 3s ease;
-    `;
-    // Crater nhẹ
-    moon.innerHTML = `
-      <div style="position:absolute;top:20%;left:25%;width:14px;height:14px;border-radius:50%;background:rgba(200,195,180,0.4)"></div>
-      <div style="position:absolute;top:50%;left:55%;width:10px;height:10px;border-radius:50%;background:rgba(200,195,180,0.35)"></div>
-      <div style="position:absolute;top:62%;left:28%;width:8px;height:8px;border-radius:50%;background:rgba(200,195,180,0.3)"></div>
-    `;
-    document.body.appendChild(moon);
-    requestAnimationFrame(() => { moon.style.opacity = "1"; });
-  });
-})();
-
-// ══════════════════════════════════════════════════════════════════════════════
 // AURORA NỀN MỜ ẢO
 // ══════════════════════════════════════════════════════════════════════════════
 (function initAurora() {
@@ -2551,4 +2556,44 @@ function startModalBorderCycle() {
       btn.addEventListener("click", () => setTimeout(revealFirsts, 100));
     }
   });
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SỐ LẦN GHÉ THĂM — của anh & của em
+// Cách nhận diện: máy của anh mở link 1 lần với ?chong=1 để đánh dấu,
+// mọi thiết bị khác mặc định tính là của em.
+// ══════════════════════════════════════════════════════════════════════════════
+(function initVisits() {
+  // Đánh dấu thiết bị của anh qua URL ?chong=1 (chỉ cần mở 1 lần)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("chong") === "1") {
+    localStorage.setItem("visitorRole", "anh");
+  }
+  const role = localStorage.getItem("visitorRole") === "anh" ? "anh" : "em";
+
+  async function countAndRender() {
+    let counts = null;
+    try {
+      // Mỗi phiên (session) chỉ đếm 1 lần
+      if (!sessionStorage.getItem("visitCounted")) {
+        const res = await fetch("/visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ who: role }),
+        });
+        counts = (await res.json());
+        sessionStorage.setItem("visitCounted", "1");
+      } else {
+        const res = await fetch("/visits");
+        counts = await res.json();
+      }
+    } catch (e) { console.error("Lỗi visit counter:", e); return; }
+
+    const anhEl = document.getElementById("visitAnh");
+    const emEl  = document.getElementById("visitEm");
+    if (anhEl) anhEl.textContent = counts.anh ?? 0;
+    if (emEl)  emEl.textContent  = counts.em ?? 0;
+  }
+
+  countAndRender();
 })();

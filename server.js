@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
 
@@ -63,6 +64,41 @@ function getUnlockDate(number) {
 
 // ── Letter data ────────────────────────────────────────────────────────────────
 const letters = require("./letters");
+
+// ── Visit counter ──────────────────────────────────────────────────────────────
+// Lưu số lần ghé thăm vào visits.json (của anh & của em)
+const VISITS_FILE = path.join(__dirname, "visits.json");
+
+function readVisits() {
+  try {
+    return JSON.parse(fs.readFileSync(VISITS_FILE, "utf8"));
+  } catch {
+    return { anh: 0, em: 0 };
+  }
+}
+
+function writeVisits(v) {
+  try {
+    fs.writeFileSync(VISITS_FILE, JSON.stringify(v));
+  } catch (e) {
+    console.error("Không ghi được visits.json:", e.message);
+  }
+}
+
+// POST /visit — tăng đếm cho "anh" hoặc "em", trả về số hiện tại
+app.post("/visit", (req, res) => {
+  const { who } = req.body;
+  const key = who === "anh" ? "anh" : "em";
+  const visits = readVisits();
+  visits[key] = (visits[key] || 0) + 1;
+  writeVisits(visits);
+  res.json(visits);
+});
+
+// GET /visits — chỉ đọc số hiện tại
+app.get("/visits", (req, res) => {
+  res.json(readVisits());
+});
 
 // ── API: danh sách thư đã mở ──────────────────────────────────────────────────
 app.get("/unlocked-letters", (req, res) => {

@@ -1749,3 +1749,309 @@ input, textarea, #letterContent { user-select: text; }
   .diary-card { padding: 20px 18px; }
   .diary-p { font-size: 14px; }
 }
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  VISUAL UPGRADE v2 — "Starlight Glass"                                      ║
+   ║  Lớp nâng cấp thị giác toàn trang: nebula nền, glass card, typography mới  ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+
+/* ── 1. NỀN NEBULA NHIỀU LỚP (thay nền phẳng) ─────────────────────────────── */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 12% 8%,  rgba(255,120,190,0.09), transparent 60%),
+    radial-gradient(45% 40% at 88% 12%, rgba(110,160,255,0.10), transparent 60%),
+    radial-gradient(65% 55% at 50% 115%, rgba(150,105,255,0.12), transparent 62%),
+    radial-gradient(120% 120% at 50% 45%, transparent 50%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ── 2. CHI TIẾT NỀN TẢNG: selection, scrollbar, focus ─────────────────────── */
+::selection { background: rgba(200,150,255,0.35); color: #fff; }
+
+html { scrollbar-width: thin; scrollbar-color: rgba(170,130,240,0.35) transparent; }
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: transparent; }
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255,140,200,0.4), rgba(140,120,255,0.4));
+  border-radius: 99px;
+}
+
+:focus-visible {
+  outline: 1.5px solid rgba(200,170,255,0.7);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── 3. TIÊU ĐỀ — to hơn, chữ gradient ánh trăng ───────────────────────────── */
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.6rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1.35;
+  margin: 52px 40px 8px;
+  max-width: 900px;
+  background: linear-gradient(115deg, #f4e9ff 0%, #d9c6ff 38%, #a8cfff 72%, #ffd3ea 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 28px rgba(190,150,255,0.28));
+}
+#typingCursor {
+  -webkit-text-fill-color: rgba(200,160,255,0.8);
+}
+.subtitle {
+  font-size: 10.5px;
+  letter-spacing: 6px;
+  color: rgba(175,150,220,0.5);
+  margin: 4px 0 40px 43px;
+}
+
+/* ── 4. TAB NAV — thanh kính nổi với hairline gradient ─────────────────────── */
+#tabNav {
+  background: rgba(10,6,20,0.78);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border-bottom: none;
+  padding: 2px 24px 0;
+}
+#tabNav::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,140,200,0.35) 20%,
+    rgba(170,130,255,0.4) 50%,
+    rgba(120,190,255,0.35) 80%,
+    transparent 100%);
+}
+.tab-btn {
+  padding: 16px 10px 14px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(165,148,205,0.45);
+  border-bottom: 2px solid transparent;
+  transition: color 0.25s, text-shadow 0.25s;
+}
+.tab-btn:hover {
+  color: rgba(215,200,255,0.85);
+  text-shadow: 0 0 14px rgba(190,150,255,0.5);
+}
+.tab-btn.active {
+  color: rgba(240,230,255,1);
+  text-shadow: 0 0 16px rgba(200,160,255,0.6);
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, rgba(255,140,200,0.9), rgba(160,120,255,0.9), rgba(120,190,255,0.9)) 1;
+}
+
+/* ── 5. DANH SÁCH THƯ — hàng kính bo góc, hairline mảnh ────────────────────── */
+.letter-list { gap: 6px; width: 420px; }
+.box {
+  padding: 13px 16px;
+  border-radius: 0 12px 12px 0;
+  background: rgba(255,255,255,0.016);
+  border-top: 1px solid rgba(255,255,255,0.035);
+  border-right: 1px solid rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+.box-title {
+  font-size: 13.5px;
+  letter-spacing: 0.8px;
+  color: #cbb8d8;
+}
+.box-date {
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  color: rgba(155,135,190,0.45);
+  margin-top: 3px;
+}
+.box-icon { font-size: 16px; }
+
+/* ── 6. COUNTDOWN + NGÀY BÊN NHAU — kính sao trời đồng bộ ──────────────────── */
+#countdown {
+  position: relative;
+  gap: 22px;
+  padding: 40px 30px;
+  border-radius: 26px;
+  background:
+    radial-gradient(130% 100% at 50% 0%, rgba(255,150,200,0.05), transparent 55%),
+    rgba(16,10,30,0.55);
+  border: 1px solid rgba(200,160,255,0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+#countdown::before {
+  content: "";
+  position: absolute; top: 0; left: 12%; right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,170,215,0.6), rgba(160,130,255,0.6), transparent);
+}
+.cd-days {
+  font-family: 'GFS Didot', Georgia, serif;
+  font-size: 76px;
+  background: linear-gradient(160deg, #ffe4f2 0%, #d9c6ff 55%, #a8cfff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 26px rgba(220,170,255,0.35));
+  text-shadow: none;
+}
+.cd-small {
+  font-family: 'GFS Didot', Georgia, serif;
+  color: rgba(215,195,250,0.8);
+}
+.cd-label { letter-spacing: 5px; }
+.cd-badge {
+  border: 1px solid rgba(255,160,205,0.3);
+  background: rgba(255,140,200,0.06);
+  color: rgba(230,195,255,0.75);
+  padding: 5px 16px;
+}
+.cd-quote { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13.5px; }
+
+#daysTogether {
+  border-radius: 26px;
+  background: rgba(16,10,30,0.55);
+  border: 1px solid rgba(255,160,205,0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+#daysNum {
+  font-size: 70px;
+  background: linear-gradient(160deg, #ffe0ef 0%, #ffb8d9 45%, #d9c6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(255,150,200,0.35));
+  text-shadow: none;
+}
+
+/* ── 7. MODAL — kính sâu, viền hairline gradient ───────────────────────────── */
+#modal { background: rgba(3,2,10,0.8); backdrop-filter: blur(16px) saturate(1.2); }
+.modal-content {
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(200,150,255,0.06), transparent 55%),
+    linear-gradient(165deg, #120c22, #0a0716);
+  border: 1px solid rgba(200,160,255,0.22);
+  border-radius: 24px;
+  padding: 48px 44px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02) inset,
+    0 24px 80px rgba(0,0,0,0.55),
+    0 0 70px rgba(185,110,200,0.14);
+}
+.modal-content h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.65rem;
+  color: #ecd6e2;
+}
+#letterContent {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 15.5px;
+  line-height: 2.05;
+  border-radius: 16px;
+  background: rgba(8,5,18,0.55);
+  border: 1px solid rgba(160,110,220,0.18);
+  padding: 26px 28px;
+}
+input[type="password"] {
+  border-radius: 30px;
+  padding: 11px 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(180,130,240,0.28);
+}
+#passwordSection button {
+  border-radius: 30px;
+  padding: 11px 24px;
+  background: linear-gradient(135deg, rgba(255,140,200,0.14), rgba(150,110,255,0.16));
+  border: 1px solid rgba(220,160,255,0.35);
+  letter-spacing: 2px;
+}
+#passwordSection button:hover {
+  background: linear-gradient(135deg, rgba(255,140,200,0.24), rgba(150,110,255,0.28));
+  border-color: rgba(240,190,255,0.6);
+  box-shadow: 0 0 24px rgba(200,140,255,0.2);
+}
+
+/* ── 8. CÁC TRANG NỘI DUNG — card kính đồng bộ, hairline đầu card ──────────── */
+.tab-coming-label {
+  font-size: 11px;
+  letter-spacing: 6px;
+  color: rgba(200,170,255,0.55);
+  text-shadow: 0 0 18px rgba(180,140,255,0.35);
+}
+#thingsIntro, #firstsIntro, #diaryIntro, #radioIntro {
+  font-size: 16.5px;
+  color: rgba(200,185,235,0.62);
+  line-height: 2;
+}
+
+.thing-card, .first-card, .diary-card, .radio-track {
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(255,150,200,0.035), transparent 50%),
+    rgba(255,255,255,0.022);
+  border: 1px solid rgba(190,155,255,0.13);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+.thing-card::before, .first-card::before, .diary-card::before {
+  content: "";
+  position: absolute; top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(220,175,255,0.35), transparent);
+}
+.thing-card:hover, .first-card:hover, .diary-card:hover, .radio-track:hover {
+  border-color: rgba(220,180,255,0.35);
+  box-shadow: 0 8px 32px rgba(150,100,255,0.1);
+}
+.thing-text { font-size: 15.5px; line-height: 1.75; color: rgba(220,205,245,0.88); }
+.thing-num, .first-num {
+  background: linear-gradient(160deg, #ffd3ea, #c9a6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.first-title { color: rgba(255,222,240,0.92); }
+.diary-p { color: rgba(222,208,246,0.85); }
+
+/* Timeline tinh chỉnh */
+.tl-title { font-size: 19px; color: rgba(232,218,255,0.94); }
+.tl-desc  { color: rgba(192,176,228,0.66); line-height: 1.85; }
+.tl-dot   { box-shadow: 0 0 20px rgba(255,120,180,0.65), 0 0 40px rgba(255,120,180,0.25); }
+
+/* Gallery card kính */
+.photo-card {
+  border-radius: 14px;
+  background: rgba(255,255,255,0.022);
+  border: 1px solid rgba(190,155,255,0.14);
+}
+.photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(160,110,255,0.16);
+}
+
+/* ── 9. MOBILE + REDUCED MOTION ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  h1 { font-size: 1.7rem; margin: 40px 18px 6px; }
+  .subtitle { margin-left: 20px; letter-spacing: 3px; }
+  .cd-days { font-size: 56px; }
+  #daysNum { font-size: 54px; }
+  .modal-content { padding: 32px 22px; border-radius: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -2512,3 +2512,57 @@ function startModalBorderCycle() {
     }, 2000);
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// NHẬT KÝ — viết vào những ngày có điều muốn nói ra
+// Thêm entry mới lên ĐẦU mảng DIARY (mới nhất nằm trên)
+// Dùng \n\n để xuống đoạn trong content
+// ══════════════════════════════════════════════════════════════════════════════
+(function initDiary() {
+  const DIARY = [
+    {
+      date: "4 THÁNG 7, 2026",
+      content: `Cái hôm mà chồng đáp xuống sân bay, chồng đã biết là ngày mai sẽ không thể nhìn thấy vợ ngay lập tức nữa rồi. Điều làm chồng lạ lẫm nhất không phải là chuyến bay dài, mà là cảm giác phải tạm gác lại một cuộc sống rất ồn ào bên vợ để quay về với những ngày bình thường. Đến lúc ấy chồng mới nhận ra, hóa ra chồng đã quen với việc có em ở cạnh nhiều đến thế.
+
+Hôm đó ở khắp nơi người ta bắn pháo hoa, nhưng chỗ chồng lại im lìm lạ thường. Ngồi trên xe với ba mẹ, mọi thứ vẫn như cũ, chỉ là chẳng còn những câu chuyện xàm xí, những tiếng cười hay những lần mình trêu chọc nhau không ngừng. Chồng cứ thấy thiếu thiếu một điều gì đó, rồi mới nhận ra... điều chồng thiếu chính là em.
+
+Có lẽ sau mỗi lần gặp nhau, điều khó nhất không phải là khoảng cách, mà là phải tập quen lại với một cuộc sống không có vợ ở ngay bên cạnh. Chồng nhớ em nhiều lắm, nhớ cả những điều nhỏ nhặt nhất mà lúc ở cạnh nhau chồng từng nghĩ là rất bình thường.
+
+Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp tiếp theo của mình đến sớm hơn.`,
+    },
+    // Thêm entry mới theo mẫu (đặt lên trên cùng):
+    // {
+    //   date: "10 THÁNG 7, 2026",
+    //   content: `nội dung...`,
+    // },
+  ];
+
+  const feed = document.getElementById("diaryFeed");
+  if (!feed) return;
+
+  DIARY.forEach(entry => {
+    const card = document.createElement("div");
+    card.className = "diary-card";
+    const paragraphs = entry.content
+      .split("\n\n")
+      .map(p => `<p class="diary-p">${p.trim()}</p>`)
+      .join("");
+    card.innerHTML = `
+      <div class="diary-date"><span class="diary-dot">✦</span>${entry.date}</div>
+      <div class="diary-content">${paragraphs}</div>
+    `;
+    feed.appendChild(card);
+  });
+
+  function revealDiary() {
+    feed.querySelectorAll(".diary-card").forEach((c, i) => {
+      setTimeout(() => c.classList.add("show"), i * 150);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "diary") {
+      btn.addEventListener("click", () => setTimeout(revealDiary, 100));
+    }
+  });
+})();

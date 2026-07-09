@@ -1701,3 +1701,51 @@ input, textarea, #letterContent { user-select: text; }
   .vp-col    { min-width: 48px; }
   .vp-heart  { font-size: 13px; }
 }
+
+/* ══ NHẬT KÝ ══════════════════════════════════════════════════════════════════ */
+#diaryWrap { padding: 32px 24px 80px; max-width: 660px; margin: 0 auto; }
+#diaryIntro {
+  font-size: 15px; font-style: italic;
+  color: rgba(185,170,225,0.55); text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.8; margin: 0 auto 44px;
+}
+#diaryFeed { display: flex; flex-direction: column; gap: 26px; }
+.diary-card {
+  position: relative;
+  padding: 26px 30px 24px;
+  border-radius: 18px;
+  background:
+    radial-gradient(140% 120% at 0% 0%, rgba(255,150,200,0.045), transparent 55%),
+    rgba(255,255,255,0.018);
+  border: 1px solid rgba(180,150,255,0.13);
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.3s;
+}
+.diary-card.show { opacity: 1; transform: translateY(0); }
+.diary-card:hover { border-color: rgba(200,170,255,0.32); }
+.diary-date {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(190,160,230,0.6);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  margin-bottom: 16px;
+}
+.diary-dot {
+  font-size: 11px;
+  color: rgba(255,170,210,0.7);
+  text-shadow: 0 0 8px rgba(255,150,200,0.6);
+}
+.diary-p {
+  font-size: 15px; font-style: italic;
+  color: rgba(215,200,240,0.82);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 2;
+  margin: 0 0 14px;
+}
+.diary-p:last-child { margin-bottom: 0; }
+@media (max-width: 768px) {
+  #diaryWrap { padding: 20px 14px 60px; }
+  .diary-card { padding: 20px 18px; }
+  .diary-p { font-size: 14px; }
+}

@@ -1575,51 +1575,44 @@ input, textarea, #letterContent { user-select: text; }
   #thingsWrap { padding: 20px 14px 60px; }
 }
 
-/* ══ SỐ LẦN GHÉ THĂM ══════════════════════════════════════════════════════════ */
-#visitBox {
-  margin-top: 20px;
-  width: 100%; max-width: 340px;
-  padding: 26px 24px;
-  text-align: center;
-  border-radius: 24px;
-  background: rgba(20,12,32,0.5);
-  border: 1px solid rgba(150,180,255,0.15);
-  box-shadow: 0 0 30px rgba(110,140,255,0.08);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
-}
-#visitBox:hover {
-  border-color: rgba(170,200,255,0.35);
-  box-shadow: 0 0 40px rgba(120,160,255,0.15);
-}
-.visit-title {
-  font-size: 10px; letter-spacing: 4px;
-  color: rgba(170,180,220,0.45);
+/* ══ SỐ LẦN GHÉ THĂM — pill cố định góc phải dưới ═══════════════════════════ */
+#visitPill {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 18px;
+  border-radius: 30px;
+  background: rgba(15,10,32,0.85);
+  border: 1px solid rgba(150,180,255,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9997;
   font-family: 'Be Vietnam Pro', sans-serif;
-  text-transform: lowercase;
-  margin-bottom: 18px;
+  font-size: 11px; letter-spacing: 1px;
+  color: rgba(180,195,240,0.65);
+  box-shadow: 0 4px 24px rgba(110,140,255,0.1);
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
 }
-.visit-row {
-  display: flex; align-items: center; justify-content: center;
-  gap: 22px;
+#visitPill.visible { opacity: 1; }
+#visitPill:hover {
+  border-color: rgba(180,205,255,0.5);
+  color: rgba(210,225,255,0.9);
+  box-shadow: 0 4px 30px rgba(130,165,255,0.2);
 }
-.visit-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.visit-num {
-  font-size: 34px; font-weight: 300;
-  color: rgba(210,225,255,0.92);
+.vp-num {
   font-family: 'GFS Didot', Georgia, serif;
-  line-height: 1; letter-spacing: -1px;
-  text-shadow: 0 0 30px rgba(140,180,255,0.3);
+  font-size: 14px;
+  color: rgba(215,230,255,0.95);
+  text-shadow: 0 0 14px rgba(140,180,255,0.4);
 }
-.visit-label {
-  font-size: 10px; letter-spacing: 3px;
-  color: rgba(170,160,215,0.5);
-  font-family: 'Be Vietnam Pro', sans-serif;
-}
-.visit-divider {
-  width: 1px; height: 38px;
-  background: linear-gradient(180deg, transparent, rgba(160,180,255,0.3), transparent);
+.vp-heart {
+  font-size: 11px;
+  color: rgba(255,150,200,0.6);
 }
 @media (max-width: 768px) {
-  #visitBox { max-width: 100%; padding: 20px 18px; }
-  .visit-num { font-size: 28px; }
+  #visitPill { bottom: 16px; right: 12px; padding: 7px 14px; font-size: 10px; gap: 7px; }
+  .vp-num { font-size: 12px; }
 }

@@ -54,8 +54,7 @@
     <button class="tab-btn" data-tab="timeline">HÀNH TRÌNH CHÚNG MÌNH</button>
     <button class="tab-btn" data-tab="gallery">ẢNH CHỤP CHUNG</button>
     <button class="tab-btn" data-tab="diary">NHẬT KÝ</button>
-    <button class="tab-btn" data-tab="reasons">VÌ SAO ANH YÊU EM</button>
-    <button class="tab-btn" data-tab="things">100 ĐIỀU ANH TỰ HÀO VỀ EM</button>
+    <button class="tab-btn" data-tab="things">VÌ SAO ANH YÊU & TỰ HÀO VỀ EM</button>
     <button class="tab-btn" data-tab="firsts">TRƯỚC KHI GẶP EM</button>
     <button class="tab-btn" data-tab="radio">ĐIỀU LÀM ANH NHỚ VỀ EM</button>
   </nav>
@@ -75,20 +74,7 @@
         <div id="daysNum">0</div>
         <div id="daysLabel">ngày bên nhau</div>
       </div>
-      <div id="visitBox">
-        <div class="visit-title">số lần ghé thăm nơi này</div>
-        <div class="visit-row">
-          <div class="visit-col">
-            <div class="visit-num" id="visitAnh">0</div>
-            <div class="visit-label">của anh</div>
-          </div>
-          <div class="visit-divider"></div>
-          <div class="visit-col">
-            <div class="visit-num" id="visitEm">0</div>
-            <div class="visit-label">của em</div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 
@@ -99,17 +85,11 @@
     <div class="tab-coming"><p class="tab-coming-label">NHẬT KÝ</p><p class="tab-coming-text">Những điều nhỏ chồng muốn kể cho em nghe mỗi ngày.</p><div id="diaryFeed"></div></div>
   </div>
 
-  <!-- REASONS -->
-  <div id="page-reasons" class="tab-page">
-    <div class="tab-coming"><p class="tab-coming-label">VÌ SAO ANH YÊU EM</p><p class="tab-coming-text">Không phải vì một lý do lớn. Mà vì rất nhiều điều nhỏ cộng lại.</p><div id="reasonsList"></div></div>
-  </div>
-
-
-  <!-- 100 THINGS -->
+  <!-- VÌ SAO ANH YÊU & TỰ HÀO VỀ EM (gộp reasons + 100 things) -->
   <div id="page-things" class="tab-page">
     <div id="thingsWrap">
-      <p class="tab-coming-label" style="text-align:center">100 ĐIỀU ANH TỰ HÀO VỀ EM</p>
-      <p id="thingsIntro">anh tự hào về em ở nhiều điều lắm, và nó được xây dựng nên từ trước tới nay chứ không phải ở 1 hành động nhỏ nào đó của em. vì vậy nên những điều anh đã ghi ở đây sẽ mãi mãi là như thế và không bao giờ có thể thay đổi được.</p>
+      <p class="tab-coming-label" style="text-align:center">VÌ SAO ANH YÊU & TỰ HÀO VỀ EM</p>
+      <p id="thingsIntro">không phải vì một lý do lớn, mà vì rất nhiều điều nhỏ cộng lại. anh tự hào về em ở nhiều điều lắm, và nó được xây dựng nên từ trước tới nay chứ không phải ở 1 hành động nhỏ nào đó của em. vì vậy nên những điều anh đã ghi ở đây sẽ mãi mãi là như thế và không bao giờ có thể thay đổi được.</p>
       <div id="thingsList"></div>
     </div>
   </div>
@@ -142,6 +122,13 @@
       <p id="firstsIntro">có những điều anh chưa bao giờ làm, cho đến khi em xuất hiện. em không phải người đến sau mà em là lý do anh làm những điều đó lần đầu tiên trong đời.</p>
       <div id="firstsList"></div>
     </div>
+  </div>
+
+  <!-- Visit pill — góc phải dưới, luôn nhìn thấy -->
+  <div id="visitPill">
+    <span class="vp-part">anh ghé <span class="vp-num" id="visitAnh">0</span></span>
+    <span class="vp-heart">♡</span>
+    <span class="vp-part">em ghé <span class="vp-num" id="visitEm">0</span></span>
   </div>
 
   <!-- Modal -->

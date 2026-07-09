@@ -2596,4 +2596,12 @@ function startModalBorderCycle() {
   }
 
   countAndRender();
+
+  // Pill chỉ hiện sau khi vào trang chính (sau intro)
+  document.addEventListener("introEnded", () => {
+    setTimeout(() => {
+      const pill = document.getElementById("visitPill");
+      if (pill) pill.classList.add("visible");
+    }, 2000);
+  });
 })();

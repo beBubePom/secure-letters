@@ -164,7 +164,7 @@ app.post("/read-letter", (req, res) => {
 });
 
 // ── ĐẦU TƯ: Portfolio data (JSON file) ────────────────────────────────────────
-const PORTFOLIO_FILE = path.join(__dirname, "data", "portfolio.json");
+const PORTFOLIO_FILE = path.join(__dirname, "portfolio.json");
 
 function readPortfolio() {
   try {
@@ -196,83 +196,102 @@ app.post("/api/portfolio", (req, res) => {
   }
 });
 
-// ── ĐẦU TƯ: Giá stock (Yahoo Finance proxy) ───────────────────────────────────
-let yahooFinance = null;
-import("yahoo-finance2")
-  .then((mod) => {
-    yahooFinance = mod.default;
-    if (yahooFinance.suppressNotices) yahooFinance.suppressNotices(["yahooSurvey"]);
-    console.log("yahoo-finance2 loaded ✅");
-  })
-  .catch((e) => console.log("yahoo-finance2 chưa được cài — chạy npm install:", e.message));
+// ── ĐẦU TƯ: Giá stock (gọi thẳng Yahoo Finance chart API, không cần package) ──
+const YAHOO_HEADERS = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" };
+
+async function yahooChart(symbol, range, interval) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
+  const r = await fetch(url, { headers: YAHOO_HEADERS });
+  if (!r.ok) throw new Error(`Yahoo trả về ${r.status}`);
+  const json = await r.json();
+  const result = json?.chart?.result?.[0];
+  if (!result) throw new Error(json?.chart?.error?.description || "Không có data");
+  return result;
+}
 
 // Cache giá 5 phút để không spam Yahoo
 const priceCache = { data: {}, time: {} };
 const CACHE_MS = 5 * 60 * 1000;
 
 app.get("/api/prices", async (req, res) => {
-  if (!yahooFinance) return res.status(500).json({ message: "yahoo-finance2 chưa cài" });
   const symbols = (req.query.symbols || "").split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
   if (!symbols.length) return res.status(400).json({ message: "Thiếu symbols" });
 
   const out = {};
-  const need = [];
   const now = Date.now();
-  for (const s of symbols) {
+  const need = symbols.filter((s) => {
     if (priceCache.data[s] && now - priceCache.time[s] < CACHE_MS) {
       out[s] = priceCache.data[s];
-    } else {
-      need.push(s);
+      return false;
     }
-  }
+    return true;
+  });
 
-  if (need.length) {
+  await Promise.all(need.map(async (s) => {
     try {
-      const quotes = await yahooFinance.quote(need);
-      const arr = Array.isArray(quotes) ? quotes : [quotes];
-      for (const q of arr) {
-        const info = {
-          symbol: q.symbol,
-          price: q.regularMarketPrice ?? null,
-          change: q.regularMarketChange ?? null,
-          changePct: q.regularMarketChangePercent ?? null,
-          currency: q.currency || "USD",
-          name: q.shortName || q.longName || q.symbol,
-        };
-        out[q.symbol] = info;
-        priceCache.data[q.symbol] = info;
-        priceCache.time[q.symbol] = now;
-      }
+      const result = await yahooChart(s, "1d", "5m");
+      const meta = result.meta || {};
+      const price = meta.regularMarketPrice ?? null;
+      const prev = meta.chartPreviousClose ?? meta.previousClose ?? null;
+      const info = {
+        symbol: s,
+        price,
+        change: price != null && prev != null ? Math.round((price - prev) * 100) / 100 : null,
+        changePct: price != null && prev != null && prev !== 0 ? ((price - prev) / prev) * 100 : null,
+        currency: meta.currency || "USD",
+        name: meta.shortName || meta.longName || s,
+      };
+      out[s] = info;
+      priceCache.data[s] = info;
+      priceCache.time[s] = now;
     } catch (e) {
-      console.error("Yahoo quote error:", e.message);
+      console.error(`Yahoo quote error (${s}):`, e.message);
     }
-  }
+  }));
   res.json(out);
 });
 
-// Lịch sử giá cho biểu đồ (6 tháng, daily)
-app.get("/api/history", async (req, res) => {
-  if (!yahooFinance) return res.status(500).json({ message: "yahoo-finance2 chưa cài" });
-  const symbol = (req.query.symbol || "").trim().toUpperCase();
-  if (!symbol) return res.status(400).json({ message: "Thiếu symbol" });
+// Lịch sử giá cho biểu đồ — range giống Robinhood: 1d, 1w, 1m, 3m, ytd, 1y, 5y, max
+const RANGE_MAP = {
+  "1d":  { yr: "1d",  interval: "5m",  intraday: true },
+  "1w":  { yr: "5d",  interval: "30m", intraday: true },
+  "1m":  { yr: "1mo", interval: "1d" },
+  "3m":  { yr: "3mo", interval: "1d" },
+  "ytd": { yr: "ytd", interval: "1d" },
+  "1y":  { yr: "1y",  interval: "1d" },
+  "5y":  { yr: "5y",  interval: "1wk" },
+  "max": { yr: "max", interval: "1mo" },
+};
 
-  const cacheKey = "hist_" + symbol;
+app.get("/api/history", async (req, res) => {
+  const symbol = (req.query.symbol || "").trim().toUpperCase();
+  const range = (req.query.range || "1y").toLowerCase();
+  if (!symbol) return res.status(400).json({ message: "Thiếu symbol" });
+  const cfg = RANGE_MAP[range] || RANGE_MAP["1y"];
+
+  const cacheKey = `hist_${symbol}_${range}`;
   const now = Date.now();
-  if (priceCache.data[cacheKey] && now - priceCache.time[cacheKey] < 30 * 60 * 1000) {
+  const histCacheMs = cfg.intraday ? 5 * 60 * 1000 : 30 * 60 * 1000;
+  if (priceCache.data[cacheKey] && now - priceCache.time[cacheKey] < histCacheMs) {
     return res.json(priceCache.data[cacheKey]);
   }
 
   try {
-    const start = new Date();
-    start.setMonth(start.getMonth() - 6);
-    const result = await yahooFinance.chart(symbol, {
-      period1: start,
-      interval: "1d",
-    });
-    const points = (result.quotes || [])
-      .filter((q) => q.close != null)
-      .map((q) => ({ date: q.date.toISOString().slice(0, 10), close: Math.round(q.close * 100) / 100 }));
-    const payload = { symbol, points };
+    const result = await yahooChart(symbol, cfg.yr, cfg.interval);
+    const ts = result.timestamp || [];
+    const closes = result.indicators?.quote?.[0]?.close || [];
+    const points = [];
+    for (let i = 0; i < ts.length; i++) {
+      if (closes[i] == null) continue;
+      const d = new Date(ts[i] * 1000);
+      points.push({
+        date: cfg.intraday
+          ? d.toISOString().slice(5, 16).replace("T", " ")
+          : d.toISOString().slice(0, 10),
+        close: Math.round(closes[i] * 100) / 100,
+      });
+    }
+    const payload = { symbol, range, points };
     priceCache.data[cacheKey] = payload;
     priceCache.time[cacheKey] = now;
     res.json(payload);

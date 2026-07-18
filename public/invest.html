@@ -130,6 +130,18 @@
 
   .chart-box { position: relative; height: 300px; margin-top: 10px; }
   .chart-controls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .range-bar {
+    display: flex; gap: 4px; margin-top: 12px;
+    border-bottom: 1px solid var(--border); padding-bottom: 2px;
+  }
+  .range-btn {
+    background: none; border: none; color: var(--muted);
+    font-size: .78rem; font-weight: 700; letter-spacing: .5px;
+    padding: 6px 10px; cursor: pointer; font-family: inherit;
+    border-bottom: 2px solid transparent;
+  }
+  .range-btn:hover { color: var(--text); }
+  .range-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .chip {
     background: var(--card); border: 1px solid var(--border); color: var(--muted);
     border-radius: 14px; padding: 4px 12px; font-size: .75rem; cursor: pointer;
@@ -183,8 +195,7 @@
 <a class="back-link" href="/">← Về 100 Lá Thư</a>
 
 <header>
-  <h1>📈 KẾ HOẠCH ĐẦU TƯ CỦA VỢ CHỒNG MÌNH</h1>
-  <p>Cùng nhau xây dựng tương lai, từng bước một 💜</p>
+  <h1>KẾ HOẠCH ĐẦU TƯ CỦA VỢ CHỒNG MÌNH</h1>
 </header>
 
 <nav class="subnav">
@@ -254,8 +265,9 @@
         <tbody></tbody>
       </table>
     </div>
-    <h3>📉 Biểu đồ giá 6 tháng</h3>
+    <h3>📉 Biểu đồ giá</h3>
     <div class="chart-controls" id="chartChips-long"></div>
+    <div class="range-bar" id="rangeBar-long"></div>
     <div class="chart-box"><canvas id="chart-long"></canvas></div>
   </div>
 </div>
@@ -274,8 +286,9 @@
         <tbody></tbody>
       </table>
     </div>
-    <h3>📉 Biểu đồ giá 6 tháng</h3>
+    <h3>📉 Biểu đồ giá</h3>
     <div class="chart-controls" id="chartChips-medium"></div>
+    <div class="range-bar" id="rangeBar-medium"></div>
     <div class="chart-box"><canvas id="chart-medium"></canvas></div>
   </div>
 </div>
@@ -295,8 +308,9 @@
         <tbody></tbody>
       </table>
     </div>
-    <h3>📉 Biểu đồ giá 6 tháng</h3>
+    <h3>📉 Biểu đồ giá</h3>
     <div class="chart-controls" id="chartChips-short"></div>
+    <div class="range-bar" id="rangeBar-short"></div>
     <div class="chart-box"><canvas id="chart-short"></canvas></div>
   </div>
 </div>
@@ -626,15 +640,49 @@ async function delWatch(i) {
   renderWatchlist();
 }
 
-// ── CHARTS ──
+// ── CHARTS (khung thời gian giống Robinhood) ──
+const RANGES = ["1d", "1w", "1m", "3m", "ytd", "1y", "5y", "max"];
+const RANGE_LABELS = { "1d": "1D", "1w": "1W", "1m": "1M", "3m": "3M", "ytd": "YTD", "1y": "1Y", "5y": "5Y", "max": "MAX" };
+const chartState = {
+  long: { symbol: null, range: "1y" },
+  medium: { symbol: null, range: "3m" },
+  short: { symbol: null, range: "1m" },
+};
+
+function renderRangeBar(term) {
+  const bar = document.getElementById("rangeBar-" + term);
+  if (!bar) return;
+  bar.innerHTML = RANGES.map(r =>
+    `<button class="range-btn ${chartState[term].range === r ? "active" : ""}"
+      onclick="setRange('${term}','${r}')">${RANGE_LABELS[r]}</button>`
+  ).join("");
+}
+
+function setRange(term, range) {
+  chartState[term].range = range;
+  renderRangeBar(term);
+  if (chartState[term].symbol) drawChart(term);
+}
+
 async function showChartFor(term, symbol) {
+  chartState[term].symbol = symbol;
   document.querySelectorAll(`#chartChips-${term} .chip`).forEach(c => c.classList.remove("active"));
   const chip = document.getElementById(`chip-${term}-${symbol}`);
   if (chip) chip.classList.add("active");
+  renderRangeBar(term);
+  drawChart(term);
+}
+
+async function drawChart(term) {
+  const { symbol, range } = chartState[term];
   try {
-    const r = await fetch("/api/history?symbol=" + symbol);
+    const r = await fetch(`/api/history?symbol=${symbol}&range=${range}`);
     const data = await r.json();
-    if (!data.points) return;
+    if (!data.points || !data.points.length) return;
+    const first = data.points[0].close;
+    const last = data.points[data.points.length - 1].close;
+    const lineColor = last >= first ? "#4ade80" : "#f87171";
+    const fillColor = last >= first ? "rgba(74,222,128,.08)" : "rgba(248,113,113,.08)";
     const ctx = document.getElementById("chart-" + term);
     if (charts[term]) charts[term].destroy();
     charts[term] = new Chart(ctx, {
@@ -642,10 +690,10 @@ async function showChartFor(term, symbol) {
       data: {
         labels: data.points.map(p => p.date),
         datasets: [{
-          label: symbol,
+          label: `${symbol} (${RANGE_LABELS[range]})`,
           data: data.points.map(p => p.close),
-          borderColor: "#a78bfa",
-          backgroundColor: "rgba(167,139,250,.08)",
+          borderColor: lineColor,
+          backgroundColor: fillColor,
           fill: true,
           tension: .25,
           pointRadius: 0,
@@ -655,6 +703,7 @@ async function showChartFor(term, symbol) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
         plugins: { legend: { labels: { color: "#e8e6f0" } } },
         scales: {
           x: { ticks: { color: "#9a97ad", maxTicksLimit: 8 }, grid: { color: "rgba(255,255,255,.04)" } },

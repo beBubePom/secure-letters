@@ -2466,28 +2466,21 @@ function startModalBorderCycle() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// SỐ LẦN GHÉ THĂM — của anh & của em
-// Cách nhận diện: máy của anh mở link 1 lần với ?chong=1 để đánh dấu,
-// mọi thiết bị khác mặc định tính là của em.
+// SỐ LẦN GHÉ THĂM — của anh & của em (nhận diện theo IP, server tự xác định)
+// Máy của anh mở link 1 lần với ?chong=1 để đăng ký IP, sau đó server tự biết.
 // ══════════════════════════════════════════════════════════════════════════════
 (function initVisits() {
-  // Đánh dấu thiết bị của anh qua URL ?chong=1 (chỉ cần mở 1 lần)
   const params = new URLSearchParams(window.location.search);
-  if (params.get("chong") === "1") {
-    localStorage.setItem("visitorRole", "anh");
-  }
-  const role = localStorage.getItem("visitorRole") === "anh" ? "anh" : "em";
+  const claimUrl = params.get("chong") === "1" ? "/visit/whoami?chong=1" : "/visit/whoami";
 
   async function countAndRender() {
     let counts = null;
     try {
+      // Đăng ký / nhận diện IP trước (server tự quyết định anh hay em)
+      await fetch(claimUrl);
       // Mỗi phiên (session) chỉ đếm 1 lần
       if (!sessionStorage.getItem("visitCounted")) {
-        const res = await fetch("/visit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ who: role }),
-        });
+        const res = await fetch("/visit", { method: "POST" });
         counts = (await res.json());
         sessionStorage.setItem("visitCounted", "1");
       } else {

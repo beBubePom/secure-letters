@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // ── Password ───────────────────────────────────────────────────────────────────
 const GLOBAL_PASSWORD = process.env.PASSWORD || "yeuem100";
+const INVEST_PASSWORD = process.env.INVEST_PASSWORD || "conmeobeo@";
 
 // ── TEST MODE ─────────────────────────────────────────────────────────────────
 const TEST_MODE = process.env.TEST_MODE === "true" || false;
@@ -123,9 +124,9 @@ app.get("/visits", (req, res) => {
   res.json({ anh: v.anh, em: v.em });
 });
 
-// POST /visit/reset — reset counter về 0 (cần password)
+// POST /visit/reset — reset counter về 0 (cần password đầu tư)
 app.post("/visit/reset", (req, res) => {
-  if (req.body.password !== GLOBAL_PASSWORD) {
+  if (req.body.password !== INVEST_PASSWORD) {
     return res.status(401).json({ message: "Sai mật khẩu 🔐" });
   }
   const v = readVisits();
@@ -182,7 +183,7 @@ app.get("/api/portfolio", (req, res) => {
 
 app.post("/api/portfolio", (req, res) => {
   const { password, data } = req.body;
-  if (password !== GLOBAL_PASSWORD) {
+  if (password !== INVEST_PASSWORD) {
     return res.status(401).json({ message: "Sai mật khẩu 🔐" });
   }
   if (!data || typeof data !== "object") {

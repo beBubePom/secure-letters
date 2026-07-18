@@ -3,39 +3,307 @@
     {
       "id": 1,
       "date": "2026-07-17",
-      "title": "Chào em! Đây là nơi anh cập nhật tin tức đầu tư cho em",
+      "title": "Đây là nơi anh cập nhật tin tức đầu tư cho em",
       "url": "",
-      "note": "Anh sẽ đăng các bài báo hay về thị trường ở đây để em đọc nhé. Yêu em!"
+      "note": "Tin tức:"
     }
   ],
   "sectors": [
-    { "name": "Information Technology", "vi": "Công nghệ thông tin", "subsectors": ["Semiconductors (Chip)", "Software (Phần mềm)", "Hardware (Phần cứng)", "IT Services"] },
-    { "name": "Health Care", "vi": "Y tế", "subsectors": ["Pharmaceuticals (Dược)", "Biotechnology", "Medical Equipment", "Health Services"] },
-    { "name": "Financials", "vi": "Tài chính", "subsectors": ["Banks (Ngân hàng)", "Insurance (Bảo hiểm)", "Capital Markets", "Fintech"] },
-    { "name": "Consumer Discretionary", "vi": "Tiêu dùng không thiết yếu", "subsectors": ["Autos (Ô tô)", "E-commerce", "Retail", "Hotels & Restaurants"] },
-    { "name": "Communication Services", "vi": "Truyền thông", "subsectors": ["Internet & Social Media", "Entertainment", "Media", "Telecom"] },
-    { "name": "Industrials", "vi": "Công nghiệp", "subsectors": ["Aerospace & Defense (Quốc phòng)", "Machinery", "Transportation", "Construction"] },
-    { "name": "Consumer Staples", "vi": "Tiêu dùng thiết yếu", "subsectors": ["Food & Beverage", "Household Products", "Staples Retail (Costco, Walmart)"] },
-    { "name": "Energy", "vi": "Năng lượng", "subsectors": ["Oil & Gas", "Energy Equipment & Services", "Refining"] },
-    { "name": "Utilities", "vi": "Tiện ích", "subsectors": ["Electric (Điện)", "Gas", "Water (Nước)", "Renewables (Tái tạo)"] },
-    { "name": "Real Estate", "vi": "Bất động sản", "subsectors": ["REITs", "Real Estate Management & Development"] },
-    { "name": "Materials", "vi": "Vật liệu", "subsectors": ["Chemicals (Hóa chất)", "Metals & Mining (Kim loại & Khai khoáng)", "Construction Materials"] }
+    {
+      "name": "Information Technology",
+      "vi": "Công nghệ thông tin",
+      "subsectors": [
+        "Semiconductors (Chip)",
+        "Software (Phần mềm)",
+        "Hardware (Phần cứng)",
+        "IT Services"
+      ]
+    },
+    {
+      "name": "Health Care",
+      "vi": "Y tế",
+      "subsectors": [
+        "Pharmaceuticals (Dược)",
+        "Biotechnology",
+        "Medical Equipment",
+        "Health Services"
+      ]
+    },
+    {
+      "name": "Financials",
+      "vi": "Tài chính",
+      "subsectors": [
+        "Banks (Ngân hàng)",
+        "Insurance (Bảo hiểm)",
+        "Capital Markets",
+        "Fintech"
+      ]
+    },
+    {
+      "name": "Consumer Discretionary",
+      "vi": "Tiêu dùng không thiết yếu",
+      "subsectors": [
+        "Autos (Ô tô)",
+        "E-commerce",
+        "Retail",
+        "Hotels & Restaurants"
+      ]
+    },
+    {
+      "name": "Communication Services",
+      "vi": "Truyền thông",
+      "subsectors": [
+        "Internet & Social Media",
+        "Entertainment",
+        "Media",
+        "Telecom"
+      ]
+    },
+    {
+      "name": "Industrials",
+      "vi": "Công nghiệp",
+      "subsectors": [
+        "Aerospace & Defense (Quốc phòng)",
+        "Machinery",
+        "Transportation",
+        "Construction"
+      ]
+    },
+    {
+      "name": "Consumer Staples",
+      "vi": "Tiêu dùng thiết yếu",
+      "subsectors": [
+        "Food & Beverage",
+        "Household Products",
+        "Staples Retail (Costco, Walmart)"
+      ]
+    },
+    {
+      "name": "Energy",
+      "vi": "Năng lượng",
+      "subsectors": [
+        "Oil & Gas",
+        "Energy Equipment & Services",
+        "Refining"
+      ]
+    },
+    {
+      "name": "Utilities",
+      "vi": "Tiện ích",
+      "subsectors": [
+        "Electric (Điện)",
+        "Gas",
+        "Water (Nước)",
+        "Renewables (Tái tạo)"
+      ]
+    },
+    {
+      "name": "Real Estate",
+      "vi": "Bất động sản",
+      "subsectors": [
+        "REITs",
+        "Real Estate Management & Development"
+      ]
+    },
+    {
+      "name": "Materials",
+      "vi": "Vật liệu",
+      "subsectors": [
+        "Chemicals (Hóa chất)",
+        "Metals & Mining (Kim loại & Khai khoáng)",
+        "Construction Materials"
+      ]
+    }
   ],
   "strategy": "Chiến thuật: mỗi sector (và subsector quan trọng) mua 1-2 mã LONG term, 1-2 mã MEDIUM term, và 3-4 mã SHORT term rotation.",
   "holdings": {
     "long": [
-      { "symbol": "VOO", "sector": "Index / All", "subsector": "S&P 500 ETF", "buyPrice": 0, "note": "DCA hàng tháng, hold 10+ năm" },
-      { "symbol": "NVDA", "sector": "Information Technology", "subsector": "Semiconductors", "buyPrice": 0, "note": "DCA, hold 10+ năm" },
-      { "symbol": "AAPL", "sector": "Information Technology", "subsector": "Hardware", "buyPrice": 0, "note": "DCA, hold 10+ năm" }
+      {
+        "symbol": "VOO",
+        "sector": "Index / All",
+        "subsector": "S&P 500 ETF",
+        "buyPrice": 0,
+        "note": "DCA hàng tháng, hold 10+ năm"
+      },
+      {
+        "symbol": "NVDA",
+        "sector": "Information Technology",
+        "subsector": "Semiconductors",
+        "buyPrice": 0,
+        "note": "DCA, hold 10+ năm"
+      },
+      {
+        "symbol": "AAPL",
+        "sector": "Information Technology",
+        "subsector": "Hardware",
+        "buyPrice": 0,
+        "note": "DCA, hold 10+ năm"
+      },
+      {
+        "symbol": "ORCL",
+        "sector": "Information Technology",
+        "subsector": "Software / Cloud",
+        "buyPrice": 0,
+        "note": "AI cloud"
+      }
     ],
-    "medium": [],
-    "short": []
+    "medium": [
+      {
+        "symbol": "MRVL",
+        "sector": "Information Technology",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-5 năm",
+        "note": "Chip AI networking"
+      },
+      {
+        "symbol": "CRDO",
+        "sector": "Information Technology",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-3 năm",
+        "note": "Kết nối AI data center"
+      },
+      {
+        "symbol": "CEG",
+        "sector": "Utilities",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-5 năm",
+        "note": "Điện hạt nhân"
+      },
+      {
+        "symbol": "VST",
+        "sector": "Utilities",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-5 năm",
+        "note": "Điện"
+      },
+      {
+        "symbol": "FPS",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-3 năm",
+        "note": "Thiết bị điện cho data center"
+      },
+      {
+        "symbol": "KRMN",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-3 năm",
+        "note": "Space & defense"
+      },
+      {
+        "symbol": "AVAV",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "2-3 năm",
+        "note": "Drone quốc phòng"
+      },
+      {
+        "symbol": "SYNA",
+        "sector": "Information Technology",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-2 năm",
+        "note": "Chip IoT"
+      }
+    ],
+    "short": [
+      {
+        "symbol": "RCAT",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "Drone"
+      },
+      {
+        "symbol": "ONDS",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "Drone"
+      },
+      {
+        "symbol": "DPRO",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "Drone"
+      },
+      {
+        "symbol": "AVEX",
+        "sector": "Industrials",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "Defense drone / UAS"
+      },
+      {
+        "symbol": "TE",
+        "sector": "Energy",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-2 tháng",
+        "note": "Solar, biến động mạnh"
+      },
+      {
+        "symbol": "SHLS",
+        "sector": "Energy",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "Solar"
+      },
+      {
+        "symbol": "AIRJ",
+        "sector": "Energy",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-2 tháng",
+        "note": "Cleantech"
+      },
+      {
+        "symbol": "ADEA",
+        "sector": "Information Technology",
+        "buyPrice": 0,
+        "sellTarget": 0,
+        "holdTime": "1-3 tháng",
+        "note": "IP licensing"
+      }
+    ]
   },
   "watchlist": [
-    { "symbol": "MSFT", "sector": "Information Technology", "targetBuy": 0, "note": "Chờ dip để vào" }
+    {
+      "symbol": "OSS",
+      "sector": "Information Technology",
+      "targetBuy": 10.5,
+      "note": "Mua nếu về $10.50"
+    },
+    {
+      "symbol": "MSFT",
+      "sector": "Information Technology",
+      "targetBuy": 0,
+      "note": "Chờ dip để vào"
+    }
   ],
   "crypto": [
-    { "symbol": "BTC", "id": "bitcoin", "note": "Long term hold trên Kraken" },
-    { "symbol": "ETH", "id": "ethereum", "note": "DCA + staking" }
+    {
+      "symbol": "BTC",
+      "id": "bitcoin",
+      "note": "Long term hold trên Kraken"
+    },
+    {
+      "symbol": "ETH",
+      "id": "ethereum",
+      "note": "DCA + staking"
+    }
   ]
 }

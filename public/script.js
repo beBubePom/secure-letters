@@ -282,8 +282,8 @@ function typeTitle() {
 function buildSchedule() {
   const s = []; let n = 1, y = 2026;
   while (n <= 100) {
-    if (n <= 100) s.push({ letter: n++, day: 28, month: 8, year: y });
-    if (n <= 100) s.push({ letter: n++, day: 27, month: 1, year: y + 1 });
+    if (n <= 100) s.push({ letter: n++, day: 26, month: 8, year: y });
+    if (n <= 100) s.push({ letter: n++, day: 25, month: 1, year: y + 1 });
     y++;
   }
   return s;
@@ -2466,21 +2466,28 @@ function startModalBorderCycle() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// SỐ LẦN GHÉ THĂM — của anh & của em (nhận diện theo IP, server tự xác định)
-// Máy của anh mở link 1 lần với ?chong=1 để đăng ký IP, sau đó server tự biết.
+// SỐ LẦN GHÉ THĂM — của anh & của em
+// Cách nhận diện: máy của anh mở link 1 lần với ?chong=1 để đánh dấu,
+// mọi thiết bị khác mặc định tính là của em.
 // ══════════════════════════════════════════════════════════════════════════════
 (function initVisits() {
+  // Đánh dấu thiết bị của anh qua URL ?chong=1 (chỉ cần mở 1 lần)
   const params = new URLSearchParams(window.location.search);
-  const claimUrl = params.get("chong") === "1" ? "/visit/whoami?chong=1" : "/visit/whoami";
+  if (params.get("chong") === "1") {
+    localStorage.setItem("visitorRole", "anh");
+  }
+  const role = localStorage.getItem("visitorRole") === "anh" ? "anh" : "em";
 
   async function countAndRender() {
     let counts = null;
     try {
-      // Đăng ký / nhận diện IP trước (server tự quyết định anh hay em)
-      await fetch(claimUrl);
       // Mỗi phiên (session) chỉ đếm 1 lần
       if (!sessionStorage.getItem("visitCounted")) {
-        const res = await fetch("/visit", { method: "POST" });
+        const res = await fetch("/visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ who: role }),
+        });
         counts = (await res.json());
         sessionStorage.setItem("visitCounted", "1");
       } else {

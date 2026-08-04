@@ -2606,8 +2606,9 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 })();
 
 
+
 // ══════════════════════════════════════════════════════════════════════════════
-// CHỦ ĐỀ THEO TỪNG TAB v2 — nền đổi tông mạnh + particle vẽ hình thật + accent riêng
+// CHỦ ĐỀ THEO TỪNG TAB v3 — mặt trăng siêu chi tiết + hoa đào ≠ vườn hồng rõ rệt
 // ══════════════════════════════════════════════════════════════════════════════
 (function initTabThemes() {
   const canvas = document.getElementById("themeCanvas");
@@ -2621,18 +2622,19 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
   });
   const ctx = canvas.getContext("2d");
 
-  // ── 8 chủ đề: nền đậm tông + hạt riêng + accent trang trí ──────────────────
+  // ── 8 chủ đề ─────────────────────────────────────────────────────────────
   const THEMES = {
     home: {
       bodyBg: "radial-gradient(140% 100% at 50% -10%, #1a1030 0%, #0a0618 45%, #050310 100%)",
       particle: "stars", accentType: "moon",
-      accent: { cx: 0.88, cy: 0.14, r: 46, color: "220,210,255" },
+      accent: { cx: 0.88, cy: 0.15, r: 42, color: "222,215,250" },
     },
-    timeline: {
+    timeline: { // hoa đào — nhẹ, gió cuốn, cụm hoa 5 cánh thật
       bodyBg: "radial-gradient(140% 100% at 15% -10%, #3a1a30 0%, #200f22 45%, #12081a 100%)",
-      particle: "petals", accentType: "branch",
-      accent: { color: "255,185,210" },
-      petalColor: ["255,200,220", "255,175,205"],
+      particle: "petals", petalMode: "blossom", secondary: "bokeh",
+      accentType: "branch",
+      accent: { color: "255,190,215" },
+      petalColor: ["255,205,225", "255,180,210"],
     },
     gallery: {
       bodyBg: "radial-gradient(140% 100% at 50% 110%, #063a48 0%, #042230 50%, #02121c 100%)",
@@ -2644,11 +2646,12 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       particle: "fireflies", accentType: "haze",
       accent: { color: "255,200,130" },
     },
-    things: {
+    things: { // vườn hồng — nặng hơn, rơi thẳng, nụ hồng thật, đom đóm tim ấm
       bodyBg: "radial-gradient(140% 100% at 15% -10%, #4a1020 0%, #2a0a15 50%, #170509 100%)",
-      particle: "petals", accentType: "vine",
-      accent: { color: "255,90,130" },
-      petalColor: ["255,110,150", "230,60,110"],
+      particle: "petals", petalMode: "rose", secondary: "hearts",
+      accentType: "vine",
+      accent: { color: "255,70,115" },
+      petalColor: ["230,55,100", "150,20,55"],
     },
     firsts: {
       bodyBg: "radial-gradient(140% 100% at 50% 105%, #6a2606 0%, #3d1506 50%, #1c0803 100%)",
@@ -2658,7 +2661,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     radio: {
       bodyBg: "radial-gradient(140% 100% at 20% -10%, #34164f 0%, #1c0c2e 50%, #0f0619 100%)",
       particle: "notes", accentType: "moon",
-      accent: { cx: 0.86, cy: 0.16, r: 40, color: "205,170,255" },
+      accent: { cx: 0.86, cy: 0.17, r: 38, color: "212,180,255" },
     },
     future: {
       bodyBg: "radial-gradient(140% 100% at 50% 100%, #1c3a2a 0%, #0c2436 55%, #061420 100%)",
@@ -2669,31 +2672,130 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 
   document.body.style.transition = "background 1.8s ease";
 
-  // ── Vẽ cánh hoa thật (hình giọt lệ có khía ở đầu — chuẩn hoa anh đào) ───────
-  function drawPetal(p) {
+  // ── MẶT TRĂNG SIÊU CHI TIẾT ─────────────────────────────────────────────────
+  // Miệng núi lửa cố định (sinh 1 lần, giữ nguyên vị trí suốt phiên)
+  const MOON_CRATERS = Array.from({ length: 11 }, () => ({
+    dx: (Math.random() - 0.5) * 1.1,
+    dy: (Math.random() - 0.5) * 1.1,
+    dr: 0.05 + Math.random() * 0.16,
+    depth: 0.22 + Math.random() * 0.3,
+  })).filter(c => Math.hypot(c.dx, c.dy) < 0.82);
+
+  function drawDetailedMoon(cx, cy, r, color) {
+    ctx.save();
+    // Quầng khí quyển nhiều lớp
+    for (let i = 3; i >= 1; i--) {
+      const gr = r * (1.7 + i * 1.0);
+      const g = ctx.createRadialGradient(cx, cy, r * 0.85, cx, cy, gr);
+      g.addColorStop(0, `rgba(${color},${0.11 / i})`);
+      g.addColorStop(1, `rgba(${color},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, gr, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Khối cầu — ánh sáng chiếu từ trên-trái, tạo cảm giác 3D
+    const sphere = ctx.createRadialGradient(cx - r * 0.38, cy - r * 0.38, r * 0.08, cx, cy, r * 1.05);
+    sphere.addColorStop(0, "rgba(255,255,252,0.98)");
+    sphere.addColorStop(0.45, `rgba(${color},0.96)`);
+    sphere.addColorStop(0.8, `rgba(${color},0.85)`);
+    sphere.addColorStop(1, `rgba(${color},0.62)`);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = sphere; ctx.fill();
+
+    // Cắt vùng để vẽ chi tiết bề mặt gọn trong hình tròn
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+
+    // Miệng núi lửa — mỗi cái có bóng đổ + viền sáng nhẹ
+    MOON_CRATERS.forEach(c => {
+      const px = cx + c.dx * r, py = cy + c.dy * r, pr = c.dr * r;
+      const cg = ctx.createRadialGradient(px - pr * 0.3, py - pr * 0.3, 0, px, py, pr);
+      cg.addColorStop(0, `rgba(110,100,135,${c.depth})`);
+      cg.addColorStop(1, `rgba(110,100,135,0)`);
+      ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+      ctx.fillStyle = cg; ctx.fill();
+      ctx.beginPath(); ctx.arc(px - pr * 0.18, py - pr * 0.18, pr * 0.85, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,255,255,${c.depth * 0.3})`;
+      ctx.lineWidth = Math.max(0.4, pr * 0.07);
+      ctx.stroke();
+    });
+
+    // Đường ranh sáng-tối (terminator) — tạo chiều sâu hình cầu
+    const term = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+    term.addColorStop(0, "rgba(15,10,30,0.4)");
+    term.addColorStop(0.5, "rgba(15,10,30,0)");
+    term.addColorStop(1, "rgba(15,10,30,0)");
+    ctx.fillStyle = term;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    // Viền sáng mảnh quanh mép trăng
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255,255,255,0.55)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Vài ngôi sao nhỏ lấp lánh quanh trăng
+    const starOffsets = [[-2.1, -0.6, 1.4], [1.9, -1.1, 1.1], [-1.4, 1.3, 1], [2.4, 0.9, 1.2]];
+    starOffsets.forEach(([ox, oy, sz], i) => {
+      const sx = cx + ox * r, sy = cy + oy * r;
+      const a = 0.35 + 0.55 * Math.abs(Math.sin(tt * 0.9 + i * 1.7));
+      ctx.save(); ctx.globalAlpha = a;
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.shadowColor = "rgba(255,255,255,0.8)"; ctx.shadowBlur = 4;
+      ctx.beginPath(); ctx.arc(sx, sy, sz, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.restore();
+  }
+
+  // ── Hoa đào — cánh mỏng, khía đầu, đung đưa theo gió ────────────────────────
+  function drawBlossomPetal(p) {
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rot);
     const s = p.r;
     const g = ctx.createLinearGradient(0, -s, 0, s);
-    g.addColorStop(0, `rgba(${p.c[0]},0.92)`);
-    g.addColorStop(1, `rgba(${p.c[1]},0.55)`);
+    g.addColorStop(0, `rgba(${p.c[0]},0.9)`);
+    g.addColorStop(1, `rgba(${p.c[1]},0.5)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.moveTo(0, -s);
-    ctx.bezierCurveTo(s * 0.9, -s * 0.3, s * 0.7, s * 0.7, 0, s * 0.95);
-    ctx.quadraticCurveTo(0, s * 0.7, -s * 0.15, s * 0.95); // khía nhỏ ở đầu
-    ctx.bezierCurveTo(-s * 0.7, s * 0.7, -s * 0.9, -s * 0.3, 0, -s);
-    ctx.closePath();
-    ctx.fill();
-    // gân nhẹ giữa cánh
-    ctx.strokeStyle = `rgba(255,255,255,0.25)`;
+    ctx.bezierCurveTo(s * 0.85, -s * 0.25, s * 0.65, s * 0.7, 0, s * 0.92);
+    ctx.quadraticCurveTo(0, s * 0.68, -s * 0.14, s * 0.92);
+    ctx.bezierCurveTo(-s * 0.65, s * 0.7, -s * 0.85, -s * 0.25, 0, -s);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
     ctx.lineWidth = 0.6;
-    ctx.beginPath(); ctx.moveTo(0, -s * 0.8); ctx.lineTo(0, s * 0.7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -s * 0.75); ctx.lineTo(0, s * 0.65); ctx.stroke();
     ctx.restore();
   }
 
-  // ── Vẽ bong bóng có viền sáng + điểm phản chiếu ─────────────────────────────
+  // ── Hoa hồng — cánh dày, tròn hơn, gợn nhung, nặng hơn hoa đào ──────────────
+  function drawRosePetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    const s = p.r;
+    const g = ctx.createRadialGradient(-s * 0.2, -s * 0.3, s * 0.1, 0, 0, s * 1.1);
+    g.addColorStop(0, `rgba(${p.c[0]},0.95)`);
+    g.addColorStop(0.6, `rgba(${p.c[1]},0.85)`);
+    g.addColorStop(1, `rgba(${p.c[1]},0.55)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(0, -s * 0.95);
+    ctx.bezierCurveTo(s * 1.05, -s * 0.5, s * 0.9, s * 0.55, 0, s);
+    ctx.bezierCurveTo(-s * 0.9, s * 0.55, -s * 1.05, -s * 0.5, 0, -s * 0.95);
+    ctx.closePath(); ctx.fill();
+    // gợn nhung — vài đường cong mờ bên trong
+    ctx.strokeStyle = "rgba(0,0,0,0.12)";
+    ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.moveTo(-s * 0.3, -s * 0.5); ctx.quadraticCurveTo(0, 0, -s * 0.2, s * 0.6); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(s * 0.3, -s * 0.5); ctx.quadraticCurveTo(0, 0, s * 0.2, s * 0.6); ctx.stroke();
+    ctx.restore();
+  }
+
   function drawBubble(p) {
     ctx.save();
     ctx.globalAlpha = 0.5;
@@ -2711,7 +2813,6 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.restore();
   }
 
-  // ── Vẽ đom đóm — lõi sáng + quầng mềm ───────────────────────────────────────
   function drawFirefly(p, a) {
     ctx.save();
     ctx.globalAlpha = a;
@@ -2727,7 +2828,6 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.restore();
   }
 
-  // ── Vẽ tàn lửa bay lên — có đuôi mờ dần ─────────────────────────────────────
   function drawEmber(p) {
     ctx.save();
     ctx.globalAlpha = Math.max(0, p.life) * 0.85;
@@ -2743,7 +2843,6 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.restore();
   }
 
-  // ── Vẽ nốt nhạc thật (đầu nốt + thân + đuôi cong) ───────────────────────────
   function drawNote(p) {
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -2752,27 +2851,15 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.fillStyle = `rgba(${p.c},0.9)`;
     ctx.strokeStyle = `rgba(${p.c},0.9)`;
     ctx.lineWidth = 1.6 * s;
-    // đầu nốt (hình oval nghiêng)
-    ctx.save();
-    ctx.rotate(-0.35);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 5.5 * s, 4 * s, 0, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.save(); ctx.rotate(-0.35);
+    ctx.beginPath(); ctx.ellipse(0, 0, 5.5 * s, 4 * s, 0, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
-    // thân nốt
-    ctx.beginPath();
-    ctx.moveTo(5 * s, -1 * s);
-    ctx.lineTo(5 * s, -16 * s);
-    ctx.stroke();
-    // đuôi cong
-    ctx.beginPath();
-    ctx.moveTo(5 * s, -16 * s);
-    ctx.quadraticCurveTo(11 * s, -13 * s, 9 * s, -7 * s);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(5 * s, -1 * s); ctx.lineTo(5 * s, -16 * s); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(5 * s, -16 * s);
+    ctx.quadraticCurveTo(11 * s, -13 * s, 9 * s, -7 * s); ctx.stroke();
     ctx.restore();
   }
 
-  // ── Vẽ tia sáng lấp lánh (dawn) — kim cương 4 cánh ─────────────────────────
   function drawSpark(p, a) {
     ctx.save();
     ctx.translate(p.x, p.y);
@@ -2781,19 +2868,45 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.lineWidth = 1.1;
     ctx.shadowColor = `rgba(${p.c},0.9)`; ctx.shadowBlur = 6;
     const s = p.r * 2.2;
-    ctx.beginPath();
-    ctx.moveTo(-s, 0); ctx.lineTo(s, 0);
-    ctx.moveTo(0, -s); ctx.lineTo(0, s);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-s, 0); ctx.lineTo(s, 0); ctx.moveTo(0, -s); ctx.lineTo(0, s); ctx.stroke();
     ctx.beginPath(); ctx.arc(0, 0, p.r * 0.5, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,0.9)`; ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.fill();
     ctx.restore();
   }
 
-  // ── Particle pool ────────────────────────────────────────────────────────
-  let pool = [];
-  let currentType = null;
-  let petalColors = ["255,200,220", "255,175,205"];
+  // ── Bokeh mềm — trôi lơ lửng cho chủ đề hoa đào ─────────────────────────────
+  function drawBokeh(p) {
+    ctx.save();
+    ctx.globalAlpha = p.a;
+    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    g.addColorStop(0, `rgba(${p.c},0.28)`);
+    g.addColorStop(1, `rgba(${p.c},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Trái tim ấm — trôi lên cho chủ đề vườn hồng ─────────────────────────────
+  function drawHeart(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.globalAlpha = p.a;
+    const s = p.r;
+    ctx.fillStyle = `rgba(${p.c},0.8)`;
+    ctx.shadowColor = `rgba(${p.c},0.7)`; ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.moveTo(0, s * 0.35);
+    ctx.bezierCurveTo(-s, -s * 0.5, -s * 0.5, -s * 1.15, 0, -s * 0.4);
+    ctx.bezierCurveTo(s * 0.5, -s * 1.15, s, -s * 0.5, 0, s * 0.35);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Particle pool chính + pool phụ ──────────────────────────────────────────
+  let pool = [], secondaryPool = [];
+  let currentType = null, currentSecondary = null;
+  let petalColors = ["255,205,225", "255,180,210"];
+  let petalMode = "blossom";
 
   function spawn(type) {
     const p = { type };
@@ -2804,11 +2917,21 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       p.c = "225,212,255";
     } else if (type === "petals") {
       p.x = Math.random() * W; p.y = -30;
-      p.r = 8 + Math.random() * 8;
-      p.vx = (Math.random() - 0.5) * 0.7;
-      p.vy = 0.6 + Math.random() * 0.9;
+      p.mode = petalMode;
+      if (petalMode === "rose") {
+        p.r = 11 + Math.random() * 9;
+        p.vx = (Math.random() - 0.5) * 0.35;
+        p.vy = 0.35 + Math.random() * 0.5;
+        p.vrot = (Math.random() - 0.5) * 0.015;
+        p.windK = 0.18;
+      } else {
+        p.r = 7 + Math.random() * 6;
+        p.vx = (Math.random() - 0.5) * 0.6;
+        p.vy = 0.7 + Math.random() * 1.0;
+        p.vrot = (Math.random() - 0.5) * 0.045;
+        p.windK = 0.75;
+      }
       p.rot = Math.random() * Math.PI * 2;
-      p.vrot = (Math.random() - 0.5) * 0.035;
       p.sway = Math.random() * Math.PI * 2;
       p.c = petalColors;
     } else if (type === "bubbles") {
@@ -2850,30 +2973,89 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     return p;
   }
 
-  function initPool(type) {
-    const counts = { stars: 100, petals: 40, bubbles: 36, fireflies: 42, embers: 42, notes: 18, sparks: 42 };
-    pool = Array.from({ length: counts[type] || 40 }, () => spawn(type));
+  function spawnSecondary(type) {
+    if (type === "bokeh") {
+      return {
+        x: Math.random() * W, y: Math.random() * H,
+        r: 30 + Math.random() * 55,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -(0.05 + Math.random() * 0.1),
+        a: 0.15 + Math.random() * 0.25,
+        c: "255,190,215",
+      };
+    }
+    if (type === "hearts") {
+      return {
+        x: Math.random() * W, y: H + 30,
+        r: 6 + Math.random() * 7,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: -(0.25 + Math.random() * 0.35),
+        a: 0, aMax: 0.35 + Math.random() * 0.25, aDir: 1,
+        c: "255,110,150",
+      };
+    }
   }
 
-  // ── Accent trang trí riêng cho từng theme ───────────────────────────────────
+  function initPool(type) {
+    const counts = { stars: 100, petals: petalMode === "rose" ? 30 : 42, bubbles: 36, fireflies: 42, embers: 42, notes: 18, sparks: 42 };
+    pool = Array.from({ length: counts[type] || 40 }, () => spawn(type));
+  }
+  function initSecondary(type) {
+    const counts = { bokeh: 9, hearts: 14 };
+    secondaryPool = type ? Array.from({ length: counts[type] || 0 }, () => spawnSecondary(type)) : [];
+  }
+
+  // ── Cụm hoa đào 5 cánh thật (dùng cho cành hoa) ─────────────────────────────
+  function drawBlossomCluster(cx, cy, color, size) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    for (let i = 0; i < 5; i++) {
+      const ang = (i / 5) * Math.PI * 2;
+      ctx.save();
+      ctx.rotate(ang);
+      ctx.translate(0, -size * 0.55);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.6);
+      g.addColorStop(0, `rgba(${color},0.85)`);
+      g.addColorStop(1, `rgba(${color},0.3)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 0.42, size * 0.62, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = "rgba(255,225,120,0.9)";
+    ctx.beginPath(); ctx.arc(0, 0, size * 0.22, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Nụ hồng thật (nhiều lớp cánh xoắn) cho dây leo ──────────────────────────
+  function drawRoseBud(cx, cy, color, size) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    for (let i = 0; i < 4; i++) {
+      const ang = i * 0.9 + 0.3;
+      const sc = size * (1 - i * 0.16);
+      ctx.save();
+      ctx.rotate(ang);
+      const g = ctx.createRadialGradient(-sc * 0.2, -sc * 0.2, 0, 0, 0, sc);
+      g.addColorStop(0, `rgba(255,140,170,0.9)`);
+      g.addColorStop(1, `rgba(${color},0.85)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, sc * 0.62, sc * 0.85, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  // ── Accent trang trí ─────────────────────────────────────────────────────
   let waveOffset = 0;
   function drawAccent(theme) {
     if (!theme || !theme.accentType) return;
     const a = theme.accent || {};
     if (theme.accentType === "moon") {
-      const cx = W * a.cx, cy = H * a.cy;
-      ctx.save();
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, a.r * 3.2);
-      g.addColorStop(0, `rgba(${a.color},0.28)`);
-      g.addColorStop(1, `rgba(${a.color},0)`);
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(cx, cy, a.r * 3.2, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = `rgba(${a.color},0.92)`;
-      ctx.beginPath(); ctx.arc(cx, cy, a.r, 0, Math.PI * 2); ctx.fill();
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.beginPath(); ctx.arc(cx + a.r * 0.42, cy - a.r * 0.18, a.r * 0.88, 0, Math.PI * 2); ctx.fill();
-      ctx.restore();
+      drawDetailedMoon(W * a.cx, H * a.cy, a.r, a.color);
     } else if (theme.accentType === "sun" || theme.accentType === "sunrise") {
       const cx = W * a.cx, cy = H * a.cy;
       ctx.save();
@@ -2894,8 +3076,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       ctx.save();
       for (let layer = 0; layer < 2; layer++) {
         const baseY = H - 40 - layer * 26;
-        ctx.beginPath();
-        ctx.moveTo(0, baseY);
+        ctx.beginPath(); ctx.moveTo(0, baseY);
         for (let x = 0; x <= W; x += 18) {
           const y = baseY + Math.sin(x * 0.012 + waveOffset * (layer ? 1.4 : 1) + layer) * (10 - layer * 3);
           ctx.lineTo(x, y);
@@ -2905,31 +3086,49 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
         ctx.fill();
       }
       ctx.restore();
-    } else if (theme.accentType === "branch" || theme.accentType === "vine") {
+    } else if (theme.accentType === "branch") {
       ctx.save();
-      ctx.globalAlpha = 0.5;
-      ctx.strokeStyle = `rgba(${a.color},0.4)`;
-      ctx.lineWidth = 2.2;
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = `rgba(${a.color},0.45)`;
+      ctx.lineWidth = 2.4;
       ctx.beginPath();
-      const startX = theme.accentType === "branch" ? -10 : W + 10;
-      const dir = theme.accentType === "branch" ? 1 : -1;
-      ctx.moveTo(startX, 0);
-      ctx.bezierCurveTo(
-        startX + dir * 90, 60,
-        startX + dir * 40, 140,
-        startX + dir * 130, 210
-      );
+      ctx.moveTo(-10, 0);
+      ctx.bezierCurveTo(80, 60, 40, 140, 130, 210);
       ctx.stroke();
-      // vài chấm hoa/gai dọc theo cành
-      for (let i = 0; i < 5; i++) {
-        const t = i / 4;
-        const px = startX + dir * (90 * t + 20);
-        const py = 20 + t * 190;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${a.color},0.55)`;
-        ctx.arc(px, py, theme.accentType === "branch" ? 4 : 2.5, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(30, 90);
+      ctx.bezierCurveTo(70, 100, 90, 130, 95, 165);
+      ctx.stroke();
+      const blossoms = [[10, 15], [50, 80], [95, 155], [70, 105], [110, 190]];
+      blossoms.forEach(([bx, by], i) => {
+        const bob = Math.sin(tt * 0.6 + i) * 2;
+        drawBlossomCluster(bx, by + bob, a.color, 9 + (i % 2) * 3);
+      });
+      ctx.restore();
+    } else if (theme.accentType === "vine") {
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = `rgba(${a.color},0.4)`;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(W + 10, 0);
+      ctx.bezierCurveTo(W - 80, 70, W - 30, 150, W - 120, 230);
+      ctx.stroke();
+      // gai dọc dây leo
+      for (let i = 0; i < 7; i++) {
+        const t = i / 6;
+        const tx = W + 10 - t * 110, ty = t * 220;
+        ctx.save();
+        ctx.translate(tx, ty); ctx.rotate(-0.6 + t);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(7, -3); ctx.lineTo(0, 3); ctx.closePath();
+        ctx.fillStyle = `rgba(${a.color},0.5)`; ctx.fill();
+        ctx.restore();
       }
+      const buds = [[W - 30, 25], [W - 70, 95], [W - 100, 175]];
+      buds.forEach(([bx, by], i) => {
+        const bob = Math.sin(tt * 0.5 + i * 1.3) * 2;
+        drawRoseBud(bx, by + bob, a.color, 12 + (i % 2) * 3);
+      });
       ctx.restore();
     } else if (theme.accentType === "haze") {
       ctx.save();
@@ -2945,60 +3144,70 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     }
   }
 
-  let tt = 0;
+  let tt = 0, windPhase = 0;
   let activeThemeKey = "home";
   function loop() {
     requestAnimationFrame(loop);
     if (!currentType) return;
     ctx.clearRect(0, 0, W, H);
     tt += 0.016;
+    windPhase += 0.006;
+    const wind = Math.sin(windPhase);
 
     drawAccent(THEMES[activeThemeKey]);
 
+    // Pool phụ vẽ trước (nằm sau particle chính 1 lớp cảm giác chiều sâu)
+    secondaryPool.forEach((p, i) => {
+      if (p.type === undefined) { /* bokeh/hearts không cần type check riêng */ }
+      if (currentSecondary === "bokeh") {
+        p.x += p.vx; p.y += p.vy;
+        if (p.y < -p.r) { secondaryPool[i] = spawnSecondary("bokeh"); secondaryPool[i].y = H + p.r; }
+        drawBokeh(p);
+      } else if (currentSecondary === "hearts") {
+        p.x += p.vx + Math.sin(tt + i) * 0.15; p.y += p.vy;
+        if (p.aDir === 1) { p.a += 0.006; if (p.a >= p.aMax) p.aDir = -1; }
+        else { p.a -= 0.004; }
+        if (p.y < -20 || p.a <= 0 && p.aDir === -1) secondaryPool[i] = spawnSecondary("hearts");
+        drawHeart(p);
+      }
+    });
+
     pool.forEach((p, i) => {
       if (p.type === "stars") {
-        const a = 0.25 + 0.6 * Math.abs(Math.sin(tt * 0.6 + p.tw));
-        ctx.save(); ctx.globalAlpha = a;
+        const alpha = 0.25 + 0.6 * Math.abs(Math.sin(tt * 0.6 + p.tw));
+        ctx.save(); ctx.globalAlpha = alpha;
         ctx.fillStyle = `rgb(${p.c})`;
         ctx.shadowColor = `rgba(${p.c},0.65)`; ctx.shadowBlur = 5;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
       } else if (p.type === "petals") {
-        p.sway += 0.02;
-        p.x += p.vx + Math.sin(p.sway) * 0.5;
+        p.sway += p.mode === "rose" ? 0.012 : 0.024;
+        p.x += p.vx + Math.sin(p.sway) * (p.mode === "rose" ? 0.25 : 0.55) + wind * p.windK;
         p.y += p.vy;
-        p.rot += p.vrot;
+        p.rot += p.vrot + wind * 0.002;
         if (p.y > H + 30) pool[i] = spawn("petals");
-        drawPetal(p);
+        if (p.mode === "rose") drawRosePetal(p); else drawBlossomPetal(p);
       } else if (p.type === "bubbles") {
-        p.sway += 0.03;
-        p.x += Math.sin(p.sway) * 0.3;
-        p.y += p.vy;
+        p.sway += 0.03; p.x += Math.sin(p.sway) * 0.3; p.y += p.vy;
         if (p.y < -30) pool[i] = spawn("bubbles");
         drawBubble(p);
       } else if (p.type === "fireflies") {
-        p.tw += p.twSpeed;
-        p.x += p.vx; p.y += p.vy;
+        p.tw += p.twSpeed; p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
         if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-        const a = 0.2 + 0.75 * Math.abs(Math.sin(p.tw));
-        drawFirefly(p, a);
+        drawFirefly(p, 0.2 + 0.75 * Math.abs(Math.sin(p.tw)));
       } else if (p.type === "embers") {
         p.x += p.vx; p.y += p.vy; p.life -= 0.006;
         if (p.life <= 0 || p.y < -30) pool[i] = spawn("embers");
         drawEmber(p);
       } else if (p.type === "notes") {
-        p.sway += 0.02;
-        p.x += p.vx + Math.sin(p.sway) * 0.6;
-        p.y += p.vy;
+        p.sway += 0.02; p.x += p.vx + Math.sin(p.sway) * 0.6; p.y += p.vy;
         if (p.y < -30) pool[i] = spawn("notes");
         drawNote(p);
       } else if (p.type === "sparks") {
-        p.tw += 0.035;
-        p.x += p.vx; p.y += p.vy;
+        p.tw += 0.035; p.x += p.vx; p.y += p.vy;
         if (p.y < -30) pool[i] = spawn("sparks");
-        const a = 0.35 + 0.55 * Math.abs(Math.sin(p.tw));
-        drawSpark(p, a);
+        drawSpark(p, 0.35 + 0.55 * Math.abs(Math.sin(p.tw)));
       }
     });
   }
@@ -3008,10 +3217,17 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     const t = THEMES[tab] || THEMES.home;
     activeThemeKey = THEMES[tab] ? tab : "home";
     document.body.style.background = t.bodyBg;
+    const modeChanged = t.petalMode && t.petalMode !== petalMode;
     if (t.petalColor) petalColors = t.petalColor;
-    if (t.particle !== currentType) {
+    if (t.petalMode) petalMode = t.petalMode;
+    if (t.particle !== currentType || modeChanged) {
       currentType = t.particle;
       initPool(currentType);
+    }
+    const sec = t.secondary || null;
+    if (sec !== currentSecondary) {
+      currentSecondary = sec;
+      initSecondary(sec);
     }
     canvas.classList.add("visible");
   }

@@ -2566,3 +2566,41 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     }
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DỰ ĐỊNH TƯƠNG LAI — thay thế tab Đầu Tư cũ
+// ══════════════════════════════════════════════════════════════════════════════
+(function initFuture() {
+  // Thêm từng dự định vào đây, mỗi dòng 1 item
+  const FUTURE = [
+    "cùng nhau đi du lịch một chuyến thật xa",
+    // "điều thứ 2...",
+    // "điều thứ 3...",
+    // ... thêm bao nhiêu tùy anh
+  ];
+
+  const list = document.getElementById("futureList");
+  if (!list) return;
+
+  FUTURE.forEach((text, i) => {
+    const card = document.createElement("div");
+    card.className = "future-card";
+    card.innerHTML = `
+      <div class="future-num">${String(i + 1).padStart(2, "0")}</div>
+      <div class="future-text">${text}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  function revealFuture() {
+    list.querySelectorAll(".future-card").forEach((c, i) => {
+      setTimeout(() => c.classList.add("show"), i * 60);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "future") {
+      btn.addEventListener("click", () => setTimeout(revealFuture, 100));
+    }
+  });
+})();

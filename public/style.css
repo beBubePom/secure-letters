@@ -787,246 +787,6 @@ input, textarea, #letterContent { user-select: text; }
   .tab-btn { padding: 12px 10px; font-size: 9px; letter-spacing: 1.5px; }
 }
 
-/* ══ HỘP BÍ MẬT ══════════════════════════════════════════════════════════════ */
-#secretWrap {
-  min-height: 70vh;
-  display: flex; align-items: center; justify-content: center;
-}
-#secretLock {
-  display: flex; flex-direction: column; align-items: center; gap: 24px;
-  text-align: center; padding: 40px;
-}
-#secretIcon {
-  font-size: 64px;
-  animation: secretFloat 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(180,150,255,0.4));
-}
-@keyframes secretFloat {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
-}
-#secretHint {
-  font-size: 13px; letter-spacing: 3px;
-  color: rgba(160,140,200,0.45);
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-style: italic;
-}
-#secretBtn {
-  padding: 12px 32px;
-  background: transparent;
-  border: 1px solid rgba(180,150,255,0.3);
-  border-radius: 40px;
-  color: rgba(200,180,240,0.7);
-  font-size: 12px; letter-spacing: 3px;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  cursor: none;
-  transition: all 0.4s ease;
-}
-#secretBtn:hover {
-  border-color: rgba(200,170,255,0.7);
-  color: rgba(225,210,255,0.95);
-  box-shadow: 0 0 24px rgba(180,150,255,0.15);
-  letter-spacing: 4px;
-}
-#secretReveal {
-  display: none;
-  flex-direction: column; align-items: center; gap: 32px;
-  text-align: center; padding: 60px 40px;
-  animation: secretFadeIn 1.2s ease forwards;
-}
-#secretReveal.show { display: flex; }
-@keyframes secretFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-#secretMsg {
-  font-size: 22px; font-style: italic;
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  color: rgba(220,205,255,0.88);
-  max-width: 540px;
-  line-height: 1.8;
-  text-shadow: 0 0 40px rgba(180,150,255,0.2);
-}
-#secretClose {
-  font-size: 11px; letter-spacing: 3px;
-  color: rgba(140,120,180,0.4);
-  background: none; border: none;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  cursor: none;
-  transition: color 0.3s;
-}
-#secretClose:hover { color: rgba(180,160,220,0.7); }
-
-/* ══ HỘP BÍ MẬT — OPEN WHEN GRID ═══════════════════════════════════════════ */
-#secretGrid {
-  padding: 32px 32px 60px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
-}
-.secret-card {
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(160,140,220,0.12);
-  border-radius: 10px;
-  cursor: none;
-  transition: all 0.25s;
-  display: flex; flex-direction: column; gap: 4px;
-}
-.secret-card:hover {
-  border-color: rgba(200,170,255,0.4);
-  background: rgba(160,130,255,0.05);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(160,130,255,0.08);
-}
-.secret-num {
-  font-size: 9px; letter-spacing: 2px;
-  color: rgba(140,120,180,0.35);
-  font-family: 'Be Vietnam Pro', sans-serif;
-}
-.secret-label {
-  font-size: 13px; font-style: italic;
-  color: rgba(195,180,235,0.75);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  line-height: 1.5;
-}
-.secret-label::before { content: "mở khi "; color: rgba(140,120,180,0.4); font-style: normal; font-size: 11px; letter-spacing: 1px; font-family: 'Be Vietnam Pro', sans-serif; }
-
-/* Password modal */
-#secretModal {
-  display: none; position: fixed; inset: 0;
-  z-index: 9000;
-  background: rgba(4,2,12,0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  align-items: center; justify-content: center;
-}
-#secretModal.show { display: flex; }
-#secretModalInner {
-  background: rgba(12,8,22,0.95);
-  border: 1px solid rgba(180,150,255,0.2);
-  border-radius: 18px;
-  padding: 40px 36px;
-  max-width: 460px; width: 90%;
-  display: flex; flex-direction: column; gap: 20px;
-  text-align: center;
-  box-shadow: 0 0 60px rgba(160,120,255,0.1);
-}
-#secretModalLabel {
-  font-size: 17px; font-style: italic;
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  color: rgba(215,200,255,0.9);
-  line-height: 1.6;
-}
-#secretModalLabel::before { content: "mở khi "; font-style: normal; font-size: 11px; letter-spacing: 2px; color: rgba(160,140,200,0.4); font-family: 'Be Vietnam Pro', sans-serif; display: block; margin-bottom: 6px; }
-#secretModalHint {
-  font-size: 13px; font-style: italic;
-  color: rgba(170,150,220,0.55);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  line-height: 1.8; padding: 16px; 
-  border: 1px solid rgba(160,140,220,0.1);
-  border-radius: 10px;
-  background: rgba(160,130,255,0.03);
-}
-#secretPassInput {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(160,140,220,0.2);
-  border-radius: 30px;
-  padding: 12px 20px;
-  color: rgba(200,185,240,0.9);
-  font-size: 14px; text-align: center;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  outline: none; width: 100%;
-  transition: border-color 0.3s;
-}
-#secretPassInput:focus { border-color: rgba(180,150,255,0.5); }
-#secretPassError {
-  font-size: 11px; color: rgba(255,130,130,0.6);
-  font-family: 'Be Vietnam Pro', sans-serif;
-  letter-spacing: 1px; min-height: 16px;
-}
-#secretModalBtns { display: flex; gap: 12px; justify-content: center; }
-#secretPassSubmit, #secretPassClose {
-  padding: 10px 28px; border-radius: 30px;
-  font-size: 11px; letter-spacing: 2px;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  cursor: none; transition: all 0.3s;
-}
-#secretPassSubmit {
-  background: rgba(160,130,255,0.15);
-  border: 1px solid rgba(180,150,255,0.35);
-  color: rgba(210,195,255,0.9);
-}
-#secretPassSubmit:hover { background: rgba(160,130,255,0.25); border-color: rgba(200,170,255,0.6); }
-#secretPassClose {
-  background: transparent;
-  border: 1px solid rgba(160,140,200,0.15);
-  color: rgba(140,120,180,0.5);
-}
-#secretPassClose:hover { color: rgba(180,160,220,0.7); border-color: rgba(160,140,200,0.3); }
-
-@media (max-width: 768px) {
-  #secretGrid { padding: 16px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
-  #secretModalInner { padding: 28px 20px; }
-}
-
-/* ══ EXIT INTENT MODAL ════════════════════════════════════════════════════════ */
-#exitModal {
-  display: none; position: fixed; inset: 0; z-index: 999990;
-  align-items: center; justify-content: center;
-  background: rgba(4,2,12,0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-#exitModal.show { display: flex; }
-#exitInner {
-  background: rgba(10,7,20,0.97);
-  border: 1px solid rgba(180,150,255,0.18);
-  border-radius: 20px;
-  padding: 40px 36px;
-  max-width: 380px; width: 88%;
-  text-align: center;
-  display: flex; flex-direction: column; gap: 24px;
-  box-shadow: 0 0 60px rgba(160,120,255,0.1);
-  animation: exitFade 0.4s ease;
-}
-@keyframes exitFade {
-  from { opacity:0; transform:translateY(-12px) scale(0.97); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-#exitMsg {
-  font-size: 17px; font-style: italic; line-height: 1.8;
-  color: rgba(210,195,255,0.85);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-}
-#exitBtns { display: flex; gap: 12px; justify-content: center; }
-#exitYes, #exitNo {
-  padding: 10px 32px; border-radius: 30px;
-  font-size: 12px; letter-spacing: 2px;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  cursor: none; transition: all 0.3s;
-}
-#exitYes {
-  background: rgba(160,130,255,0.12);
-  border: 1px solid rgba(180,150,255,0.3);
-  color: rgba(210,195,255,0.9);
-}
-#exitYes:hover { background: rgba(160,130,255,0.22); border-color: rgba(200,170,255,0.6); }
-#exitNo {
-  background: transparent;
-  border: 1px solid rgba(160,140,200,0.15);
-  color: rgba(140,120,180,0.5);
-}
-#exitNo:hover { color: rgba(180,160,220,0.7); border-color: rgba(160,140,200,0.3); }
-#exitReply {
-  font-size: 14px; font-style: italic;
-  color: rgba(190,175,230,0.65);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  line-height: 1.7; min-height: 20px;
-  opacity: 0; transition: opacity 0.6s ease;
-}
-#exitReply.show { opacity: 1; }
-
 /* ══ MOOD BUBBLES ════════════════════════════════════════════════════════════ */
 #moodWrap { padding: 28px 24px 60px; }
 
@@ -1106,168 +866,6 @@ input, textarea, #letterContent { user-select: text; }
   #moodWrap { padding: 16px 14px 60px; }
   #moodPicker { gap: 10px; }
   .mood-bubble { width: 50px; height: 50px; font-size: 22px; }
-}
-
-
-/* ══ WEATHER — BEAUTIFUL ══════════════════════════════════════════════════════ */
-#weatherWrap {
-  padding: 28px 24px 80px;
-}
-#weatherRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: start;
-}
-@media (max-width: 600px) {
-  #weatherRow { grid-template-columns: 1fr; }
-}
-#weatherLoading {
-  text-align: center; padding: 60px 0;
-  font-size: 12px; letter-spacing: 3px;
-  color: rgba(160,140,200,0.4);
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-style: italic;
-}
-.weather-city-card {
-  border-radius: 24px; overflow: hidden;
-  position: relative; padding: 28px 24px 22px;
-  border: 1px solid rgba(255,255,255,0.07);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-  transition: all 0.5s ease;
-}
-/* Glow blob */
-.weather-city-card::before {
-  content: ""; position: absolute;
-  width: 200px; height: 200px; border-radius: 50%;
-  opacity: 0.15; filter: blur(55px);
-  top: -40px; right: -40px; pointer-events: none;
-  transition: background 1s ease;
-}
-
-/* ── NẮNG — vàng/cam ấm ── */
-.weather-city-card.sun {
-  background: linear-gradient(145deg, #1c1200 0%, #241800 50%, #1a1000 100%);
-  border-color: rgba(220,160,50,0.15);
-}
-.weather-city-card.sun::before { background: #ffa500; }
-.sun .wTemp  { color: rgba(255,210,110,0.95); text-shadow: 0 0 30px rgba(255,160,0,0.3); }
-.sun .wDesc  { color: rgba(220,160,60,0.5); }
-.sun .wLoc   { color: rgba(180,130,40,0.4); }
-.sun .w-detail    { color: rgba(200,150,60,0.55); }
-.sun .w-detail span { color: rgba(255,200,110,0.88); }
-.sun .wDivider { background: linear-gradient(90deg, transparent, rgba(220,150,40,0.22), transparent); }
-.sun .weatherMsg { background: rgba(140,90,0,0.14); border-color: rgba(220,150,40,0.12); }
-.sun .wMsgLabel  { color: rgba(180,130,40,0.35); }
-.sun .wMsgText   { color: rgba(245,205,140,0.85); }
-.sun .wMsgNext   { color: rgba(220,170,80,0.5); }
-.sun .wMsgNext:hover { color: rgba(240,190,100,0.85); }
-.sun .wReminder  { background: rgba(180,100,0,0.1); border-color: rgba(220,140,30,0.12); }
-.sun .wReminderText { color: rgba(240,195,120,0.75); }
-
-/* ── MƯA — xanh tím ── */
-.weather-city-card.rain {
-  background: linear-gradient(145deg, #080e28 0%, #0a1035 50%, #06091e 100%);
-  border-color: rgba(80,120,255,0.15);
-}
-.weather-city-card.rain::before { background: #4060ff; }
-.rain .wTemp  { color: rgba(150,195,255,0.95); text-shadow: 0 0 30px rgba(80,140,255,0.25); }
-.rain .wDesc  { color: rgba(100,150,255,0.5); }
-.rain .wLoc   { color: rgba(80,120,220,0.4); }
-.rain .w-detail    { color: rgba(100,150,240,0.5); }
-.rain .w-detail span { color: rgba(160,200,255,0.88); }
-.rain .wDivider { background: linear-gradient(90deg, transparent, rgba(80,130,255,0.2), transparent); }
-.rain .weatherMsg { background: rgba(30,60,180,0.12); border-color: rgba(80,130,255,0.12); }
-.rain .wMsgLabel  { color: rgba(90,140,255,0.35); }
-.rain .wMsgText   { color: rgba(175,210,255,0.85); }
-.rain .wMsgNext   { color: rgba(120,170,255,0.5); }
-.rain .wMsgNext:hover { color: rgba(160,205,255,0.85); }
-.rain .wReminder  { background: rgba(20,40,150,0.15); border-color: rgba(70,120,255,0.12); }
-.rain .wReminderText { color: rgba(160,200,255,0.75); }
-
-/* ── TUYẾT — trắng lạnh ── */
-.weather-city-card.snow {
-  background: linear-gradient(145deg, #0a0e18 0%, #0c1020 50%, #080c16 100%);
-  border-color: rgba(180,220,255,0.15);
-}
-.weather-city-card.snow::before { background: #aaddff; opacity: 0.12; }
-.snow .wTemp  { color: rgba(220,240,255,0.97); text-shadow: 0 0 30px rgba(160,210,255,0.3); }
-.snow .wDesc  { color: rgba(160,210,255,0.5); }
-.snow .wLoc   { color: rgba(130,180,230,0.4); }
-.snow .w-detail    { color: rgba(140,190,240,0.5); }
-.snow .w-detail span { color: rgba(200,230,255,0.9); }
-.snow .wDivider { background: linear-gradient(90deg, transparent, rgba(160,210,255,0.2), transparent); }
-.snow .weatherMsg { background: rgba(50,90,180,0.1); border-color: rgba(150,200,255,0.12); }
-.snow .wMsgLabel  { color: rgba(130,185,240,0.35); }
-.snow .wMsgText   { color: rgba(200,230,255,0.85); }
-.snow .wMsgNext   { color: rgba(150,200,255,0.5); }
-.snow .wMsgNext:hover { color: rgba(190,225,255,0.85); }
-.snow .wReminder  { background: rgba(40,80,160,0.12); border-color: rgba(140,195,255,0.12); }
-.snow .wReminderText { color: rgba(195,225,255,0.75); }
-
-/* ── MÂY — tím xanh trung ── */
-.weather-city-card.cloud {
-  background: linear-gradient(145deg, #0e0e1e 0%, #111120 50%, #0c0c1a 100%);
-  border-color: rgba(140,135,220,0.12);
-}
-.weather-city-card.cloud::before { background: #7070cc; }
-.cloud .wTemp  { color: rgba(200,195,245,0.95); }
-.cloud .wDesc  { color: rgba(155,150,215,0.5); }
-.cloud .wLoc   { color: rgba(130,125,195,0.4); }
-.cloud .w-detail    { color: rgba(145,140,210,0.5); }
-.cloud .w-detail span { color: rgba(200,195,245,0.88); }
-.cloud .wDivider { background: linear-gradient(90deg, transparent, rgba(140,135,220,0.18), transparent); }
-.cloud .weatherMsg { background: rgba(70,70,140,0.1); border-color: rgba(140,130,220,0.1); }
-.cloud .wMsgLabel  { color: rgba(130,125,200,0.35); }
-.cloud .wMsgText   { color: rgba(200,195,240,0.85); }
-.cloud .wMsgNext   { color: rgba(160,155,230,0.5); }
-.cloud .wMsgNext:hover { color: rgba(190,185,245,0.85); }
-.cloud .wReminder  { background: rgba(60,60,120,0.1); border-color: rgba(130,125,210,0.1); }
-.cloud .wReminderText { color: rgba(190,185,240,0.72); }
-
-/* ── SƯƠNG MÙ ── */
-.weather-city-card.fog {
-  background: linear-gradient(145deg, #0e0e14 0%, #111118 50%, #0c0c12 100%);
-  border-color: rgba(160,160,200,0.1);
-}
-.weather-city-card.fog::before { background: #9090aa; opacity: 0.1; }
-.fog .wTemp   { color: rgba(190,190,220,0.9); }
-.fog .wDesc   { color: rgba(150,150,190,0.45); }
-.fog .wLoc    { color: rgba(130,130,170,0.38); }
-.fog .w-detail     { color: rgba(140,140,185,0.48); }
-.fog .w-detail span { color: rgba(185,185,220,0.85); }
-.fog .wDivider { background: linear-gradient(90deg, transparent, rgba(150,150,200,0.15), transparent); }
-.fog .weatherMsg { background: rgba(60,60,100,0.1); border-color: rgba(140,140,200,0.1); }
-.fog .wMsgLabel  { color: rgba(130,130,185,0.32); }
-.fog .wMsgText   { color: rgba(185,185,225,0.82); }
-.fog .wMsgNext   { color: rgba(150,150,210,0.45); }
-.fog .wReminder  { background: rgba(55,55,95,0.1); border-color: rgba(135,135,195,0.1); }
-.fog .wReminderText { color: rgba(180,180,220,0.7); }
-
-/* Shared elements */
-.wTop { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
-.wIcon { font-size: 70px; line-height: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); }
-.wRight { text-align: right; }
-.wTemp { font-size: 56px; font-weight: 300; line-height: 1; font-family: 'GFS Didot', Georgia, serif; letter-spacing: -2px; }
-.wDesc { font-size: 10px; letter-spacing: 3px; margin-top: 4px; font-family: 'Be Vietnam Pro', sans-serif; }
-.wLoc  { font-size: 10px; letter-spacing: 2px; margin-top: 3px; font-family: 'Be Vietnam Pro', sans-serif; }
-.wDivider { height: 1px; margin-bottom: 14px; }
-.wDetails { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
-.w-detail { font-size: 11px; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 0.5px; }
-.weatherMsg { border-radius: 14px; padding: 16px 18px; margin-bottom: 10px; }
-.wMsgLabel { font-size: 8px; letter-spacing: 3px; margin-bottom: 8px; font-family: 'Be Vietnam Pro', sans-serif; }
-.wMsgText  { font-size: 15px; font-style: italic; line-height: 1.85; font-family: 'Cormorant Garamond', Georgia, serif; min-height: 48px; }
-.wMsgNext  { margin-top: 10px; font-size: 10px; text-align: right; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 1.5px; cursor: none; transition: color 0.2s; }
-
-/* Reminder box — chỉ Spokane */
-.wReminder { border-radius: 12px; padding: 13px 16px; }
-.wReminderLabel { font-size: 8px; letter-spacing: 3px; margin-bottom: 6px; font-family: 'Be Vietnam Pro', sans-serif; color: rgba(160,155,200,0.32); }
-.wReminderText { font-size: 13px; font-style: italic; line-height: 1.75; font-family: 'Cormorant Garamond', Georgia, serif; }
-
-@media (max-width: 768px) {
-  #weatherWrap { padding: 16px 14px 60px; }
-  .wIcon { font-size: 54px; }
-  .wTemp { font-size: 44px; }
 }
 
 /* ══ ĐẾM NGÀY BÊN NHAU ════════════════════════════════════════════════════════ */
@@ -1573,6 +1171,42 @@ input, textarea, #letterContent { user-select: text; }
 }
 @media (max-width: 768px) {
   #thingsWrap { padding: 20px 14px 60px; }
+}
+
+/* ══ DỰ ĐỊNH TƯƠNG LAI ════════════════════════════════════════════════════════ */
+#futureWrap { padding: 32px 24px 80px; max-width: 640px; margin: 0 auto; }
+#futureIntro {
+  font-size: 16px; font-style: italic;
+  color: rgba(185,170,225,0.6); text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.9; max-width: 520px; margin: 0 auto 44px;
+}
+#futureList { display: flex; flex-direction: column; gap: 14px; }
+.future-card {
+  position: relative;
+  padding: 18px 22px 18px 56px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(120,200,255,0.14);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+}
+.future-card.show { opacity: 1; transform: translateY(0); }
+.future-card:hover { border-color: rgba(150,215,255,0.35); }
+.future-num {
+  position: absolute; left: 18px; top: 17px;
+  font-size: 16px; font-weight: 300;
+  color: rgba(150,210,255,0.55);
+  font-family: 'GFS Didot', Georgia, serif;
+}
+.future-text {
+  font-size: 15px; font-style: italic;
+  color: rgba(205,225,245,0.88);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  #futureWrap { padding: 20px 14px 60px; }
 }
 
 /* ══ SỐ LẦN GHÉ THĂM — viên ngọc góc phải dưới ═══════════════════════════════ */
@@ -1987,13 +1621,13 @@ input[type="password"] {
   color: rgba(200,170,255,0.55);
   text-shadow: 0 0 18px rgba(180,140,255,0.35);
 }
-#thingsIntro, #firstsIntro, #diaryIntro, #radioIntro {
+#thingsIntro, #firstsIntro, #diaryIntro, #radioIntro, #futureIntro {
   font-size: 16.5px;
   color: rgba(200,185,235,0.62);
   line-height: 2;
 }
 
-.thing-card, .first-card, .diary-card, .radio-track {
+.thing-card, .first-card, .diary-card, .radio-track, .future-card {
   background:
     radial-gradient(120% 100% at 0% 0%, rgba(255,150,200,0.035), transparent 50%),
     rgba(255,255,255,0.022);
@@ -2003,18 +1637,18 @@ input[type="password"] {
   position: relative;
   overflow: hidden;
 }
-.thing-card::before, .first-card::before, .diary-card::before {
+.thing-card::before, .first-card::before, .diary-card::before, .future-card::before {
   content: "";
   position: absolute; top: 0; left: 10%; right: 10%;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(220,175,255,0.35), transparent);
 }
-.thing-card:hover, .first-card:hover, .diary-card:hover, .radio-track:hover {
+.thing-card:hover, .first-card:hover, .diary-card:hover, .radio-track:hover, .future-card:hover {
   border-color: rgba(220,180,255,0.35);
   box-shadow: 0 8px 32px rgba(150,100,255,0.1);
 }
-.thing-text { font-size: 15.5px; line-height: 1.75; color: rgba(220,205,245,0.88); }
-.thing-num, .first-num {
+.thing-text, .future-text { font-size: 15.5px; line-height: 1.75; color: rgba(220,205,245,0.88); }
+.thing-num, .first-num, .future-num {
   background: linear-gradient(160deg, #ffd3ea, #c9a6ff);
   -webkit-background-clip: text;
   background-clip: text;

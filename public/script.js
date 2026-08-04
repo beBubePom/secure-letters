@@ -2605,13 +2605,13 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
   });
 })();
 
+
 // ══════════════════════════════════════════════════════════════════════════════
-// CHỦ ĐỀ THEO TỪNG TAB — mỗi tab có màu nền + hạt riêng
+// CHỦ ĐỀ THEO TỪNG TAB v2 — nền đổi tông mạnh + particle vẽ hình thật + accent riêng
 // ══════════════════════════════════════════════════════════════════════════════
 (function initTabThemes() {
-  const glow = document.getElementById("themeGlow");
   const canvas = document.getElementById("themeCanvas");
-  if (!glow || !canvas) return;
+  if (!canvas || !document.body) return;
 
   let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
@@ -2621,197 +2621,384 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
   });
   const ctx = canvas.getContext("2d");
 
-  // ── Định nghĩa 8 chủ đề ────────────────────────────────────────────────────
+  // ── 8 chủ đề: nền đậm tông + hạt riêng + accent trang trí ──────────────────
   const THEMES = {
-    home: { // vũ trụ — tím xanh sâu, giữ nguyên nebula gốc
-      glow: `radial-gradient(55% 45% at 12% 8%, rgba(255,120,190,0.09), transparent 60%),
-             radial-gradient(45% 40% at 88% 12%, rgba(110,160,255,0.10), transparent 60%),
-             radial-gradient(65% 55% at 50% 115%, rgba(150,105,255,0.12), transparent 62%)`,
-      particle: "stars",
+    home: {
+      bodyBg: "radial-gradient(140% 100% at 50% -10%, #1a1030 0%, #0a0618 45%, #050310 100%)",
+      particle: "stars", accentType: "moon",
+      accent: { cx: 0.88, cy: 0.14, r: 46, color: "220,210,255" },
     },
-    timeline: { // hoa đào — hồng phấn
-      glow: `radial-gradient(60% 50% at 15% 0%, rgba(255,170,205,0.14), transparent 62%),
-             radial-gradient(55% 45% at 90% 100%, rgba(255,140,190,0.12), transparent 60%)`,
-      particle: "petals",
+    timeline: {
+      bodyBg: "radial-gradient(140% 100% at 15% -10%, #3a1a30 0%, #200f22 45%, #12081a 100%)",
+      particle: "petals", accentType: "branch",
+      accent: { color: "255,185,210" },
+      petalColor: ["255,200,220", "255,175,205"],
     },
-    gallery: { // biển cả — xanh ngọc lam
-      glow: `radial-gradient(60% 50% at 10% 100%, rgba(70,190,220,0.14), transparent 62%),
-             radial-gradient(55% 45% at 90% 0%, rgba(60,150,220,0.12), transparent 60%)`,
-      particle: "bubbles",
+    gallery: {
+      bodyBg: "radial-gradient(140% 100% at 50% 110%, #063a48 0%, #042230 50%, #02121c 100%)",
+      particle: "bubbles", accentType: "wave",
+      accent: { color: "120,220,235" },
     },
-    diary: { // đom đóm — hổ phách ấm
-      glow: `radial-gradient(55% 45% at 20% 10%, rgba(255,190,110,0.12), transparent 62%),
-             radial-gradient(55% 45% at 85% 90%, rgba(255,160,90,0.1), transparent 60%)`,
-      particle: "fireflies",
+    diary: {
+      bodyBg: "radial-gradient(140% 100% at 20% 0%, #402508 0%, #22140a 50%, #140b06 100%)",
+      particle: "fireflies", accentType: "haze",
+      accent: { color: "255,200,130" },
     },
-    things: { // vườn hồng — đỏ hồng ấm
-      glow: `radial-gradient(60% 50% at 15% 0%, rgba(255,110,150,0.14), transparent 62%),
-             radial-gradient(55% 45% at 90% 100%, rgba(255,80,130,0.1), transparent 60%)`,
-      particle: "petals",
+    things: {
+      bodyBg: "radial-gradient(140% 100% at 15% -10%, #4a1020 0%, #2a0a15 50%, #170509 100%)",
+      particle: "petals", accentType: "vine",
+      accent: { color: "255,90,130" },
+      petalColor: ["255,110,150", "230,60,110"],
     },
-    firsts: { // hoàng hôn — cam vàng
-      glow: `radial-gradient(60% 50% at 10% 100%, rgba(255,150,60,0.16), transparent 62%),
-             radial-gradient(55% 45% at 90% 0%, rgba(255,110,80,0.12), transparent 60%)`,
-      particle: "embers",
+    firsts: {
+      bodyBg: "radial-gradient(140% 100% at 50% 105%, #6a2606 0%, #3d1506 50%, #1c0803 100%)",
+      particle: "embers", accentType: "sun",
+      accent: { cx: 0.82, cy: 0.86, r: 60, color: "255,175,90" },
     },
-    radio: { // đêm nhạc — tím sâu
-      glow: `radial-gradient(60% 50% at 15% 0%, rgba(170,120,255,0.15), transparent 62%),
-             radial-gradient(55% 45% at 90% 100%, rgba(120,90,220,0.12), transparent 60%)`,
-      particle: "notes",
+    radio: {
+      bodyBg: "radial-gradient(140% 100% at 20% -10%, #34164f 0%, #1c0c2e 50%, #0f0619 100%)",
+      particle: "notes", accentType: "moon",
+      accent: { cx: 0.86, cy: 0.16, r: 40, color: "205,170,255" },
     },
-    future: { // bình minh — xanh vàng nhạt
-      glow: `radial-gradient(60% 50% at 10% 0%, rgba(140,200,255,0.14), transparent 62%),
-             radial-gradient(55% 45% at 90% 100%, rgba(255,210,150,0.1), transparent 60%)`,
-      particle: "sparks",
+    future: {
+      bodyBg: "radial-gradient(140% 100% at 50% 100%, #1c3a2a 0%, #0c2436 55%, #061420 100%)",
+      particle: "sparks", accentType: "sunrise",
+      accent: { cx: 0.5, cy: 0.92, r: 70, color: "255,220,160" },
     },
   };
 
+  document.body.style.transition = "background 1.8s ease";
+
+  // ── Vẽ cánh hoa thật (hình giọt lệ có khía ở đầu — chuẩn hoa anh đào) ───────
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    const s = p.r;
+    const g = ctx.createLinearGradient(0, -s, 0, s);
+    g.addColorStop(0, `rgba(${p.c[0]},0.92)`);
+    g.addColorStop(1, `rgba(${p.c[1]},0.55)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.bezierCurveTo(s * 0.9, -s * 0.3, s * 0.7, s * 0.7, 0, s * 0.95);
+    ctx.quadraticCurveTo(0, s * 0.7, -s * 0.15, s * 0.95); // khía nhỏ ở đầu
+    ctx.bezierCurveTo(-s * 0.7, s * 0.7, -s * 0.9, -s * 0.3, 0, -s);
+    ctx.closePath();
+    ctx.fill();
+    // gân nhẹ giữa cánh
+    ctx.strokeStyle = `rgba(255,255,255,0.25)`;
+    ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(0, -s * 0.8); ctx.lineTo(0, s * 0.7); ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Vẽ bong bóng có viền sáng + điểm phản chiếu ─────────────────────────────
+  function drawBubble(p) {
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    const g = ctx.createRadialGradient(p.x - p.r * 0.3, p.y - p.r * 0.3, 0, p.x, p.y, p.r);
+    g.addColorStop(0, `rgba(${p.c},0.35)`);
+    g.addColorStop(0.7, `rgba(${p.c},0.08)`);
+    g.addColorStop(1, `rgba(${p.c},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = `rgba(${p.c},0.8)`;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,0.8)";
+    ctx.beginPath(); ctx.arc(p.x - p.r * 0.35, p.y - p.r * 0.35, p.r * 0.22, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Vẽ đom đóm — lõi sáng + quầng mềm ───────────────────────────────────────
+  function drawFirefly(p, a) {
+    ctx.save();
+    ctx.globalAlpha = a;
+    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+    g.addColorStop(0, `rgba(${p.c},0.9)`);
+    g.addColorStop(0.4, `rgba(${p.c},0.25)`);
+    g.addColorStop(1, `rgba(${p.c},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "rgba(255,250,230,0.95)";
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Vẽ tàn lửa bay lên — có đuôi mờ dần ─────────────────────────────────────
+  function drawEmber(p) {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, p.life) * 0.85;
+    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
+    g.addColorStop(0, `rgba(${p.c},1)`);
+    g.addColorStop(0.5, `rgba(${p.c},0.35)`);
+    g.addColorStop(1, `rgba(${p.c},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = "rgba(255,235,200,0.95)";
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Vẽ nốt nhạc thật (đầu nốt + thân + đuôi cong) ───────────────────────────
+  function drawNote(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.globalAlpha = 0.75;
+    const s = p.r / 14;
+    ctx.fillStyle = `rgba(${p.c},0.9)`;
+    ctx.strokeStyle = `rgba(${p.c},0.9)`;
+    ctx.lineWidth = 1.6 * s;
+    // đầu nốt (hình oval nghiêng)
+    ctx.save();
+    ctx.rotate(-0.35);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 5.5 * s, 4 * s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    // thân nốt
+    ctx.beginPath();
+    ctx.moveTo(5 * s, -1 * s);
+    ctx.lineTo(5 * s, -16 * s);
+    ctx.stroke();
+    // đuôi cong
+    ctx.beginPath();
+    ctx.moveTo(5 * s, -16 * s);
+    ctx.quadraticCurveTo(11 * s, -13 * s, 9 * s, -7 * s);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Vẽ tia sáng lấp lánh (dawn) — kim cương 4 cánh ─────────────────────────
+  function drawSpark(p, a) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.globalAlpha = a;
+    ctx.strokeStyle = `rgba(${p.c},0.95)`;
+    ctx.lineWidth = 1.1;
+    ctx.shadowColor = `rgba(${p.c},0.9)`; ctx.shadowBlur = 6;
+    const s = p.r * 2.2;
+    ctx.beginPath();
+    ctx.moveTo(-s, 0); ctx.lineTo(s, 0);
+    ctx.moveTo(0, -s); ctx.lineTo(0, s);
+    ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, p.r * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,0.9)`; ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Particle pool ────────────────────────────────────────────────────────
   let pool = [];
   let currentType = null;
+  let petalColors = ["255,200,220", "255,175,205"];
 
   function spawn(type) {
     const p = { type };
     if (type === "stars") {
       p.x = Math.random() * W; p.y = Math.random() * H;
-      p.r = Math.random() * 1.4 + 0.3;
-      p.vx = 0; p.vy = 0;
+      p.r = Math.random() * 1.5 + 0.4;
       p.tw = Math.random() * Math.PI * 2;
-      p.c = "220,205,255";
+      p.c = "225,212,255";
     } else if (type === "petals") {
-      p.x = Math.random() * W; p.y = -20;
-      p.r = 5 + Math.random() * 5;
-      p.vx = (Math.random() - 0.5) * 0.6;
-      p.vy = 0.5 + Math.random() * 0.7;
+      p.x = Math.random() * W; p.y = -30;
+      p.r = 8 + Math.random() * 8;
+      p.vx = (Math.random() - 0.5) * 0.7;
+      p.vy = 0.6 + Math.random() * 0.9;
       p.rot = Math.random() * Math.PI * 2;
-      p.vrot = (Math.random() - 0.5) * 0.02;
+      p.vrot = (Math.random() - 0.5) * 0.035;
       p.sway = Math.random() * Math.PI * 2;
-      p.c = Math.random() > 0.5 ? "255,180,205" : "255,150,185";
+      p.c = petalColors;
     } else if (type === "bubbles") {
-      p.x = Math.random() * W; p.y = H + 20;
-      p.r = 3 + Math.random() * 6;
-      p.vx = (Math.random() - 0.5) * 0.3;
-      p.vy = -(0.4 + Math.random() * 0.6);
+      p.x = Math.random() * W; p.y = H + 30;
+      p.r = 4 + Math.random() * 9;
+      p.vy = -(0.4 + Math.random() * 0.7);
       p.sway = Math.random() * Math.PI * 2;
-      p.c = "130,210,235";
+      p.c = "140,220,240";
     } else if (type === "fireflies") {
       p.x = Math.random() * W; p.y = Math.random() * H;
-      p.r = 1.5 + Math.random() * 1.8;
-      p.vx = (Math.random() - 0.5) * 0.25;
-      p.vy = (Math.random() - 0.5) * 0.25;
+      p.r = 1.6 + Math.random() * 1.6;
+      p.vx = (Math.random() - 0.5) * 0.3;
+      p.vy = (Math.random() - 0.5) * 0.3;
       p.tw = Math.random() * Math.PI * 2;
       p.twSpeed = 0.02 + Math.random() * 0.03;
-      p.c = "255,205,130";
+      p.c = "255,205,120";
     } else if (type === "embers") {
-      p.x = Math.random() * W; p.y = H + 20;
-      p.r = 1.5 + Math.random() * 2.5;
-      p.vx = (Math.random() - 0.5) * 0.4;
-      p.vy = -(0.5 + Math.random() * 0.9);
+      p.x = Math.random() * W; p.y = H + 30;
+      p.r = 1.8 + Math.random() * 2.6;
+      p.vx = (Math.random() - 0.5) * 0.5;
+      p.vy = -(0.5 + Math.random() * 1);
       p.life = 1;
-      p.c = Math.random() > 0.5 ? "255,160,70" : "255,120,60";
+      p.c = Math.random() > 0.5 ? "255,160,70" : "255,120,55";
     } else if (type === "notes") {
-      p.x = Math.random() * W; p.y = H + 20;
-      p.r = 10 + Math.random() * 6;
-      p.vx = (Math.random() - 0.5) * 0.3;
-      p.vy = -(0.3 + Math.random() * 0.4);
+      p.x = Math.random() * W; p.y = H + 30;
+      p.r = 14 + Math.random() * 8;
+      p.vx = (Math.random() - 0.5) * 0.35;
+      p.vy = -(0.3 + Math.random() * 0.45);
       p.sway = Math.random() * Math.PI * 2;
-      p.glyph = Math.random() > 0.5 ? "♪" : "♫";
       p.c = "200,170,255";
     } else if (type === "sparks") {
-      p.x = Math.random() * W; p.y = H + 20;
-      p.r = 1 + Math.random() * 2;
-      p.vx = (Math.random() - 0.5) * 0.2;
-      p.vy = -(0.3 + Math.random() * 0.5);
+      p.x = Math.random() * W; p.y = H + 30;
+      p.r = 1.4 + Math.random() * 1.8;
+      p.vx = (Math.random() - 0.5) * 0.25;
+      p.vy = -(0.35 + Math.random() * 0.55);
       p.tw = Math.random() * Math.PI * 2;
-      p.c = Math.random() > 0.5 ? "255,215,170" : "160,205,255";
+      p.c = Math.random() > 0.5 ? "255,220,170" : "170,215,255";
     }
     return p;
   }
 
   function initPool(type) {
-    const counts = { stars: 90, petals: 45, bubbles: 40, fireflies: 45, embers: 40, notes: 22, sparks: 45 };
+    const counts = { stars: 100, petals: 40, bubbles: 36, fireflies: 42, embers: 42, notes: 18, sparks: 42 };
     pool = Array.from({ length: counts[type] || 40 }, () => spawn(type));
   }
 
+  // ── Accent trang trí riêng cho từng theme ───────────────────────────────────
+  let waveOffset = 0;
+  function drawAccent(theme) {
+    if (!theme || !theme.accentType) return;
+    const a = theme.accent || {};
+    if (theme.accentType === "moon") {
+      const cx = W * a.cx, cy = H * a.cy;
+      ctx.save();
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, a.r * 3.2);
+      g.addColorStop(0, `rgba(${a.color},0.28)`);
+      g.addColorStop(1, `rgba(${a.color},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, a.r * 3.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `rgba(${a.color},0.92)`;
+      ctx.beginPath(); ctx.arc(cx, cy, a.r, 0, Math.PI * 2); ctx.fill();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.beginPath(); ctx.arc(cx + a.r * 0.42, cy - a.r * 0.18, a.r * 0.88, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    } else if (theme.accentType === "sun" || theme.accentType === "sunrise") {
+      const cx = W * a.cx, cy = H * a.cy;
+      ctx.save();
+      const pulse = 1 + Math.sin(tt * 0.8) * 0.05;
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, a.r * 3.4 * pulse);
+      g.addColorStop(0, `rgba(${a.color},0.35)`);
+      g.addColorStop(1, `rgba(${a.color},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, a.r * 3.4 * pulse, 0, Math.PI * 2); ctx.fill();
+      const g2 = ctx.createRadialGradient(cx, cy, 0, cx, cy, a.r);
+      g2.addColorStop(0, "rgba(255,245,225,0.98)");
+      g2.addColorStop(1, `rgba(${a.color},0.85)`);
+      ctx.fillStyle = g2;
+      ctx.beginPath(); ctx.arc(cx, cy, a.r, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    } else if (theme.accentType === "wave") {
+      waveOffset += 0.012;
+      ctx.save();
+      for (let layer = 0; layer < 2; layer++) {
+        const baseY = H - 40 - layer * 26;
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        for (let x = 0; x <= W; x += 18) {
+          const y = baseY + Math.sin(x * 0.012 + waveOffset * (layer ? 1.4 : 1) + layer) * (10 - layer * 3);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+        ctx.fillStyle = `rgba(${a.color},${0.08 - layer * 0.03})`;
+        ctx.fill();
+      }
+      ctx.restore();
+    } else if (theme.accentType === "branch" || theme.accentType === "vine") {
+      ctx.save();
+      ctx.globalAlpha = 0.5;
+      ctx.strokeStyle = `rgba(${a.color},0.4)`;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      const startX = theme.accentType === "branch" ? -10 : W + 10;
+      const dir = theme.accentType === "branch" ? 1 : -1;
+      ctx.moveTo(startX, 0);
+      ctx.bezierCurveTo(
+        startX + dir * 90, 60,
+        startX + dir * 40, 140,
+        startX + dir * 130, 210
+      );
+      ctx.stroke();
+      // vài chấm hoa/gai dọc theo cành
+      for (let i = 0; i < 5; i++) {
+        const t = i / 4;
+        const px = startX + dir * (90 * t + 20);
+        const py = 20 + t * 190;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${a.color},0.55)`;
+        ctx.arc(px, py, theme.accentType === "branch" ? 4 : 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    } else if (theme.accentType === "haze") {
+      ctx.save();
+      [[0.12, 0.88, 130], [0.85, 0.9, 160]].forEach(([fx, fy, r]) => {
+        const cx = W * fx, cy = H * fy;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        g.addColorStop(0, `rgba(${a.color},0.1)`);
+        g.addColorStop(1, `rgba(${a.color},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.restore();
+    }
+  }
+
   let tt = 0;
+  let activeThemeKey = "home";
   function loop() {
     requestAnimationFrame(loop);
     if (!currentType) return;
     ctx.clearRect(0, 0, W, H);
     tt += 0.016;
 
+    drawAccent(THEMES[activeThemeKey]);
+
     pool.forEach((p, i) => {
       if (p.type === "stars") {
-        const a = 0.25 + 0.55 * Math.abs(Math.sin(tt * 0.6 + p.tw));
+        const a = 0.25 + 0.6 * Math.abs(Math.sin(tt * 0.6 + p.tw));
         ctx.save(); ctx.globalAlpha = a;
         ctx.fillStyle = `rgb(${p.c})`;
-        ctx.shadowColor = `rgba(${p.c},0.6)`; ctx.shadowBlur = 5;
+        ctx.shadowColor = `rgba(${p.c},0.65)`; ctx.shadowBlur = 5;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
       } else if (p.type === "petals") {
         p.sway += 0.02;
-        p.x += p.vx + Math.sin(p.sway) * 0.4;
+        p.x += p.vx + Math.sin(p.sway) * 0.5;
         p.y += p.vy;
         p.rot += p.vrot;
-        if (p.y > H + 20) pool[i] = spawn("petals");
-        ctx.save();
-        ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-        ctx.globalAlpha = 0.55;
-        ctx.fillStyle = `rgba(${p.c},0.8)`;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        if (p.y > H + 30) pool[i] = spawn("petals");
+        drawPetal(p);
       } else if (p.type === "bubbles") {
         p.sway += 0.03;
-        p.x += p.vx + Math.sin(p.sway) * 0.3;
+        p.x += Math.sin(p.sway) * 0.3;
         p.y += p.vy;
-        if (p.y < -20) pool[i] = spawn("bubbles");
-        ctx.save();
-        ctx.globalAlpha = 0.35;
-        ctx.strokeStyle = `rgba(${p.c},0.7)`;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.stroke();
-        ctx.restore();
+        if (p.y < -30) pool[i] = spawn("bubbles");
+        drawBubble(p);
       } else if (p.type === "fireflies") {
         p.tw += p.twSpeed;
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
         if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-        const a = 0.2 + 0.7 * Math.abs(Math.sin(p.tw));
-        ctx.save(); ctx.globalAlpha = a;
-        ctx.fillStyle = `rgb(${p.c})`;
-        ctx.shadowColor = `rgba(${p.c},0.9)`; ctx.shadowBlur = 8;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
+        const a = 0.2 + 0.75 * Math.abs(Math.sin(p.tw));
+        drawFirefly(p, a);
       } else if (p.type === "embers") {
         p.x += p.vx; p.y += p.vy; p.life -= 0.006;
-        if (p.life <= 0 || p.y < -20) pool[i] = spawn("embers");
-        ctx.save(); ctx.globalAlpha = Math.max(0, p.life) * 0.7;
-        ctx.fillStyle = `rgb(${p.c})`;
-        ctx.shadowColor = `rgba(${p.c},0.7)`; ctx.shadowBlur = 6;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
+        if (p.life <= 0 || p.y < -30) pool[i] = spawn("embers");
+        drawEmber(p);
       } else if (p.type === "notes") {
         p.sway += 0.02;
-        p.x += p.vx + Math.sin(p.sway) * 0.5;
+        p.x += p.vx + Math.sin(p.sway) * 0.6;
         p.y += p.vy;
-        if (p.y < -20) pool[i] = spawn("notes");
-        ctx.save();
-        ctx.globalAlpha = 0.4;
-        ctx.fillStyle = `rgba(${p.c},0.85)`;
-        ctx.font = `${p.r}px serif`;
-        ctx.fillText(p.glyph, p.x, p.y);
-        ctx.restore();
+        if (p.y < -30) pool[i] = spawn("notes");
+        drawNote(p);
       } else if (p.type === "sparks") {
-        p.tw += 0.03;
+        p.tw += 0.035;
         p.x += p.vx; p.y += p.vy;
-        if (p.y < -20) pool[i] = spawn("sparks");
-        const a = 0.3 + 0.5 * Math.abs(Math.sin(p.tw));
-        ctx.save(); ctx.globalAlpha = a;
-        ctx.fillStyle = `rgb(${p.c})`;
-        ctx.shadowColor = `rgba(${p.c},0.7)`; ctx.shadowBlur = 6;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
+        if (p.y < -30) pool[i] = spawn("sparks");
+        const a = 0.35 + 0.55 * Math.abs(Math.sin(p.tw));
+        drawSpark(p, a);
       }
     });
   }
@@ -2819,7 +3006,9 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 
   function applyTheme(tab) {
     const t = THEMES[tab] || THEMES.home;
-    glow.style.background = t.glow;
+    activeThemeKey = THEMES[tab] ? tab : "home";
+    document.body.style.background = t.bodyBg;
+    if (t.petalColor) petalColors = t.petalColor;
     if (t.particle !== currentType) {
       currentType = t.particle;
       initPool(currentType);
@@ -2827,12 +3016,10 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     canvas.classList.add("visible");
   }
 
-  // Áp theme mặc định sau intro
   document.addEventListener("introEnded", () => {
     setTimeout(() => applyTheme("home"), 600);
   });
 
-  // Đổi theme khi chuyển tab
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", () => applyTheme(btn.dataset.tab));
   });

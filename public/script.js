@@ -2604,3 +2604,236 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     }
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CHỦ ĐỀ THEO TỪNG TAB — mỗi tab có màu nền + hạt riêng
+// ══════════════════════════════════════════════════════════════════════════════
+(function initTabThemes() {
+  const glow = document.getElementById("themeGlow");
+  const canvas = document.getElementById("themeCanvas");
+  if (!glow || !canvas) return;
+
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+  window.addEventListener("resize", () => {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  });
+  const ctx = canvas.getContext("2d");
+
+  // ── Định nghĩa 8 chủ đề ────────────────────────────────────────────────────
+  const THEMES = {
+    home: { // vũ trụ — tím xanh sâu, giữ nguyên nebula gốc
+      glow: `radial-gradient(55% 45% at 12% 8%, rgba(255,120,190,0.09), transparent 60%),
+             radial-gradient(45% 40% at 88% 12%, rgba(110,160,255,0.10), transparent 60%),
+             radial-gradient(65% 55% at 50% 115%, rgba(150,105,255,0.12), transparent 62%)`,
+      particle: "stars",
+    },
+    timeline: { // hoa đào — hồng phấn
+      glow: `radial-gradient(60% 50% at 15% 0%, rgba(255,170,205,0.14), transparent 62%),
+             radial-gradient(55% 45% at 90% 100%, rgba(255,140,190,0.12), transparent 60%)`,
+      particle: "petals",
+    },
+    gallery: { // biển cả — xanh ngọc lam
+      glow: `radial-gradient(60% 50% at 10% 100%, rgba(70,190,220,0.14), transparent 62%),
+             radial-gradient(55% 45% at 90% 0%, rgba(60,150,220,0.12), transparent 60%)`,
+      particle: "bubbles",
+    },
+    diary: { // đom đóm — hổ phách ấm
+      glow: `radial-gradient(55% 45% at 20% 10%, rgba(255,190,110,0.12), transparent 62%),
+             radial-gradient(55% 45% at 85% 90%, rgba(255,160,90,0.1), transparent 60%)`,
+      particle: "fireflies",
+    },
+    things: { // vườn hồng — đỏ hồng ấm
+      glow: `radial-gradient(60% 50% at 15% 0%, rgba(255,110,150,0.14), transparent 62%),
+             radial-gradient(55% 45% at 90% 100%, rgba(255,80,130,0.1), transparent 60%)`,
+      particle: "petals",
+    },
+    firsts: { // hoàng hôn — cam vàng
+      glow: `radial-gradient(60% 50% at 10% 100%, rgba(255,150,60,0.16), transparent 62%),
+             radial-gradient(55% 45% at 90% 0%, rgba(255,110,80,0.12), transparent 60%)`,
+      particle: "embers",
+    },
+    radio: { // đêm nhạc — tím sâu
+      glow: `radial-gradient(60% 50% at 15% 0%, rgba(170,120,255,0.15), transparent 62%),
+             radial-gradient(55% 45% at 90% 100%, rgba(120,90,220,0.12), transparent 60%)`,
+      particle: "notes",
+    },
+    future: { // bình minh — xanh vàng nhạt
+      glow: `radial-gradient(60% 50% at 10% 0%, rgba(140,200,255,0.14), transparent 62%),
+             radial-gradient(55% 45% at 90% 100%, rgba(255,210,150,0.1), transparent 60%)`,
+      particle: "sparks",
+    },
+  };
+
+  let pool = [];
+  let currentType = null;
+
+  function spawn(type) {
+    const p = { type };
+    if (type === "stars") {
+      p.x = Math.random() * W; p.y = Math.random() * H;
+      p.r = Math.random() * 1.4 + 0.3;
+      p.vx = 0; p.vy = 0;
+      p.tw = Math.random() * Math.PI * 2;
+      p.c = "220,205,255";
+    } else if (type === "petals") {
+      p.x = Math.random() * W; p.y = -20;
+      p.r = 5 + Math.random() * 5;
+      p.vx = (Math.random() - 0.5) * 0.6;
+      p.vy = 0.5 + Math.random() * 0.7;
+      p.rot = Math.random() * Math.PI * 2;
+      p.vrot = (Math.random() - 0.5) * 0.02;
+      p.sway = Math.random() * Math.PI * 2;
+      p.c = Math.random() > 0.5 ? "255,180,205" : "255,150,185";
+    } else if (type === "bubbles") {
+      p.x = Math.random() * W; p.y = H + 20;
+      p.r = 3 + Math.random() * 6;
+      p.vx = (Math.random() - 0.5) * 0.3;
+      p.vy = -(0.4 + Math.random() * 0.6);
+      p.sway = Math.random() * Math.PI * 2;
+      p.c = "130,210,235";
+    } else if (type === "fireflies") {
+      p.x = Math.random() * W; p.y = Math.random() * H;
+      p.r = 1.5 + Math.random() * 1.8;
+      p.vx = (Math.random() - 0.5) * 0.25;
+      p.vy = (Math.random() - 0.5) * 0.25;
+      p.tw = Math.random() * Math.PI * 2;
+      p.twSpeed = 0.02 + Math.random() * 0.03;
+      p.c = "255,205,130";
+    } else if (type === "embers") {
+      p.x = Math.random() * W; p.y = H + 20;
+      p.r = 1.5 + Math.random() * 2.5;
+      p.vx = (Math.random() - 0.5) * 0.4;
+      p.vy = -(0.5 + Math.random() * 0.9);
+      p.life = 1;
+      p.c = Math.random() > 0.5 ? "255,160,70" : "255,120,60";
+    } else if (type === "notes") {
+      p.x = Math.random() * W; p.y = H + 20;
+      p.r = 10 + Math.random() * 6;
+      p.vx = (Math.random() - 0.5) * 0.3;
+      p.vy = -(0.3 + Math.random() * 0.4);
+      p.sway = Math.random() * Math.PI * 2;
+      p.glyph = Math.random() > 0.5 ? "♪" : "♫";
+      p.c = "200,170,255";
+    } else if (type === "sparks") {
+      p.x = Math.random() * W; p.y = H + 20;
+      p.r = 1 + Math.random() * 2;
+      p.vx = (Math.random() - 0.5) * 0.2;
+      p.vy = -(0.3 + Math.random() * 0.5);
+      p.tw = Math.random() * Math.PI * 2;
+      p.c = Math.random() > 0.5 ? "255,215,170" : "160,205,255";
+    }
+    return p;
+  }
+
+  function initPool(type) {
+    const counts = { stars: 90, petals: 45, bubbles: 40, fireflies: 45, embers: 40, notes: 22, sparks: 45 };
+    pool = Array.from({ length: counts[type] || 40 }, () => spawn(type));
+  }
+
+  let tt = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    if (!currentType) return;
+    ctx.clearRect(0, 0, W, H);
+    tt += 0.016;
+
+    pool.forEach((p, i) => {
+      if (p.type === "stars") {
+        const a = 0.25 + 0.55 * Math.abs(Math.sin(tt * 0.6 + p.tw));
+        ctx.save(); ctx.globalAlpha = a;
+        ctx.fillStyle = `rgb(${p.c})`;
+        ctx.shadowColor = `rgba(${p.c},0.6)`; ctx.shadowBlur = 5;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      } else if (p.type === "petals") {
+        p.sway += 0.02;
+        p.x += p.vx + Math.sin(p.sway) * 0.4;
+        p.y += p.vy;
+        p.rot += p.vrot;
+        if (p.y > H + 20) pool[i] = spawn("petals");
+        ctx.save();
+        ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = `rgba(${p.c},0.8)`;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      } else if (p.type === "bubbles") {
+        p.sway += 0.03;
+        p.x += p.vx + Math.sin(p.sway) * 0.3;
+        p.y += p.vy;
+        if (p.y < -20) pool[i] = spawn("bubbles");
+        ctx.save();
+        ctx.globalAlpha = 0.35;
+        ctx.strokeStyle = `rgba(${p.c},0.7)`;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      } else if (p.type === "fireflies") {
+        p.tw += p.twSpeed;
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        const a = 0.2 + 0.7 * Math.abs(Math.sin(p.tw));
+        ctx.save(); ctx.globalAlpha = a;
+        ctx.fillStyle = `rgb(${p.c})`;
+        ctx.shadowColor = `rgba(${p.c},0.9)`; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      } else if (p.type === "embers") {
+        p.x += p.vx; p.y += p.vy; p.life -= 0.006;
+        if (p.life <= 0 || p.y < -20) pool[i] = spawn("embers");
+        ctx.save(); ctx.globalAlpha = Math.max(0, p.life) * 0.7;
+        ctx.fillStyle = `rgb(${p.c})`;
+        ctx.shadowColor = `rgba(${p.c},0.7)`; ctx.shadowBlur = 6;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      } else if (p.type === "notes") {
+        p.sway += 0.02;
+        p.x += p.vx + Math.sin(p.sway) * 0.5;
+        p.y += p.vy;
+        if (p.y < -20) pool[i] = spawn("notes");
+        ctx.save();
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = `rgba(${p.c},0.85)`;
+        ctx.font = `${p.r}px serif`;
+        ctx.fillText(p.glyph, p.x, p.y);
+        ctx.restore();
+      } else if (p.type === "sparks") {
+        p.tw += 0.03;
+        p.x += p.vx; p.y += p.vy;
+        if (p.y < -20) pool[i] = spawn("sparks");
+        const a = 0.3 + 0.5 * Math.abs(Math.sin(p.tw));
+        ctx.save(); ctx.globalAlpha = a;
+        ctx.fillStyle = `rgb(${p.c})`;
+        ctx.shadowColor = `rgba(${p.c},0.7)`; ctx.shadowBlur = 6;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    });
+  }
+  loop();
+
+  function applyTheme(tab) {
+    const t = THEMES[tab] || THEMES.home;
+    glow.style.background = t.glow;
+    if (t.particle !== currentType) {
+      currentType = t.particle;
+      initPool(currentType);
+    }
+    canvas.classList.add("visible");
+  }
+
+  // Áp theme mặc định sau intro
+  document.addEventListener("introEnded", () => {
+    setTimeout(() => applyTheme("home"), 600);
+  });
+
+  // Đổi theme khi chuyển tab
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => applyTheme(btn.dataset.tab));
+  });
+})();

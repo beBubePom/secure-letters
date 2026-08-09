@@ -3240,3 +3240,83 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     btn.addEventListener("click", () => applyTheme(btn.dataset.tab));
   });
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HOVER TAB — bung ra chùm hạt nhỏ đúng chủ đề của tab đó
+// ══════════════════════════════════════════════════════════════════════════════
+(function initTabHoverBurst() {
+  // Ký tự + màu tương ứng từng chủ đề
+  const BURST = {
+    home:     { glyphs: ["✦", "✧", "⋆"], color: "200,180,255" },
+    timeline: { glyphs: ["🌸", "❀", "✿"], color: "255,175,205" },
+    gallery:  { glyphs: ["○", "◦", "°"],  color: "110,215,235" },
+    diary:    { glyphs: ["✦", "·", "✧"],  color: "255,200,130" },
+    things:   { glyphs: ["🌹", "❤", "✿"], color: "255,105,145" },
+    firsts:   { glyphs: ["✦", "◦", "⋆"],  color: "255,165,90"  },
+    radio:    { glyphs: ["♪", "♫", "♩"],  color: "200,165,255" },
+    future:   { glyphs: ["✧", "✦", "⋆"],  color: "150,205,255" },
+  };
+
+  let lastBurst = 0;
+
+  function burst(btn) {
+    const now = Date.now();
+    if (now - lastBurst < 400) return;   // tránh spam khi rê chuột qua lại
+    lastBurst = now;
+
+    const cfg = BURST[btn.dataset.tab] || BURST.home;
+    const rect = btn.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + 12;
+
+    for (let i = 0; i < 7; i++) {
+      const el = document.createElement("div");
+      el.textContent = cfg.glyphs[Math.floor(Math.random() * cfg.glyphs.length)];
+      const size = 8 + Math.random() * 7;
+      el.style.cssText = `
+        position: fixed;
+        left: ${originX}px;
+        top: ${originY}px;
+        font-size: ${size}px;
+        color: rgba(${cfg.color}, 0.95);
+        text-shadow: 0 0 10px rgba(${cfg.color}, 0.9);
+        pointer-events: none;
+        z-index: 9996;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+        transition: transform 1s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 1s ease;
+        will-change: transform, opacity;
+      `;
+      document.body.appendChild(el);
+
+      // Bay tỏa ra hình quạt, hơi chếch lên trên
+      const angle = (-140 + Math.random() * 100) * (Math.PI / 180);
+      const dist = 26 + Math.random() * 40;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+      const rot = (Math.random() - 0.5) * 180;
+
+      requestAnimationFrame(() => {
+        el.style.opacity = "1";
+        el.style.transform =
+          `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${rot}deg)`;
+      });
+
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform =
+          `translate(calc(-50% + ${dx * 1.4}px), calc(-50% + ${dy * 1.4 - 14}px)) scale(0.5) rotate(${rot * 1.5}deg)`;
+      }, 520);
+
+      setTimeout(() => el.remove(), 1600);
+    }
+  }
+
+  // Chỉ chạy trên thiết bị có chuột thật (bỏ qua mobile để không nặng)
+  if (window.matchMedia("(hover: hover)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("mouseenter", () => burst(btn));
+    });
+  }
+})();

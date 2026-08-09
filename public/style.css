@@ -1209,133 +1209,6 @@ input, textarea, #letterContent { user-select: text; }
   #futureWrap { padding: 20px 14px 60px; }
 }
 
-/* ══ SỐ LẦN GHÉ THĂM — viên ngọc góc phải dưới ═══════════════════════════════ */
-#visitPill {
-  position: fixed;
-  bottom: 20px; right: 20px;
-  z-index: 9997;
-  border-radius: 40px;
-  padding: 1.5px; /* độ dày viền gradient */
-  background: conic-gradient(from var(--vp-angle, 0deg),
-    rgba(255,140,190,0.9),
-    rgba(180,130,255,0.9),
-    rgba(120,190,255,0.9),
-    rgba(120,255,220,0.7),
-    rgba(180,130,255,0.9),
-    rgba(255,140,190,0.9));
-  animation: vpBorderSpin 6s linear infinite;
-  box-shadow:
-    0 0 18px rgba(180,130,255,0.35),
-    0 0 40px rgba(255,140,190,0.18),
-    0 0 70px rgba(120,190,255,0.12);
-  opacity: 0;
-  transform: translateY(12px) scale(0.95);
-  transition: opacity 1s ease, transform 1s cubic-bezier(0.2,0.8,0.3,1);
-  user-select: none;
-  cursor: none;
-}
-#visitPill.visible { opacity: 1; transform: translateY(0) scale(1); }
-#visitPill:hover {
-  box-shadow:
-    0 0 26px rgba(200,160,255,0.55),
-    0 0 60px rgba(255,150,200,0.3),
-    0 0 100px rgba(140,200,255,0.2);
-}
-#visitPill:hover .vp-num {
-  text-shadow: 0 0 24px rgba(255,200,240,0.9), 0 0 50px rgba(180,150,255,0.5);
-}
-
-@property --vp-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-@keyframes vpBorderSpin {
-  to { --vp-angle: 360deg; }
-}
-
-.vp-inner {
-  position: relative;
-  display: flex; align-items: center; gap: 18px;
-  padding: 12px 24px;
-  border-radius: 40px;
-  background:
-    radial-gradient(120% 160% at 20% 0%, rgba(255,140,190,0.10), transparent 50%),
-    radial-gradient(120% 160% at 80% 100%, rgba(120,190,255,0.10), transparent 50%),
-    rgba(10,6,22,0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  overflow: visible;
-}
-
-.vp-col {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  min-width: 58px;
-}
-.vp-num {
-  font-family: 'GFS Didot', Georgia, serif;
-  font-size: 24px; font-weight: 300;
-  line-height: 1;
-  background: linear-gradient(135deg, #ffd9ec 0%, #d8c4ff 45%, #bfe3ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 18px rgba(220,180,255,0.45);
-  transition: text-shadow 0.3s;
-}
-.vp-label {
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-size: 8.5px; letter-spacing: 2.5px;
-  color: rgba(190,175,230,0.55);
-  text-transform: lowercase;
-  white-space: nowrap;
-}
-
-/* Trái tim đập ở giữa */
-.vp-heart {
-  font-size: 15px;
-  background: linear-gradient(135deg, #ff8ab8, #ff5590);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px rgba(255,110,170,0.7));
-  animation: vpHeartBeat 1.6s ease-in-out infinite;
-  line-height: 1;
-}
-@keyframes vpHeartBeat {
-  0%, 100% { transform: scale(1);    }
-  12%       { transform: scale(1.28); }
-  24%       { transform: scale(1);    }
-  36%       { transform: scale(1.18); }
-  48%       { transform: scale(1);    }
-}
-
-/* Sao lấp lánh bay quanh pill */
-.vp-spark {
-  position: absolute;
-  pointer-events: none;
-  font-size: 10px;
-  color: rgba(230,215,255,0.9);
-  text-shadow: 0 0 8px rgba(200,170,255,0.9);
-  animation: vpTwinkle 2.6s ease-in-out infinite;
-}
-.vp-s1 { top: -7px;  left: 16px;  font-size: 11px; animation-delay: 0s;    }
-.vp-s2 { bottom: -8px; right: 24px; font-size: 9px;  animation-delay: 0.9s; color: rgba(255,190,225,0.9); text-shadow: 0 0 8px rgba(255,150,200,0.9); }
-.vp-s3 { top: -9px;  right: 52px; font-size: 12px; animation-delay: 1.7s; color: rgba(180,220,255,0.9); text-shadow: 0 0 8px rgba(140,200,255,0.9); }
-@keyframes vpTwinkle {
-  0%, 100% { opacity: 0.15; transform: scale(0.7) rotate(0deg);   }
-  50%       { opacity: 1;    transform: scale(1.15) rotate(25deg); }
-}
-
-@media (max-width: 768px) {
-  #visitPill { bottom: 14px; right: 12px; }
-  .vp-inner  { padding: 9px 16px; gap: 12px; }
-  .vp-num    { font-size: 19px; }
-  .vp-label  { font-size: 7.5px; letter-spacing: 2px; }
-  .vp-col    { min-width: 48px; }
-  .vp-heart  { font-size: 13px; }
-}
-
 /* ══ NHẬT KÝ ══════════════════════════════════════════════════════════════════ */
 #diaryWrap { padding: 32px 24px 80px; max-width: 660px; margin: 0 auto; }
 #diaryIntro {
@@ -2010,4 +1883,218 @@ input[type="password"] {
 @media (max-width: 768px) {
   .tab-coming-label { font-size: 10.5px; letter-spacing: 4px; padding-bottom: 22px; }
   .tab-coming-label::after { width: 140px; }
+}
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  TAB NAV v4 — "Scene Behind Text"                                          ║
+   ║  Bỏ emoji, thay bằng một bức tranh SVG nhỏ hiện mờ phía SAU chữ            ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+
+/* Tắt icon emoji của bản trước */
+.tab-btn::before { content: none !important; }
+
+/* Nút gọn lại vì không còn chỗ trống cho icon phía trên */
+.tab-btn {
+  padding: 20px 14px 15px;
+  overflow: hidden;                 /* tranh không tràn ra ngoài nút */
+}
+
+/* ── Lớp tranh nền: hiện mờ dần khi hover, rõ hơn khi tab đang mở ─────────── */
+.tab-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 16px 16px 0 0;
+  background-image:
+    var(--scene),
+    radial-gradient(80% 90% at 50% 100%, rgba(var(--tc), 0.20), transparent 72%);
+  background-repeat: no-repeat, no-repeat;
+  background-position: center 52%, center;
+  background-size: 118% auto, 100% 100%;
+  opacity: 0;
+  transform: scale(1.14);
+  transition:
+    opacity 0.6s ease,
+    transform 0.9s cubic-bezier(0.2, 0.8, 0.3, 1);
+  /* Mờ dần ở mép trái/phải để tranh hòa vào thanh nav */
+  -webkit-mask-image: radial-gradient(115% 100% at 50% 60%, #000 45%, transparent 88%);
+  mask-image: radial-gradient(115% 100% at 50% 60%, #000 45%, transparent 88%);
+}
+.tab-btn:hover::after {
+  opacity: 0.62;
+  transform: scale(1);
+}
+.tab-btn.active::after {
+  opacity: 0.78;
+  transform: scale(1);
+}
+
+/* Chữ nổi lên trên tranh — thêm viền tối mảnh để luôn đọc rõ */
+.tab-btn:hover, .tab-btn.active {
+  text-shadow:
+    0 1px 6px rgba(0, 0, 0, 0.85),
+    0 0 16px rgba(var(--tc), 0.6);
+}
+
+/* ── 8 khung cảnh SVG ─────────────────────────────────────────────────────── */
+
+/* THƯ — trăng khuyết giữa trời sao */
+.tab-btn[data-tab="home"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cdefs%3E%3CradialGradient id='m'%3E%3Cstop offset='0' stop-color='%23fffdf5'/%3E%3Cstop offset='1' stop-color='%23cbb8ff'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='150' cy='30' r='17' fill='url(%23m)'/%3E%3Ccircle cx='158' cy='25' r='15' fill='%23120a24'/%3E%3Cg fill='%23e6dcff'%3E%3Ccircle cx='30' cy='22' r='1.8'/%3E%3Ccircle cx='58' cy='42' r='1.3'/%3E%3Ccircle cx='86' cy='18' r='1.6'/%3E%3Ccircle cx='45' cy='60' r='1.1'/%3E%3Ccircle cx='108' cy='52' r='1.4'/%3E%3Ccircle cx='72' cy='66' r='1'/%3E%3Ccircle cx='18' cy='48' r='1.2'/%3E%3Ccircle cx='125' cy='16' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* HÀNH TRÌNH — cành hoa đào */
+.tab-btn[data-tab="timeline"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpath d='M0 14 C40 26 62 40 88 62 M40 24 C58 30 66 44 70 58 M96 66 C120 52 150 46 200 44' stroke='%238a5a6e' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3Cg fill='%23ffb3d1'%3E%3Cg transform='translate(38,24)'%3E%3Ccircle cx='0' cy='-6' r='4.2'/%3E%3Ccircle cx='5.7' cy='-1.9' r='4.2'/%3E%3Ccircle cx='3.5' cy='4.9' r='4.2'/%3E%3Ccircle cx='-3.5' cy='4.9' r='4.2'/%3E%3Ccircle cx='-5.7' cy='-1.9' r='4.2'/%3E%3C/g%3E%3Cg transform='translate(92,63)'%3E%3Ccircle cx='0' cy='-5' r='3.5'/%3E%3Ccircle cx='4.8' cy='-1.5' r='3.5'/%3E%3Ccircle cx='3' cy='4' r='3.5'/%3E%3Ccircle cx='-3' cy='4' r='3.5'/%3E%3Ccircle cx='-4.8' cy='-1.5' r='3.5'/%3E%3C/g%3E%3Cg transform='translate(140,48)'%3E%3Ccircle cx='0' cy='-5.5' r='3.9'/%3E%3Ccircle cx='5.2' cy='-1.7' r='3.9'/%3E%3Ccircle cx='3.2' cy='4.4' r='3.9'/%3E%3Ccircle cx='-3.2' cy='4.4' r='3.9'/%3E%3Ccircle cx='-5.2' cy='-1.7' r='3.9'/%3E%3C/g%3E%3C/g%3E%3Cg fill='%23ffe08a'%3E%3Ccircle cx='38' cy='24' r='1.9'/%3E%3Ccircle cx='92' cy='63' r='1.6'/%3E%3Ccircle cx='140' cy='48' r='1.8'/%3E%3C/g%3E%3Cg fill='%23ffc7dd' opacity='.85'%3E%3Cellipse cx='66' cy='14' rx='3.4' ry='2' transform='rotate(-25 66 14)'/%3E%3Cellipse cx='118' cy='24' rx='3' ry='1.8' transform='rotate(15 118 24)'/%3E%3Cellipse cx='172' cy='20' rx='3.2' ry='1.9' transform='rotate(-40 172 20)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ẢNH CHỤP CHUNG — sóng biển nhiều lớp */
+.tab-btn[data-tab="gallery"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpath d='M0 52 Q25 42 50 52 T100 52 T150 52 T200 52 V80 H0 Z' fill='%2338b3cc' opacity='.45'/%3E%3Cpath d='M0 60 Q25 51 50 60 T100 60 T150 60 T200 60 V80 H0 Z' fill='%232a92ad' opacity='.5'/%3E%3Cpath d='M0 68 Q25 60 50 68 T100 68 T150 68 T200 68 V80 H0 Z' fill='%231d6f8a' opacity='.55'/%3E%3Cg fill='none' stroke='%23aef0ff' stroke-width='1.3' opacity='.7'%3E%3Ccircle cx='42' cy='30' r='5'/%3E%3Ccircle cx='96' cy='20' r='3.4'/%3E%3Ccircle cx='134' cy='34' r='6'/%3E%3Ccircle cx='164' cy='18' r='2.8'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* NHẬT KÝ — đom đóm trong đêm */
+.tab-btn[data-tab="diary"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cdefs%3E%3CradialGradient id='f'%3E%3Cstop offset='0' stop-color='%23fff4c9'/%3E%3Cstop offset='.45' stop-color='%23ffc766' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M0 72 Q18 58 26 72 M34 74 Q48 56 58 74 M150 74 Q162 58 172 74 M180 72 Q190 60 200 72' stroke='%237a5a2a' stroke-width='1.8' fill='none' opacity='.6' stroke-linecap='round'/%3E%3Cg%3E%3Ccircle cx='36' cy='26' r='11' fill='url(%23f)'/%3E%3Ccircle cx='36' cy='26' r='2.2' fill='%23fffbe8'/%3E%3Ccircle cx='92' cy='44' r='9' fill='url(%23f)'/%3E%3Ccircle cx='92' cy='44' r='1.9' fill='%23fffbe8'/%3E%3Ccircle cx='140' cy='22' r='12' fill='url(%23f)'/%3E%3Ccircle cx='140' cy='22' r='2.4' fill='%23fffbe8'/%3E%3Ccircle cx='168' cy='50' r='8' fill='url(%23f)'/%3E%3Ccircle cx='168' cy='50' r='1.7' fill='%23fffbe8'/%3E%3Ccircle cx='66' cy='58' r='7' fill='url(%23f)'/%3E%3Ccircle cx='66' cy='58' r='1.5' fill='%23fffbe8'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* VÌ SAO ANH YÊU & TỰ HÀO — hoa hồng nở */
+.tab-btn[data-tab="things"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpath d='M100 80 V44' stroke='%234e7a3a' stroke-width='2.4' fill='none'/%3E%3Cpath d='M100 62 Q86 56 82 66 Q94 70 100 62 Z M100 70 Q114 64 118 74 Q106 78 100 70 Z' fill='%234e7a3a' opacity='.85'/%3E%3Cg transform='translate(100,36)'%3E%3Cpath d='M0 -20 C17 -14 20 6 0 18 C-20 6 -17 -14 0 -20 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -15 C13 -10 15 5 0 14 C-15 5 -13 -10 0 -15 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -10 C9 -6 10 4 0 10 C-10 4 -9 -6 0 -10 Z' fill='%23e33d68'/%3E%3Cpath d='M0 -5 C5 -3 5 3 0 6 C-5 3 -5 -3 0 -5 Z' fill='%23f76a8d'/%3E%3C/g%3E%3Cg fill='%23ff85a8' opacity='.75'%3E%3Cellipse cx='38' cy='26' rx='4' ry='2.4' transform='rotate(-30 38 26)'/%3E%3Cellipse cx='58' cy='58' rx='3.4' ry='2' transform='rotate(20 58 58)'/%3E%3Cellipse cx='158' cy='30' rx='4.2' ry='2.5' transform='rotate(35 158 30)'/%3E%3Cellipse cx='176' cy='60' rx='3.2' ry='1.9' transform='rotate(-15 176 60)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* TRƯỚC KHI GẶP EM — hoàng hôn trên đường chân trời */
+.tab-btn[data-tab="firsts"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cdefs%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23fff3d0'/%3E%3Cstop offset='.5' stop-color='%23ffb057'/%3E%3Cstop offset='1' stop-color='%23ff7a3c'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='58' r='24' fill='url(%23s)'/%3E%3Cg stroke='%23ffcf8a' stroke-width='2' opacity='.55'%3E%3Cpath d='M0 60 H62 M138 60 H200 M0 68 H50 M150 68 H200 M0 52 H54 M146 52 H200'/%3E%3C/g%3E%3Cpath d='M0 74 H200' stroke='%23c25a20' stroke-width='3' opacity='.7'/%3E%3Cg fill='%232a1206' opacity='.55'%3E%3Cpath d='M20 74 L28 62 L36 74 Z'/%3E%3Cpath d='M164 74 L172 64 L180 74 Z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ĐIỀU LÀM ANH NHỚ VỀ EM — khuông nhạc dưới trăng */
+.tab-btn[data-tab="radio"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cg stroke='%23b39aeb' stroke-width='1' opacity='.45'%3E%3Cpath d='M0 30 H200 M0 40 H200 M0 50 H200 M0 60 H200 M0 70 H200'/%3E%3C/g%3E%3Cg fill='%23d8c2ff'%3E%3Cg transform='translate(48,54)'%3E%3Cellipse cx='0' cy='0' rx='6' ry='4.4' transform='rotate(-22)'/%3E%3Cpath d='M5.4 -1.6 V-22' stroke='%23d8c2ff' stroke-width='2' fill='none'/%3E%3Cpath d='M5.4 -22 Q14 -18 11 -10' stroke='%23d8c2ff' stroke-width='2' fill='none'/%3E%3C/g%3E%3Cg transform='translate(108,42)'%3E%3Cellipse cx='0' cy='0' rx='5.2' ry='3.9' transform='rotate(-22)'/%3E%3Cpath d='M4.7 -1.4 V-19' stroke='%23d8c2ff' stroke-width='1.8' fill='none'/%3E%3Cpath d='M4.7 -19 Q12 -15.5 9.4 -8.5' stroke='%23d8c2ff' stroke-width='1.8' fill='none'/%3E%3C/g%3E%3Cg transform='translate(158,60)'%3E%3Cellipse cx='0' cy='0' rx='5.6' ry='4.1' transform='rotate(-22)'/%3E%3Cpath d='M5 -1.5 V-20' stroke='%23d8c2ff' stroke-width='1.9' fill='none'/%3E%3Cpath d='M5 -20 Q13 -16.5 10 -9' stroke='%23d8c2ff' stroke-width='1.9' fill='none'/%3E%3C/g%3E%3C/g%3E%3Ccircle cx='176' cy='18' r='10' fill='%23e8dcff' opacity='.8'/%3E%3Ccircle cx='181' cy='15' r='9' fill='%231a0f2e'/%3E%3C/svg%3E");
+}
+
+/* DỰ ĐỊNH TƯƠNG LAI — bình minh với tia nắng */
+.tab-btn[data-tab="future"] {
+  --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cdefs%3E%3CradialGradient id='d'%3E%3Cstop offset='0' stop-color='%23fffbe8'/%3E%3Cstop offset='.55' stop-color='%23ffd98f'/%3E%3Cstop offset='1' stop-color='%23ffb45c' stop-opacity='.25'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg stroke='%23ffe4a8' stroke-width='2' opacity='.45' stroke-linecap='round'%3E%3Cpath d='M100 66 L66 30 M100 66 L84 22 M100 66 L100 18 M100 66 L116 22 M100 66 L134 30 M100 66 L54 46 M100 66 L146 46'/%3E%3C/g%3E%3Cpath d='M76 66 A24 24 0 0 1 124 66 Z' fill='url(%23d)'/%3E%3Cpath d='M0 66 H200' stroke='%236fb8d6' stroke-width='2.4' opacity='.65'/%3E%3Cg fill='%2385c9e8' opacity='.5'%3E%3Cpath d='M0 70 Q20 64 40 70 T80 70 T120 70 T160 70 T200 70 V80 H0 Z'/%3E%3C/g%3E%3Cg fill='%23bfe4ff'%3E%3Ccircle cx='34' cy='22' r='1.6'/%3E%3Ccircle cx='166' cy='18' r='1.4'/%3E%3Ccircle cx='58' cy='12' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@media (max-width: 768px) {
+  .tab-btn { padding: 16px 10px 12px; }
+  .tab-btn::after { background-size: 132% auto, 100% 100%; }
+  .tab-btn:hover::after { opacity: 0.5; }
+  .tab-btn.active::after { opacity: 0.66; }
+}
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  PAGE SCENERY v5 — tranh phong cảnh lớn phủ đáy màn hình cho từng tab      ║
+   ║  Mỗi trang có 2 lớp: phong cảnh gần (đậm) + lớp xa (mờ, parallax nhẹ)      ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+
+/* Lớp phong cảnh XA — mờ, cao hơn, trôi chậm */
+.tab-page.active::before {
+  content: "";
+  position: fixed;
+  left: -2%; right: -2%; bottom: 0;
+  height: 42vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--sceneFar);
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 104% 100%;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: sceneryRise 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) 0.25s forwards,
+             sceneryDrift 46s ease-in-out infinite;
+}
+
+/* Lớp phong cảnh GẦN — đậm nét, sát đáy */
+.tab-page.active::after {
+  content: "";
+  position: fixed;
+  left: -3%; right: -3%; bottom: 0;
+  height: 26vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--sceneNear);
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 106% 100%;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: sceneryRiseNear 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) 0.45s forwards,
+             sceneryDriftNear 34s ease-in-out infinite;
+}
+
+@keyframes sceneryRise {
+  to { opacity: 0.5; transform: translateY(0); }
+}
+@keyframes sceneryRiseNear {
+  to { opacity: 0.72; transform: translateY(0); }
+}
+@keyframes sceneryDrift {
+  0%, 100% { background-position: 48% bottom; }
+  50%      { background-position: 52% bottom; }
+}
+@keyframes sceneryDriftNear {
+  0%, 100% { background-position: 51% bottom; }
+  50%      { background-position: 49% bottom; }
+}
+
+/* ── THƯ — dãy núi dưới bầu trời sao, có hành tinh xa ────────────────────── */
+#page-home {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='hf' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%232e2050' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23140c28' stop-opacity='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 300 L120 210 L210 268 L330 168 L450 262 L560 196 L690 280 L810 190 L930 258 L1050 200 L1200 276 V400 H0 Z' fill='url(%23hf)'/%3E%3Ccircle cx='980' cy='96' r='40' fill='%233b2a63' opacity='.55'/%3E%3Cellipse cx='980' cy='96' rx='70' ry='11' fill='none' stroke='%235a4490' stroke-width='3' opacity='.45'/%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 190 L150 96 L280 176 L420 70 L560 172 L700 100 L850 186 L1000 108 L1200 180 V300 H0 Z' fill='%230a0618'/%3E%3Cpath d='M420 70 L470 108 L440 112 Z M700 100 L742 132 L716 136 Z' fill='%23e8dcff' opacity='.16'/%3E%3C/svg%3E");
+}
+
+/* ── HÀNH TRÌNH — rừng hoa đào, cành vươn từ hai bên ─────────────────────── */
+#page-timeline {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cg fill='%23c98aa8' opacity='.5'%3E%3Cellipse cx='150' cy='250' rx='130' ry='84'/%3E%3Cellipse cx='420' cy='286' rx='150' ry='72'/%3E%3Cellipse cx='760' cy='262' rx='140' ry='80'/%3E%3Cellipse cx='1060' cy='292' rx='150' ry='70'/%3E%3C/g%3E%3Cg stroke='%236b4152' stroke-width='7' fill='none' opacity='.65'%3E%3Cpath d='M150 400 V262 M120 300 L150 276 M186 296 L150 268'/%3E%3Cpath d='M760 400 V276 M726 316 L760 288 M796 312 L760 282'/%3E%3C/g%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cg stroke='%236b4152' stroke-width='9' fill='none' stroke-linecap='round'%3E%3Cpath d='M-20 40 C110 66 180 120 240 210'/%3E%3Cpath d='M1220 30 C1090 58 1020 116 960 206'/%3E%3Cpath d='M120 62 C170 78 196 112 208 150' stroke-width='5'/%3E%3Cpath d='M1078 54 C1030 72 1004 108 992 146' stroke-width='5'/%3E%3C/g%3E%3Cg fill='%23ffb3d1'%3E%3Cg transform='translate(70,52)'%3E%3Ccircle cx='0' cy='-13' r='9'/%3E%3Ccircle cx='12.4' cy='-4' r='9'/%3E%3Ccircle cx='7.6' cy='10.6' r='9'/%3E%3Ccircle cx='-7.6' cy='10.6' r='9'/%3E%3Ccircle cx='-12.4' cy='-4' r='9'/%3E%3Ccircle cx='0' cy='0' r='4' fill='%23ffe08a'/%3E%3C/g%3E%3Cg transform='translate(190,128)'%3E%3Ccircle cx='0' cy='-11' r='7.6'/%3E%3Ccircle cx='10.5' cy='-3.4' r='7.6'/%3E%3Ccircle cx='6.5' cy='9' r='7.6'/%3E%3Ccircle cx='-6.5' cy='9' r='7.6'/%3E%3Ccircle cx='-10.5' cy='-3.4' r='7.6'/%3E%3Ccircle cx='0' cy='0' r='3.4' fill='%23ffe08a'/%3E%3C/g%3E%3Cg transform='translate(1130,44)'%3E%3Ccircle cx='0' cy='-12' r='8.4'/%3E%3Ccircle cx='11.4' cy='-3.7' r='8.4'/%3E%3Ccircle cx='7' cy='9.8' r='8.4'/%3E%3Ccircle cx='-7' cy='9.8' r='8.4'/%3E%3Ccircle cx='-11.4' cy='-3.7' r='8.4'/%3E%3Ccircle cx='0' cy='0' r='3.7' fill='%23ffe08a'/%3E%3C/g%3E%3Cg transform='translate(1006,122)'%3E%3Ccircle cx='0' cy='-10' r='7'/%3E%3Ccircle cx='9.5' cy='-3.1' r='7'/%3E%3Ccircle cx='5.9' cy='8.1' r='7'/%3E%3Ccircle cx='-5.9' cy='8.1' r='7'/%3E%3Ccircle cx='-9.5' cy='-3.1' r='7'/%3E%3Ccircle cx='0' cy='0' r='3.1' fill='%23ffe08a'/%3E%3C/g%3E%3C/g%3E%3Cpath d='M0 250 Q200 228 400 250 T800 250 T1200 250 V300 H0 Z' fill='%23301826' opacity='.85'/%3E%3C/svg%3E");
+}
+
+/* ── ẢNH CHỤP CHUNG — đại dương nhiều lớp sóng ───────────────────────────── */
+#page-gallery {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 190 Q150 160 300 190 T600 190 T900 190 T1200 190 V400 H0 Z' fill='%23125f78' opacity='.55'/%3E%3Cpath d='M0 246 Q150 214 300 246 T600 246 T900 246 T1200 246 V400 H0 Z' fill='%230e4d64' opacity='.6'/%3E%3Cg fill='none' stroke='%23aef0ff' stroke-width='3' opacity='.3'%3E%3Cpath d='M120 150 Q160 132 200 150'/%3E%3Cpath d='M840 138 Q880 120 920 138'/%3E%3C/g%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 120 Q120 82 240 120 T480 120 T720 120 T960 120 T1200 120 V300 H0 Z' fill='%2317748f' opacity='.75'/%3E%3Cpath d='M0 176 Q120 138 240 176 T480 176 T720 176 T960 176 T1200 176 V300 H0 Z' fill='%230d5570' opacity='.85'/%3E%3Cpath d='M0 232 Q120 198 240 232 T480 232 T720 232 T960 232 T1200 232 V300 H0 Z' fill='%23063a52'/%3E%3Cg fill='%23d8f7ff' opacity='.55'%3E%3Cellipse cx='180' cy='118' rx='30' ry='5'/%3E%3Cellipse cx='620' cy='120' rx='38' ry='5'/%3E%3Cellipse cx='1010' cy='116' rx='32' ry='5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── NHẬT KÝ — đồng cỏ lau ban đêm, đom đóm bay ──────────────────────────── */
+#page-diary {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 280 Q200 240 400 280 T800 280 T1200 280 V400 H0 Z' fill='%233a2510' opacity='.6'/%3E%3Cg fill='%23ffcf7a' opacity='.35'%3E%3Ccircle cx='200' cy='180' r='26'/%3E%3Ccircle cx='620' cy='140' r='30'/%3E%3Ccircle cx='980' cy='196' r='24'/%3E%3C/g%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cg stroke='%234a3016' stroke-width='4' fill='none' stroke-linecap='round' opacity='.9'%3E%3Cpath d='M40 300 Q34 216 62 156'/%3E%3Cpath d='M96 300 Q104 210 82 148'/%3E%3Cpath d='M170 300 Q160 224 190 168'/%3E%3Cpath d='M250 300 Q262 218 236 158'/%3E%3Cpath d='M340 300 Q332 230 360 178'/%3E%3Cpath d='M460 300 Q470 222 444 164'/%3E%3Cpath d='M560 300 Q552 234 580 184'/%3E%3Cpath d='M680 300 Q690 216 664 156'/%3E%3Cpath d='M780 300 Q772 228 800 174'/%3E%3Cpath d='M880 300 Q890 220 864 162'/%3E%3Cpath d='M980 300 Q972 232 1000 180'/%3E%3Cpath d='M1080 300 Q1090 218 1064 158'/%3E%3Cpath d='M1160 300 Q1152 228 1180 176'/%3E%3C/g%3E%3Cg fill='%235a3a1c' opacity='.85'%3E%3Cellipse cx='62' cy='152' rx='6' ry='16'/%3E%3Cellipse cx='190' cy='164' rx='6' ry='16'/%3E%3Cellipse cx='360' cy='174' rx='6' ry='16'/%3E%3Cellipse cx='580' cy='180' rx='6' ry='16'/%3E%3Cellipse cx='800' cy='170' rx='6' ry='16'/%3E%3Cellipse cx='1000' cy='176' rx='6' ry='16'/%3E%3Cellipse cx='1180' cy='172' rx='6' ry='16'/%3E%3C/g%3E%3Cpath d='M0 268 Q300 246 600 268 T1200 268 V300 H0 Z' fill='%23241505'/%3E%3C/svg%3E");
+}
+
+/* ── YÊU & TỰ HÀO — vườn hồng, bụi hoa và dây leo ────────────────────────── */
+#page-things {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cg fill='%23582038' opacity='.55'%3E%3Cellipse cx='160' cy='300' rx='150' ry='92'/%3E%3Cellipse cx='500' cy='320' rx='170' ry='84'/%3E%3Cellipse cx='860' cy='302' rx='160' ry='90'/%3E%3Cellipse cx='1140' cy='324' rx='150' ry='80'/%3E%3C/g%3E%3Cg fill='%23c9214f' opacity='.4'%3E%3Ccircle cx='120' cy='250' r='16'/%3E%3Ccircle cx='470' cy='276' r='14'/%3E%3Ccircle cx='880' cy='254' r='17'/%3E%3Ccircle cx='1120' cy='282' r='15'/%3E%3C/g%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cg stroke='%233f6b32' stroke-width='6' fill='none' stroke-linecap='round'%3E%3Cpath d='M110 300 V150 M110 200 Q70 186 58 210 M110 230 Q152 216 164 240'/%3E%3Cpath d='M370 300 V178 M370 220 Q334 208 322 232'/%3E%3Cpath d='M640 300 V140 M640 196 Q684 182 696 206 M640 232 Q600 220 590 244'/%3E%3Cpath d='M900 300 V186 M900 228 Q938 216 948 238'/%3E%3Cpath d='M1120 300 V158 M1120 210 Q1080 196 1068 220'/%3E%3C/g%3E%3Cg%3E%3Cg transform='translate(110,132)'%3E%3Cpath d='M0 -26 C22 -18 26 8 0 24 C-26 8 -22 -18 0 -26 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -19 C16 -13 19 6 0 18 C-19 6 -16 -13 0 -19 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -12 C11 -8 12 5 0 12 C-12 5 -11 -8 0 -12 Z' fill='%23e33d68'/%3E%3Cpath d='M0 -6 C6 -4 6 4 0 7 C-6 4 -6 -4 0 -6 Z' fill='%23f76a8d'/%3E%3C/g%3E%3Cg transform='translate(640,122)'%3E%3Cpath d='M0 -28 C24 -19 28 9 0 26 C-28 9 -24 -19 0 -28 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -21 C17 -14 20 7 0 19 C-20 7 -17 -14 0 -21 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -13 C12 -9 13 5 0 13 C-13 5 -12 -9 0 -13 Z' fill='%23e33d68'/%3E%3Cpath d='M0 -6 C6 -4 6 4 0 8 C-6 4 -6 -4 0 -6 Z' fill='%23f76a8d'/%3E%3C/g%3E%3Cg transform='translate(370,162)'%3E%3Cpath d='M0 -20 C17 -14 20 6 0 18 C-20 6 -17 -14 0 -20 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -14 C12 -10 14 5 0 13 C-14 5 -12 -10 0 -14 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -8 C7 -5 8 3 0 8 C-8 3 -7 -5 0 -8 Z' fill='%23e33d68'/%3E%3C/g%3E%3Cg transform='translate(900,170)'%3E%3Cpath d='M0 -19 C16 -13 19 6 0 17 C-19 6 -16 -13 0 -19 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -13 C11 -9 13 4 0 12 C-13 4 -11 -9 0 -13 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -7 C6 -5 7 3 0 7 C-7 3 -6 -5 0 -7 Z' fill='%23e33d68'/%3E%3C/g%3E%3Cg transform='translate(1120,142)'%3E%3Cpath d='M0 -22 C18 -15 22 7 0 20 C-22 7 -18 -15 0 -22 Z' fill='%23a3103a'/%3E%3Cpath d='M0 -15 C13 -10 15 5 0 14 C-15 5 -13 -10 0 -15 Z' fill='%23c9214f'/%3E%3Cpath d='M0 -9 C8 -6 9 4 0 9 C-9 4 -8 -6 0 -9 Z' fill='%23e33d68'/%3E%3C/g%3E%3C/g%3E%3Cpath d='M0 264 Q300 244 600 264 T1200 264 V300 H0 Z' fill='%23200609'/%3E%3C/svg%3E");
+}
+
+/* ── TRƯỚC KHI GẶP EM — hoàng hôn trên núi, mặt trời lặn ─────────────────── */
+#page-firsts {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cdefs%3E%3CradialGradient id='sf'%3E%3Cstop offset='0' stop-color='%23fff3d0'/%3E%3Cstop offset='.5' stop-color='%23ffab52'/%3E%3Cstop offset='1' stop-color='%23ff6f3c' stop-opacity='.15'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='600' cy='260' r='120' fill='url(%23sf)'/%3E%3Cg stroke='%23ffcf8a' stroke-width='5' opacity='.3'%3E%3Cpath d='M0 246 H430 M770 246 H1200 M0 292 H400 M800 292 H1200 M0 200 H450 M750 200 H1200'/%3E%3C/g%3E%3Cpath d='M0 300 L180 200 L330 286 L520 176 L700 290 L880 194 L1040 282 L1200 214 V400 H0 Z' fill='%23662a0e' opacity='.6'/%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 186 L170 84 L320 176 L500 62 L680 180 L860 90 L1030 178 L1200 106 V300 H0 Z' fill='%23200a03'/%3E%3Cg stroke='%23120400' stroke-width='5' fill='none' stroke-linecap='round' opacity='.9'%3E%3Cpath d='M120 300 V196 M120 224 L96 204 M120 240 L146 218'/%3E%3Cpath d='M1080 300 V206 M1080 232 L1056 212 M1080 248 L1106 226'/%3E%3C/g%3E%3Cpath d='M0 276 Q300 258 600 276 T1200 276 V300 H0 Z' fill='%230d0301'/%3E%3C/svg%3E");
+}
+
+/* ── NHỚ VỀ EM — thành phố đêm, khuông nhạc trên trời ────────────────────── */
+#page-radio {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cg stroke='%23b39aeb' stroke-width='2.5' opacity='.22'%3E%3Cpath d='M0 90 H1200 M0 124 H1200 M0 158 H1200 M0 192 H1200 M0 226 H1200'/%3E%3C/g%3E%3Cg fill='%23d8c2ff' opacity='.45'%3E%3Cg transform='translate(240,192)'%3E%3Cellipse rx='17' ry='12' transform='rotate(-22)'/%3E%3Cpath d='M15 -4 V-62' stroke='%23d8c2ff' stroke-width='5' fill='none'/%3E%3Cpath d='M15 -62 Q40 -52 32 -30' stroke='%23d8c2ff' stroke-width='5' fill='none'/%3E%3C/g%3E%3Cg transform='translate(660,124)'%3E%3Cellipse rx='15' ry='11' transform='rotate(-22)'/%3E%3Cpath d='M13.5 -3.6 V-56' stroke='%23d8c2ff' stroke-width='4.5' fill='none'/%3E%3Cpath d='M13.5 -56 Q36 -47 29 -26' stroke='%23d8c2ff' stroke-width='4.5' fill='none'/%3E%3C/g%3E%3Cg transform='translate(1000,226)'%3E%3Cellipse rx='16' ry='11.5' transform='rotate(-22)'/%3E%3Cpath d='M14 -3.8 V-58' stroke='%23d8c2ff' stroke-width='4.6' fill='none'/%3E%3Cpath d='M14 -58 Q38 -49 30 -28' stroke='%23d8c2ff' stroke-width='4.6' fill='none'/%3E%3C/g%3E%3C/g%3E%3Ccircle cx='1050' cy='80' r='42' fill='%23e8dcff' opacity='.5'/%3E%3Ccircle cx='1068' cy='68' r='38' fill='%231a0f2e'/%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cg fill='%23150a26'%3E%3Crect x='0' y='170' width='90' height='130'/%3E%3Crect x='100' y='120' width='70' height='180'/%3E%3Crect x='180' y='196' width='100' height='104'/%3E%3Crect x='292' y='96' width='64' height='204'/%3E%3Crect x='366' y='172' width='88' height='128'/%3E%3Crect x='466' y='140' width='72' height='160'/%3E%3Crect x='550' y='206' width='104' height='94'/%3E%3Crect x='666' y='110' width='68' height='190'/%3E%3Crect x='746' y='186' width='94' height='114'/%3E%3Crect x='852' y='146' width='76' height='154'/%3E%3Crect x='940' y='202' width='100' height='98'/%3E%3Crect x='1052' y='128' width='70' height='172'/%3E%3Crect x='1134' y='190' width='66' height='110'/%3E%3C/g%3E%3Cg fill='%23ffd98a' opacity='.55'%3E%3Crect x='116' y='140' width='9' height='12'/%3E%3Crect x='136' y='140' width='9' height='12'/%3E%3Crect x='116' y='168' width='9' height='12'/%3E%3Crect x='308' y='120' width='9' height='12'/%3E%3Crect x='328' y='150' width='9' height='12'/%3E%3Crect x='308' y='182' width='9' height='12'/%3E%3Crect x='482' y='164' width='9' height='12'/%3E%3Crect x='504' y='196' width='9' height='12'/%3E%3Crect x='682' y='134' width='9' height='12'/%3E%3Crect x='704' y='166' width='9' height='12'/%3E%3Crect x='682' y='200' width='9' height='12'/%3E%3Crect x='868' y='170' width='9' height='12'/%3E%3Crect x='890' y='204' width='9' height='12'/%3E%3Crect x='1068' y='152' width='9' height='12'/%3E%3Crect x='1090' y='186' width='9' height='12'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── DỰ ĐỊNH TƯƠNG LAI — bình minh trên đồi, chim bay ────────────────────── */
+#page-future {
+  --sceneFar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cdefs%3E%3CradialGradient id='df'%3E%3Cstop offset='0' stop-color='%23fffbe8'/%3E%3Cstop offset='.55' stop-color='%23ffd98f'/%3E%3Cstop offset='1' stop-color='%23ffb45c' stop-opacity='.1'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg stroke='%23ffe4a8' stroke-width='4' opacity='.28' stroke-linecap='round'%3E%3Cpath d='M600 300 L400 110 M600 300 L490 66 M600 300 L600 40 M600 300 L710 66 M600 300 L800 110 M600 300 L330 190 M600 300 L870 190'/%3E%3C/g%3E%3Cpath d='M480 300 A120 120 0 0 1 720 300 Z' fill='url(%23df)'/%3E%3Cg fill='none' stroke='%239fd6f0' stroke-width='3.5' opacity='.5' stroke-linecap='round'%3E%3Cpath d='M180 130 q14 -12 28 0 q14 -12 28 0'/%3E%3Cpath d='M950 96 q12 -10 24 0 q12 -10 24 0'/%3E%3Cpath d='M840 168 q10 -9 20 0 q10 -9 20 0'/%3E%3C/g%3E%3C/svg%3E");
+  --sceneNear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 176 Q200 106 420 168 T820 152 T1200 178 V300 H0 Z' fill='%23134a48' opacity='.85'/%3E%3Cpath d='M0 224 Q240 168 500 218 T980 206 T1200 226 V300 H0 Z' fill='%230b2f3e'/%3E%3Cg stroke='%23062430' stroke-width='5' fill='none' stroke-linecap='round'%3E%3Cpath d='M170 300 V214 M170 240 L146 220 M170 258 L196 236'/%3E%3Cpath d='M1010 300 V222 M1010 246 L986 226 M1010 264 L1036 242'/%3E%3C/g%3E%3Cpath d='M0 272 Q300 254 600 272 T1200 272 V300 H0 Z' fill='%2304161f'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 768px) {
+  .tab-page.active::before { height: 30vh; }
+  .tab-page.active::after  { height: 20vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-page.active::before,
+  .tab-page.active::after { animation-name: sceneryRise; animation-iteration-count: 1; }
 }

@@ -2466,54 +2466,6 @@ function startModalBorderCycle() {
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// SỐ LẦN GHÉ THĂM — của anh & của em
-// Cách nhận diện: máy của anh mở link 1 lần với ?chong=1 để đánh dấu,
-// mọi thiết bị khác mặc định tính là của em.
-// ══════════════════════════════════════════════════════════════════════════════
-(function initVisits() {
-  // Đánh dấu thiết bị của anh qua URL ?chong=1 (chỉ cần mở 1 lần)
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("chong") === "1") {
-    localStorage.setItem("visitorRole", "anh");
-  }
-  const role = localStorage.getItem("visitorRole") === "anh" ? "anh" : "em";
-
-  async function countAndRender() {
-    let counts = null;
-    try {
-      // Mỗi phiên (session) chỉ đếm 1 lần
-      if (!sessionStorage.getItem("visitCounted")) {
-        const res = await fetch("/visit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ who: role }),
-        });
-        counts = (await res.json());
-        sessionStorage.setItem("visitCounted", "1");
-      } else {
-        const res = await fetch("/visits");
-        counts = await res.json();
-      }
-    } catch (e) { console.error("Lỗi visit counter:", e); return; }
-
-    const anhEl = document.getElementById("visitAnh");
-    const emEl  = document.getElementById("visitEm");
-    if (anhEl) anhEl.textContent = counts.anh ?? 0;
-    if (emEl)  emEl.textContent  = counts.em ?? 0;
-  }
-
-  countAndRender();
-
-  // Pill chỉ hiện sau khi vào trang chính (sau intro)
-  document.addEventListener("introEnded", () => {
-    setTimeout(() => {
-      const pill = document.getElementById("visitPill");
-      if (pill) pill.classList.add("visible");
-    }, 2000);
-  });
-})();
-
-// ══════════════════════════════════════════════════════════════════════════════
 // NHẬT KÝ — viết vào những ngày có điều muốn nói ra
 // Thêm entry mới lên ĐẦU mảng DIARY (mới nhất nằm trên)
 // Dùng \n\n để xuống đoạn trong content

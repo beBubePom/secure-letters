@@ -16,19 +16,23 @@ app.use(express.static(path.join(__dirname, "public")));
 const PORT = process.env.PORT || 5000;
 
 // ── Password ───────────────────────────────────────────────────────────────────
-const GLOBAL_PASSWORD = process.env.PASSWORD || "yeuem100";
+const GLOBAL_PASSWORD = process.env.PASSWORD || "porsche911";
 
 // ── TEST MODE ─────────────────────────────────────────────────────────────────
 const TEST_MODE = process.env.TEST_MODE === "true" || false;
 
 // ── Lịch mở thư ───────────────────────────────────────────────────────────────
+// Ngày trong SCHEDULE là ngày HIỂN THỊ cho em thấy (28/08 và 27/01).
+// Thư thật sự mở sớm hơn UNLOCK_EARLY_DAYS ngày so với ngày hiển thị.
+const UNLOCK_EARLY_DAYS = 2;
+
 function buildSchedule() {
   const schedule = [];
   let letterNum = 1;
   let year = 2026;
   while (letterNum <= 100) {
-    if (letterNum <= 100) schedule.push({ letter: letterNum++, month: 8, day: 26, year: year });
-    if (letterNum <= 100) schedule.push({ letter: letterNum++, month: 1, day: 25, year: year + 1 });
+    if (letterNum <= 100) schedule.push({ letter: letterNum++, month: 8, day: 28, year: year });
+    if (letterNum <= 100) schedule.push({ letter: letterNum++, month: 1, day: 27, year: year + 1 });
     year++;
   }
   return schedule;
@@ -50,12 +54,26 @@ function getCaliforniaNow() {
   return { year: get("year"), month: get("month"), day: get("day") };
 }
 
+// Đổi y/m/d thành số YYYYMMDD để so sánh cho gọn
+function toNum(y, m, d) {
+  return y * 10000 + m * 100 + d;
+}
+
+// Ngày mở thật = ngày hiển thị trừ đi UNLOCK_EARLY_DAYS ngày
+function getRealUnlockDate(month, day, year) {
+  const d = new Date(Date.UTC(year, month - 1, day));
+  d.setUTCDate(d.getUTCDate() - UNLOCK_EARLY_DAYS);
+  return {
+    year: d.getUTCFullYear(),
+    month: d.getUTCMonth() + 1,
+    day: d.getUTCDate(),
+  };
+}
+
 function datePassed(month, day, year) {
   const now = getCaliforniaNow();
-  if (now.year > year) return true;
-  if (now.year === year && now.month > month) return true;
-  if (now.year === year && now.month === month && now.day >= day) return true;
-  return false;
+  const real = getRealUnlockDate(month, day, year);
+  return toNum(now.year, now.month, now.day) >= toNum(real.year, real.month, real.day);
 }
 
 function getUnlockedLetterNumbers() {

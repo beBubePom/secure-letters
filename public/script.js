@@ -282,8 +282,8 @@ function typeTitle() {
 function buildSchedule() {
   const s = []; let n = 1, y = 2026;
   while (n <= 100) {
-    if (n <= 100) s.push({ letter: n++, day: 26, month: 8, year: y });
-    if (n <= 100) s.push({ letter: n++, day: 25, month: 1, year: y + 1 });
+    if (n <= 100) s.push({ letter: n++, day: 28, month: 8, year: y });
+    if (n <= 100) s.push({ letter: n++, day: 27, month: 1, year: y + 1 });
     y++;
   }
   return s;

@@ -3272,3 +3272,221 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     });
   }
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CUỘN THƯ MƯỢT + THANH CUỘN TỰ VẼ
+// - Cuộn từ từ có quán tính thay vì nhảy một mạch
+// - Thanh cuộn tự vẽ nên con trỏ mặc định không bao giờ hiện ra
+// ══════════════════════════════════════════════════════════════════════════════
+(function initSmoothLetterScroll() {
+  const lc = document.getElementById("letterContent");
+  if (!lc) return;
+
+  const modal = lc.closest(".modal-content") || lc.parentElement;
+  if (modal && getComputedStyle(modal).position === "static") {
+    modal.style.position = "relative";
+  }
+
+  // ── Tạo thanh cuộn tự vẽ ───────────────────────────────────────────────────
+  const track = document.createElement("div");
+  track.id = "letterScrollTrack";
+  const thumb = document.createElement("div");
+  thumb.id = "letterScrollThumb";
+  track.appendChild(thumb);
+  modal.appendChild(track);
+
+  // ── Trạng thái cuộn mượt ───────────────────────────────────────────────────
+  let target = 0;         // vị trí muốn tới
+  let current = 0;        // vị trí đang hiển thị
+  let rafId = null;
+  let animating = false;
+
+  const EASE = 0.12;       // càng nhỏ càng trôi chậm/mượt
+  const WHEEL_STEP = 0.9;  // hệ số nhân cho mỗi nấc lăn chuột
+
+  function maxScroll() {
+    return Math.max(0, lc.scrollHeight - lc.clientHeight);
+  }
+
+  function syncTrackGeometry() {
+    const max = maxScroll();
+    // Không có gì để cuộn thì ẩn thanh
+    if (max <= 1) {
+      track.classList.remove("visible");
+      return;
+    }
+    const lcRect = lc.getBoundingClientRect();
+    const mRect = modal.getBoundingClientRect();
+    // Đặt track bám mép phải khung thư
+    track.style.top = (lcRect.top - mRect.top + 10) + "px";
+    track.style.height = (lcRect.height - 20) + "px";
+    track.style.left = (lcRect.right - mRect.left - 16) + "px";
+    track.classList.add("visible");
+
+    const trackH = lcRect.height - 20;
+    const ratio = lc.clientHeight / lc.scrollHeight;
+    const thumbH = Math.max(26, trackH * ratio);
+    thumb.style.height = thumbH + "px";
+  }
+
+  function updateThumbPos() {
+    const max = maxScroll();
+    if (max <= 1) return;
+    const trackH = track.clientHeight;
+    const thumbH = thumb.offsetHeight;
+    const p = current / max;
+    thumb.style.top = (p * (trackH - thumbH)) + "px";
+  }
+
+  function tick() {
+    const diff = target - current;
+    if (Math.abs(diff) < 0.4) {
+      current = target;
+      lc.scrollTop = current;
+      updateThumbPos();
+      animating = false;
+      rafId = null;
+      return;
+    }
+    current += diff * EASE;
+    lc.scrollTop = current;
+    updateThumbPos();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startAnim() {
+    if (!animating) {
+      animating = true;
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  function scrollBy(delta) {
+    const max = maxScroll();
+    target = Math.min(max, Math.max(0, target + delta));
+    startAnim();
+  }
+
+  function scrollTo(pos) {
+    const max = maxScroll();
+    target = Math.min(max, Math.max(0, pos));
+    startAnim();
+  }
+
+  // ── Lăn chuột: chặn mặc định, tự cuộn từ từ ────────────────────────────────
+  lc.addEventListener("wheel", (e) => {
+    if (maxScroll() <= 1) return;
+    e.preventDefault();
+    let d = e.deltaY;
+    if (e.deltaMode === 1) d *= 18;        // cuộn theo dòng
+    else if (e.deltaMode === 2) d *= lc.clientHeight; // cuộn theo trang
+    scrollBy(d * WHEEL_STEP);
+  }, { passive: false });
+
+  // ── Phím mũi tên / PageUp / PageDown / Home / End ──────────────────────────
+  lc.setAttribute("tabindex", "0");
+  lc.style.outline = "none";
+  lc.addEventListener("keydown", (e) => {
+    const page = lc.clientHeight * 0.85;
+    const keys = {
+      ArrowDown: 60, ArrowUp: -60,
+      PageDown: page, PageUp: -page,
+    };
+    if (e.key in keys) { e.preventDefault(); scrollBy(keys[e.key]); }
+    else if (e.key === "Home") { e.preventDefault(); scrollTo(0); }
+    else if (e.key === "End")  { e.preventDefault(); scrollTo(maxScroll()); }
+  });
+
+  // ── Kéo thanh cuộn tự vẽ ───────────────────────────────────────────────────
+  let dragging = false;
+  let dragStartY = 0;
+  let dragStartScroll = 0;
+
+  thumb.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    dragging = true;
+    dragStartY = e.clientY;
+    dragStartScroll = current;
+    track.classList.add("dragging");
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    e.preventDefault();
+    const trackH = track.clientHeight;
+    const thumbH = thumb.offsetHeight;
+    const usable = trackH - thumbH;
+    if (usable <= 0) return;
+    const dy = e.clientY - dragStartY;
+    // Kéo tới đâu nhảy tới đó luôn cho khớp tay, không cần easing
+    const max = maxScroll();
+    const pos = dragStartScroll + (dy / usable) * max;
+    target = current = Math.min(max, Math.max(0, pos));
+    lc.scrollTop = current;
+    updateThumbPos();
+  }, { passive: false });
+
+  window.addEventListener("mouseup", () => {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove("dragging");
+  });
+
+  // Click vào phần trống của track → nhảy tới vị trí đó (có easing)
+  track.addEventListener("mousedown", (e) => {
+    if (e.target === thumb) return;
+    const rect = track.getBoundingClientRect();
+    const thumbH = thumb.offsetHeight;
+    const p = (e.clientY - rect.top - thumbH / 2) / (rect.height - thumbH);
+    scrollTo(p * maxScroll());
+  });
+
+  // ── Cảm ứng: giữ hành vi cuộn tự nhiên của mobile ──────────────────────────
+  lc.addEventListener("touchstart", () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    animating = false;
+    current = target = lc.scrollTop;
+  }, { passive: true });
+
+  lc.addEventListener("scroll", () => {
+    // Đồng bộ khi cuộn bằng cảm ứng hoặc nguồn khác
+    if (!animating && !dragging) {
+      current = target = lc.scrollTop;
+      updateThumbPos();
+    }
+  }, { passive: true });
+
+  // ── Đồng bộ lại mỗi khi mở thư / đổi kích thước ────────────────────────────
+  function resetScroll() {
+    current = target = 0;
+    lc.scrollTop = 0;
+    syncTrackGeometry();
+    updateThumbPos();
+  }
+
+  // Theo dõi việc thư được hiển thị để canh lại thanh cuộn
+  const mo = new MutationObserver(() => {
+    if (lc.style.display !== "none") {
+      setTimeout(() => { syncTrackGeometry(); updateThumbPos(); }, 60);
+      setTimeout(() => { syncTrackGeometry(); updateThumbPos(); }, 700);
+    } else {
+      track.classList.remove("visible");
+    }
+  });
+  mo.observe(lc, { attributes: true, attributeFilter: ["style"], childList: true });
+
+  window.addEventListener("resize", () => {
+    syncTrackGeometry();
+    updateThumbPos();
+  });
+
+  // Đóng modal → ẩn thanh cuộn
+  const closeBtn = document.getElementById("closeBtn");
+  if (closeBtn) closeBtn.addEventListener("click", () => track.classList.remove("visible"));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") track.classList.remove("visible");
+  });
+
+  // Cho phép nơi khác gọi lại khi cần
+  window.resetLetterScroll = resetScroll;
+})();

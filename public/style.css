@@ -1985,3 +1985,70 @@ input[type="password"] {
   .tab-btn:hover::after { opacity: 0.5; }
   .tab-btn.active::after { opacity: 0.66; }
 }
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  CUỘN THƯ MƯỢT — ẩn scrollbar gốc, tự vẽ thanh cuộn riêng                  ║
+   ║  Lý do: scrollbar native là UI của trình duyệt, cursor:none không ăn vào   ║
+   ║  nó nên con trỏ mặc định luôn hiện khi rê/kéo. Ẩn đi rồi tự vẽ là hết.     ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+
+/* Ẩn hoàn toàn thanh cuộn gốc của khung thư */
+#letterContent {
+  scrollbar-width: none !important;          /* Firefox */
+  -ms-overflow-style: none !important;       /* IE/Edge cũ */
+  overscroll-behavior: contain;              /* không kéo lan ra trang nền */
+  padding-right: 30px;                       /* chừa chỗ cho thanh cuộn tự vẽ */
+}
+#letterContent::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;                  /* Chrome / Safari / Edge */
+}
+
+/* Bọc ngoài để đặt thanh cuộn tự vẽ theo đúng khung thư */
+#letterScrollTrack {
+  position: absolute;
+  width: 5px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0;
+  transition: opacity 0.35s ease, width 0.25s ease;
+  pointer-events: auto;
+  cursor: none !important;
+  z-index: 5;
+}
+#letterScrollTrack.visible { opacity: 1; }
+#letterScrollTrack:hover,
+#letterScrollTrack.dragging { width: 8px; }
+
+#letterScrollThumb {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  min-height: 26px;
+  border-radius: 99px;
+  background: linear-gradient(180deg,
+    rgba(255, 160, 205, 0.85),
+    rgba(180, 140, 255, 0.85));
+  box-shadow: 0 0 10px rgba(220, 150, 255, 0.35);
+  cursor: none !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+#letterScrollTrack:hover #letterScrollThumb,
+#letterScrollTrack.dragging #letterScrollThumb {
+  background: linear-gradient(180deg,
+    rgba(255, 185, 220, 1),
+    rgba(205, 170, 255, 1));
+  box-shadow: 0 0 18px rgba(240, 180, 255, 0.6);
+}
+
+@media (max-width: 768px) {
+  #letterContent { padding-right: 22px; }
+  #letterScrollTrack { width: 4px; }
+}
+
+/* Cuộn mượt cho toàn trang (khi bấm chuyển tab, nhảy mốc...) */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

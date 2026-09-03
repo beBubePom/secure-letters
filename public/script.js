@@ -2452,6 +2452,37 @@ function startModalBorderCycle() {
       title: "lần đầu anh tỏ tình với ai đó",
       desc: "và cũng là lần đầu anh chắc chắn đến vậy về cảm xúc của mình.",
     },
+    {
+      date: "30 THÁNG 6, 2026",
+      title: "trở thành của nhau",
+    },
+    {
+      title: "lần đầu anh đi ăn cùng người con gái nào đó, may mắn đấy là em",
+    },
+    {
+      date: "29 THÁNG 6, 2026",
+      title: "lần đầu ôm 1 ai đó",
+    },
+    {
+      date: "29 THÁNG 6, 2026",
+      title: "lần đầu nắm tay 1 ai đó",
+    },
+    {
+      date: "29 THÁNG 6, 2026",
+      title: "lần đầu hôn 1 ai đó",
+    },
+    {
+      date: "1 THÁNG 7, 2026",
+      title: "lần đầu đi coi phim cùng người anh yêu",
+    },
+    {
+      date: "25 THÁNG 8, 2026",
+      title: "lần đầu được nhận quà sinh nhật từ người anh yêu",
+    },
+    {
+      date: "2 THÁNG 7, 2026",
+      title: "lần đầu uống trà sữa và đi ăn cùng người anh yêu",
+    },
   ];
 
   const list = document.getElementById("firstsList");
@@ -2462,8 +2493,9 @@ function startModalBorderCycle() {
     card.className = "first-card";
     card.innerHTML = `
       <div class="first-num">${String(i+1).padStart(2,"0")}</div>
+      ${f.date ? `<div class="first-date">${f.date}</div>` : ""}
       <div class="first-title">${f.title}</div>
-      <div class="first-desc">${f.desc}</div>
+      ${f.desc ? `<div class="first-desc">${f.desc}</div>` : ""}
     `;
     list.appendChild(card);
   });

@@ -2377,6 +2377,22 @@ function startModalBorderCycle() {
       title: "anh phải về rồi",
       desc: "tạm biệt em bé của anh nhá. tới giờ anh phải về rồi. anh yêu em nhiều lắm, và lần gặp tiếp theo sẽ tới nhanh thôi.",
     },
+    {
+      date: "25 THÁNG 8, 2026",
+      title: "qua lại Spokane thăm em",
+      desc: "tự nhiên cảm thấy trong lòng có nhiều chút hồi hộp hơn cả lần đầu, xen chút cảm giác lạ lẫm nữa không hiểu tại sao, nhưng khi ôm em lần đầu thì cảm thấy siêu ấm áp. còn được em tổ chức sinh nhật cho nữa, anh vui lắm, cũng là lần đầu tiên anh được đón sinh nhật cùng người anh yêu, lần đầu tiên anh được nhận nhiều sự chu đáo tới vậy.",
+      badge: "sinh nhật đầu tiên có em ♡",
+    },
+    {
+      date: "26 THÁNG 8, 2026",
+      title: "Silverwood Park",
+      desc: "đi Silverwood Park chơi, chơi được vài trò sợ toát cả mồ hôi, nhưng mà có em nên... vẫn sợ. cuối cùng cũng kịp đi miniso để mua gấu bông cho em, còn có cả móc khóa đôi nữa.",
+    },
+    {
+      date: "27 THÁNG 8, 2026",
+      title: "anh phải về rồi, lần nữa",
+      desc: "mặc dù biết là lần sau vẫn sẽ tới nhanh thôi nhưng anh vẫn cảm thấy buồn với nhớ em nhiều lắm, anh muốn được ôm em mãi. anh nhớ cảm giác em nằm gọn trong lòng anh, làm anh mãi mãi không bao giờ muốn khoảnh khắc đấy kết thúc. ước gì lần sau lần sau và lần sau nữa, anh vẫn có thể ôm bé Như nhỏ như cục kẹo của anh ở gọn trong lòng.",
+    },
   ];
 
   const list = document.getElementById("timelineList");
@@ -2386,7 +2402,7 @@ function startModalBorderCycle() {
     const item = document.createElement("div");
     item.className = "tl-item";
     item.innerHTML = `
-      <div class="tl-dot ${i === 1 ? "first" : ""}"></div>
+      <div class="tl-dot ${ev.badge ? "first" : ""}"></div>
       <div class="tl-date">${ev.date}</div>
       <div class="tl-title">${ev.title}</div>
       <div class="tl-desc">${ev.desc}</div>

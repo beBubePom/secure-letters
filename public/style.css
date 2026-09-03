@@ -2064,3 +2064,24 @@ html { scroll-behavior: smooth; }
 }
 /* Thẻ không có mô tả thì bớt khoảng trống thừa */
 .first-card .first-title:last-child { margin-bottom: 0; }
+
+/* Thẻ "dự định tương lai" — tiêu đề + mô tả, đồng bộ với thẻ "lần đầu" */
+.future-card {
+  padding: 22px 24px 22px 60px;
+}
+.future-num {
+  left: 20px; top: 22px;
+  font-size: 22px;
+}
+.future-title {
+  font-size: 17px; font-style: italic;
+  color: rgba(225, 240, 255, 0.9);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 1.5; margin-bottom: 6px;
+}
+.future-desc {
+  font-size: 14px; font-style: italic;
+  color: rgba(180, 205, 230, 0.62);
+  font-family: 'Crimson Pro', Georgia, serif;
+  line-height: 1.7;
+}

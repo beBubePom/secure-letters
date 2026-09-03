@@ -2441,47 +2441,40 @@ function startModalBorderCycle() {
       desc: "chỉ vì được ở cạnh em, anh làm cả những điều mình chưa từng làm.",
     },
     {
-      title: "lần đầu anh đi ăn Haidilao cùng ai đó",
-      desc: "lần đầu tiên của anh, và anh mừng vì người ngồi đối diện là em.",
+      title: "lần đầu anh đi ăn cùng một người con gái",
+      desc: "cũng là lần đầu anh ăn Haidilao. anh mừng vì người ngồi đối diện là em.",
     },
     {
       title: "lần đầu anh lái xe xuyên đêm vì một người",
       desc: "cả quãng đường dài từ Seattle về Spokane, chỉ để được ở bên em thêm chút nữa.",
     },
     {
+      title: "lần đầu anh nắm tay một ai đó",
+      desc: "một điều tưởng như rất bình thường, vậy mà anh phải đợi tới khi có em mới biết nó là gì.",
+    },
+    {
+      title: "lần đầu anh ôm một ai đó",
+      desc: "và anh chỉ ước khoảnh khắc đó đừng bao giờ kết thúc.",
+    },
+    {
+      title: "lần đầu anh hôn một ai đó",
+      desc: "anh đã đợi rất lâu để dành nó cho đúng người. hóa ra người đó là em.",
+    },
+    {
       title: "lần đầu anh tỏ tình với ai đó",
       desc: "và cũng là lần đầu anh chắc chắn đến vậy về cảm xúc của mình.",
     },
     {
-      date: "30 THÁNG 6, 2026",
-      title: "trở thành của nhau",
+      title: "lần đầu anh trở thành của một ai đó",
+      desc: "ngày anh thôi đứng ngoài câu chuyện của em, để trở thành một phần trong đó.",
     },
     {
-      title: "lần đầu anh đi ăn cùng người con gái nào đó, may mắn đấy là em",
+      title: "lần đầu anh đi coi phim cùng người anh yêu",
+      desc: "anh chẳng nhớ phim chiếu gì, chỉ nhớ em ngồi ngay bên cạnh.",
     },
     {
-      date: "29 THÁNG 6, 2026",
-      title: "lần đầu ôm 1 ai đó",
-    },
-    {
-      date: "29 THÁNG 6, 2026",
-      title: "lần đầu nắm tay 1 ai đó",
-    },
-    {
-      date: "29 THÁNG 6, 2026",
-      title: "lần đầu hôn 1 ai đó",
-    },
-    {
-      date: "1 THÁNG 7, 2026",
-      title: "lần đầu đi coi phim cùng người anh yêu",
-    },
-    {
-      date: "25 THÁNG 8, 2026",
-      title: "lần đầu được nhận quà sinh nhật từ người anh yêu",
-    },
-    {
-      date: "2 THÁNG 7, 2026",
-      title: "lần đầu uống trà sữa và đi ăn cùng người anh yêu",
+      title: "lần đầu anh được nhận quà sinh nhật từ người anh yêu",
+      desc: "cũng là lần đầu anh thấy sinh nhật của mình có ý nghĩa tới vậy.",
     },
   ];
 
@@ -2521,6 +2514,18 @@ function startModalBorderCycle() {
 (function initDiary() {
   const DIARY = [
     {
+      date: "27 THÁNG 8, 2026",
+      content: `hôm đấy tự nhiên chuyến bay bị delayed nên chồng được ở bên cạnh em thêm một lúc nữa lận. đáng lẽ phải vui lắm, vì tự nhiên có thêm chút thời gian với em, nhưng lúc đó chồng lại cứ có cảm giác như mọi thứ đang đếm ngược vậy.
+ở bên em mà trong đầu cứ nghĩ: à, lại sắp phải về rồi, sắp không được gặp em nữa rồi.
+thành ra càng ngồi cạnh em lâu bao nhiêu, chồng lại càng không muốn thời gian trôi tiếp bấy nhiêu.
+chồng thích cảm giác được ở cạnh em lắm. thật ra chẳng cần làm gì đặc biệt hết, chỉ cần quay sang thấy em ở đó, được nghe em nói chuyện ngay bên cạnh, được ôm em, được chạm vào em một cách rất bình thường thôi là chồng đã thấy vui rồi.
+đến lúc phải đi mới thấy hụt hẫng kinh khủng. vừa mới ở cạnh nhau đó thôi mà đã bắt đầu nhớ.
+nhớ cảm giác quay qua là thấy em.
+nhớ giọng em ở ngay bên cạnh.
+nhớ cả những thứ rất nhỏ mà lúc ở gần nhau chồng chẳng để ý.
+chắc vì vậy nên mỗi lần rời em, chồng lại chỉ mong thật nhanh tới lần tiếp theo được gặp lại. cho tới khi ở trên máy bay, chồng cũng nghĩ về em mãi, mong thời gian trôi thật nhanh để anh được gặp vợ anh nữa.`,
+    },
+    {
       date: "4 THÁNG 7, 2026",
       content: `Cái hôm mà chồng đáp xuống sân bay, chồng đã biết là ngày mai sẽ không thể nhìn thấy vợ ngay lập tức nữa rồi. Điều làm chồng lạ lẫm nhất không phải là chuyến bay dài, mà là cảm giác phải tạm gác lại một cuộc sống rất ồn ào bên vợ để quay về với những ngày bình thường. Đến lúc ấy chồng mới nhận ra, hóa ra chồng đã quen với việc có em ở cạnh nhiều đến thế.
 
@@ -2545,7 +2550,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     card.className = "diary-card";
     const paragraphs = entry.content
       .split("\n\n")
-      .map(p => `<p class="diary-p">${p.trim()}</p>`)
+      .map(p => `<p class="diary-p">${p.trim().replace(/\n/g, "<br>")}</p>`)
       .join("");
     card.innerHTML = `
       <div class="diary-date"><span class="diary-dot">✦</span>${entry.date}</div>
@@ -2571,23 +2576,32 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 // DỰ ĐỊNH TƯƠNG LAI — thay thế tab Đầu Tư cũ
 // ══════════════════════════════════════════════════════════════════════════════
 (function initFuture() {
-  // Thêm từng dự định vào đây, mỗi dòng 1 item
+  // Thêm từng dự định vào đây
   const FUTURE = [
-    "cùng nhau đi du lịch một chuyến thật xa",
-    // "điều thứ 2...",
-    // "điều thứ 3...",
-    // ... thêm bao nhiêu tùy anh
+    {
+      title: "cùng nhau đi du lịch một chuyến thật xa",
+      desc: "không cần đi đâu quá sang, chỉ cần đủ xa để cả hai đứa tạm quên hết mọi thứ còn lại.",
+    },
+    {
+      title: "đi Halloween cùng em",
+      desc: "anh muốn xem em hóa trang thành gì, rồi hai đứa cùng đi chơi cả tối.",
+    },
+    {
+      title: "đi về Việt Nam cùng em",
+      desc: "dẫn em về nơi anh lớn lên, đi ăn những món anh vẫn nhớ, và có em ở đó cùng anh.",
+    },
   ];
 
   const list = document.getElementById("futureList");
   if (!list) return;
 
-  FUTURE.forEach((text, i) => {
+  FUTURE.forEach((f, i) => {
     const card = document.createElement("div");
     card.className = "future-card";
     card.innerHTML = `
       <div class="future-num">${String(i + 1).padStart(2, "0")}</div>
-      <div class="future-text">${text}</div>
+      <div class="future-title">${f.title}</div>
+      ${f.desc ? `<div class="future-desc">${f.desc}</div>` : ""}
     `;
     list.appendChild(card);
   });

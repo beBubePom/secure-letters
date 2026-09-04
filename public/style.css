@@ -428,7 +428,8 @@ button:hover {
 /* Ẩn con trỏ mặc định + không cho chọn text trên toàn trang */
 *, *::before, *::after { cursor: none !important; user-select: none; }
 /* Chỉ cho chọn text trong ô nhập liệu và nội dung thư */
-input, textarea, #letterContent { user-select: text; }
+/* Chỉ cho chọn text trong ô nhập liệu — nội dung thư không cho bôi đen/copy */
+input, textarea { user-select: text; -webkit-user-select: text; }
 
 /* ── Volume bar ───────────────────────────────────────────────────────────────── */
 #volumeBar {
@@ -2085,3 +2086,155 @@ html { scroll-behavior: smooth; }
   font-family: 'Crimson Pro', Georgia, serif;
   line-height: 1.7;
 }
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  ẢNH CHỤP CHUNG — lưới ảnh + xem phóng to                                  ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+#galleryWrap { padding: 32px 24px 80px; max-width: 900px; margin: 0 auto; }
+#galleryIntro {
+  font-size: 16.5px; font-style: italic;
+  color: rgba(190, 225, 235, 0.62); text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  line-height: 2; max-width: 520px; margin: 0 auto 44px;
+}
+#galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px;
+}
+.photo-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(110, 215, 235, 0.05), transparent 55%),
+    rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(120, 200, 225, 0.15);
+  opacity: 0; transform: translateY(16px);
+  transition:
+    opacity 0.6s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 0.4s ease, border-color 0.35s ease;
+}
+.photo-card.show { opacity: 1; transform: translateY(0); }
+.photo-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(150, 225, 245, 0.42);
+  box-shadow: 0 14px 40px rgba(60, 170, 210, 0.18);
+}
+.photo-img {
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.photo-card:hover .photo-img { transform: scale(1.06); }
+.photo-img-placeholder {
+  font-size: 42px;
+  opacity: 0.35;
+  background: rgba(255, 255, 255, 0.025);
+}
+.photo-meta { padding: 12px 14px 14px; }
+.photo-date {
+  font-size: 9.5px; letter-spacing: 2.5px;
+  color: rgba(140, 205, 225, 0.6);
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.photo-caption {
+  font-size: 14px; margin-top: 5px;
+  color: rgba(205, 230, 240, 0.85);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; line-height: 1.5;
+}
+
+/* ── Xem ảnh phóng to ─────────────────────────────────────────────────────── */
+#lightbox {
+  position: fixed; inset: 0;
+  z-index: 99990;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(2, 8, 14, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+#lightbox.show { display: flex; animation: lbFade 0.35s ease; }
+@keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+
+#lightboxInner {
+  max-width: 88vw; max-height: 86vh;
+  display: flex; flex-direction: column; align-items: center;
+  animation: lbZoom 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+@keyframes lbZoom {
+  from { transform: scale(0.93); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+#lightboxImg {
+  max-width: 88vw; max-height: 74vh;
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7),
+              0 0 0 1px rgba(150, 220, 240, 0.18);
+  display: block;
+}
+#lightboxMeta { text-align: center; margin-top: 16px; }
+#lightboxDate {
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(140, 205, 225, 0.6);
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+#lightboxCaption {
+  font-size: 18px; font-style: italic; margin-top: 6px;
+  color: rgba(215, 238, 248, 0.9);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+#lightboxClose, #lightboxPrev, #lightboxNext {
+  position: absolute;
+  color: rgba(190, 225, 240, 0.55);
+  cursor: none !important;
+  user-select: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+  z-index: 2;
+}
+#lightboxClose {
+  top: 22px; right: 28px;
+  font-size: 34px; line-height: 1;
+}
+#lightboxPrev, #lightboxNext {
+  top: 50%; transform: translateY(-50%);
+  font-size: 54px; line-height: 1;
+  padding: 20px;
+}
+#lightboxPrev { left: 14px; }
+#lightboxNext { right: 14px; }
+#lightboxClose:hover { color: rgba(235, 250, 255, 1); transform: scale(1.15); }
+#lightboxPrev:hover, #lightboxNext:hover {
+  color: rgba(235, 250, 255, 1);
+  transform: translateY(-50%) scale(1.18);
+}
+
+@media (max-width: 768px) {
+  #galleryWrap { padding: 20px 14px 60px; }
+  #galleryGrid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  #lightboxPrev, #lightboxNext { font-size: 38px; padding: 12px; }
+  #lightboxCaption { font-size: 15px; }
+}
+
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║  CHỐNG COPY — không cho bôi đen / kéo thả chữ trong thư                    ║
+   ╚════════════════════════════════════════════════════════════════════════════╝ */
+#letterContent,
+#letterContent * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -webkit-touch-callout: none !important;   /* tắt menu giữ-lâu trên iOS */
+  -webkit-user-drag: none;
+}
+/* Chặn luôn phần bôi đen ở các trang nội dung khác */
+.diary-p, .thing-text, .first-title, .first-desc,
+.future-title, .future-desc, .tl-title, .tl-desc,
+#thingsIntro, #firstsIntro, #diaryIntro, #futureIntro {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+/* Nếu trình duyệt vẫn cố bôi đen thì không hiện màu nền chọn */
+#letterContent ::selection { background: transparent; color: inherit; }
+#letterContent ::-moz-selection { background: transparent; color: inherit; }

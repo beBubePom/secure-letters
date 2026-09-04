@@ -111,7 +111,25 @@
 
   <!-- GALLERY -->
   <div id="page-gallery" class="tab-page">
-    <div class="tab-coming"><p class="tab-coming-label">ẢNH CHỤP CHUNG</p><p class="tab-coming-text">Những khoảnh khắc mình chụp cùng nhau, để sau này nhìn lại.</p></div>
+    <div id="galleryWrap">
+      <p class="tab-coming-label" style="text-align:center">ẢNH CHỤP CHUNG</p>
+      <p id="galleryIntro">những khoảnh khắc mình chụp cùng nhau, để sau này nhìn lại.</p>
+      <div id="galleryGrid"></div>
+    </div>
+  </div>
+
+  <!-- Xem ảnh phóng to -->
+  <div id="lightbox">
+    <span id="lightboxClose">&times;</span>
+    <span id="lightboxPrev">&#8249;</span>
+    <span id="lightboxNext">&#8250;</span>
+    <div id="lightboxInner">
+      <img id="lightboxImg" src="" alt="">
+      <div id="lightboxMeta">
+        <div id="lightboxDate"></div>
+        <div id="lightboxCaption"></div>
+      </div>
+    </div>
   </div>
 
   <!-- RADIO -->

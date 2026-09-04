@@ -958,23 +958,29 @@ animateDust();
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// GALLERY ẢNH KỶ NIỆM
-// Thêm ảnh vào đây: { date, caption, url } — url là link Cloudinary
+// ẢNH CHỤP CHUNG
+// Thêm ảnh: bỏ file vào public/images/photos/ rồi khai báo một dòng ở đây.
+//   date    — ngày chụp, hiện dưới ảnh
+//   caption — chú thích ngắn
+//   url     — đường dẫn file, ví dụ "images/photos/spokane-1.jpg"
+//             (để trống "" thì hiện ô placeholder 📷)
 // ══════════════════════════════════════════════════════════════════════════════
 const GALLERY_PHOTOS = [
-  { date: "28/08/2024", caption: "lần đầu gặp nhau", url: "" },
-  { date: "14/02/2025", caption: "valentine đầu tiên", url: "" },
-  { date: "01/04/2025", caption: "chuyến đi biển",    url: "" },
-  { date: "15/05/2025", caption: "sinh nhật em",       url: "" },
+  { date: "29/06/2026", caption: "lần đầu gặp nhau ở Spokane", url: "" },
+  { date: "30/06/2026", caption: "ngày mình thành của nhau",   url: "" },
+  { date: "25/08/2026", caption: "sinh nhật đầu tiên có em",   url: "" },
+  { date: "26/08/2026", caption: "Silverwood Park",            url: "" },
 ];
 
 (function initGallery() {
   const grid = document.getElementById("galleryGrid");
   if (!grid) return;
 
-  GALLERY_PHOTOS.forEach(photo => {
+  // ── Dựng lưới ảnh ──────────────────────────────────────────────────────────
+  GALLERY_PHOTOS.forEach((photo, i) => {
     const card = document.createElement("div");
     card.className = "photo-card";
+    card.dataset.index = i;
 
     const imgHTML = photo.url
       ? `<img class="photo-img" src="${photo.url}" alt="${photo.caption}" loading="lazy">`
@@ -986,7 +992,67 @@ const GALLERY_PHOTOS = [
         <div class="photo-date">${photo.date}</div>
         <div class="photo-caption">${photo.caption}</div>
       </div>`;
+
+    // Chỉ mở xem lớn khi ảnh đã có file thật
+    if (photo.url) card.addEventListener("click", () => openLightbox(i));
     grid.appendChild(card);
+  });
+
+  // ── Xem ảnh phóng to ───────────────────────────────────────────────────────
+  const lb        = document.getElementById("lightbox");
+  const lbImg     = document.getElementById("lightboxImg");
+  const lbDate    = document.getElementById("lightboxDate");
+  const lbCaption = document.getElementById("lightboxCaption");
+  let current = 0;
+
+  function openLightbox(i) {
+    const withPhoto = GALLERY_PHOTOS.map((p, idx) => p.url ? idx : -1).filter(x => x >= 0);
+    if (!withPhoto.length) return;
+    current = i;
+    render();
+    lb.classList.add("show");
+  }
+
+  function render() {
+    const p = GALLERY_PHOTOS[current];
+    lbImg.src = p.url;
+    lbImg.alt = p.caption;
+    lbDate.textContent = p.date;
+    lbCaption.textContent = p.caption;
+  }
+
+  function step(dir) {
+    const withPhoto = GALLERY_PHOTOS.map((p, idx) => p.url ? idx : -1).filter(x => x >= 0);
+    if (withPhoto.length < 2) return;
+    const pos = withPhoto.indexOf(current);
+    current = withPhoto[(pos + dir + withPhoto.length) % withPhoto.length];
+    render();
+  }
+
+  function closeLightbox() { lb.classList.remove("show"); }
+
+  document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+  document.getElementById("lightboxPrev").addEventListener("click", (e) => { e.stopPropagation(); step(-1); });
+  document.getElementById("lightboxNext").addEventListener("click", (e) => { e.stopPropagation(); step(1); });
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("show")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+  });
+
+  // ── Hiện dần từng ảnh khi mở tab ───────────────────────────────────────────
+  function revealGallery() {
+    grid.querySelectorAll(".photo-card").forEach((c, i) => {
+      setTimeout(() => c.classList.add("show"), i * 90);
+    });
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    if (btn.dataset.tab === "gallery") {
+      btn.addEventListener("click", () => setTimeout(revealGallery, 100));
+    }
   });
 })();
 
@@ -3551,4 +3617,58 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 
   // Cho phép nơi khác gọi lại khi cần
   window.resetLetterScroll = resetScroll;
+})();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CHỐNG COPY NỘI DUNG
+// Chặn chuột phải, Ctrl+C/X/A/S/P/U, kéo thả chữ, và menu giữ-lâu trên mobile.
+// Ô nhập mật khẩu vẫn dùng bình thường.
+// ══════════════════════════════════════════════════════════════════════════════
+(function initAntiCopy() {
+  // Cho phép thao tác bình thường bên trong ô nhập liệu
+  const isInput = (el) =>
+    el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+
+  // ── Chặn chuột phải ────────────────────────────────────────────────────────
+  document.addEventListener("contextmenu", (e) => {
+    if (isInput(e.target)) return;
+    e.preventDefault();
+  });
+
+  // ── Chặn copy / cắt / kéo thả ──────────────────────────────────────────────
+  ["copy", "cut", "dragstart"].forEach((ev) => {
+    document.addEventListener(ev, (e) => {
+      if (isInput(e.target)) return;
+      e.preventDefault();
+    });
+  });
+
+  // ── Chặn bôi đen ngoài ô nhập liệu ─────────────────────────────────────────
+  document.addEventListener("selectstart", (e) => {
+    if (isInput(e.target)) return;
+    e.preventDefault();
+  });
+
+  // ── Chặn phím tắt sao chép / lưu / xem nguồn ───────────────────────────────
+  document.addEventListener("keydown", (e) => {
+    if (isInput(e.target)) return;
+
+    const k = e.key.toLowerCase();
+    const combo = e.ctrlKey || e.metaKey;
+
+    // Ctrl/Cmd + C, X, A, S, P, U
+    if (combo && ["c", "x", "a", "s", "p", "u"].includes(k)) {
+      e.preventDefault();
+      return;
+    }
+    // Ctrl/Cmd + Shift + I / J / C  (mở devtools)
+    if (combo && e.shiftKey && ["i", "j", "c"].includes(k)) {
+      e.preventDefault();
+      return;
+    }
+    // F12
+    if (e.key === "F12") {
+      e.preventDefault();
+    }
+  }, { capture: true });
 })();

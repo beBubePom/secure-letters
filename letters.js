@@ -1030,6 +1030,11 @@ miễn là mình vẫn đang đi cùng nhau.
 chắc nếu không có gì thay đổi.
 năm sau, vợ chồng mình đón sinh nhật cùng nhau tiếp nhá.
 cảm ơn em vì đã khiến sinh nhật của anh thật vui ấy.
+chắc là tới đây thôi.
+anh viết cũng dài rồi nhỉ.
+hẹn gặp em vào ... năm sau.
+à mà nhiều năm sau nữa nữa nhé.
+lần tới nhé.
 anh yêu em nhiều lắm.
 `,
     music: `/music/letter1.mp3`,

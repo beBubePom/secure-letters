@@ -966,10 +966,7 @@ animateDust();
 //             (để trống "" thì hiện ô placeholder 📷)
 // ══════════════════════════════════════════════════════════════════════════════
 const GALLERY_PHOTOS = [
-  { date: "29/06/2026", caption: "lần đầu gặp nhau ở Spokane", url: "" },
-  { date: "30/06/2026", caption: "ngày mình thành của nhau",   url: "" },
-  { date: "25/08/2026", caption: "sinh nhật đầu tiên có em",   url: "" },
-  { date: "26/08/2026", caption: "Silverwood Park",            url: "" },
+  { date: "02/07/2026", caption: "Gas Work Station - Seattle", url: "images/photos/jul-2-2026.jpeg" },
 ];
 
 (function initGallery() {
@@ -982,8 +979,11 @@ const GALLERY_PHOTOS = [
     card.className = "photo-card";
     card.dataset.index = i;
 
+    // Mã hóa đường dẫn để tên file có dấu cách / dấu phẩy vẫn tải được
+    const safeUrl = photo.url ? photo.url.split("/").map(encodeURIComponent).join("/") : "";
+
     const imgHTML = photo.url
-      ? `<img class="photo-img" src="${photo.url}" alt="${photo.caption}" loading="lazy">`
+      ? `<img class="photo-img" src="${safeUrl}" alt="${photo.caption}" loading="lazy">`
       : `<div class="photo-img-placeholder">📷</div>`;
 
     card.innerHTML = `
@@ -1015,7 +1015,7 @@ const GALLERY_PHOTOS = [
 
   function render() {
     const p = GALLERY_PHOTOS[current];
-    lbImg.src = p.url;
+    lbImg.src = p.url.split("/").map(encodeURIComponent).join("/");
     lbImg.alt = p.caption;
     lbDate.textContent = p.date;
     lbCaption.textContent = p.caption;

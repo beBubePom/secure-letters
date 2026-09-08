@@ -42,7 +42,7 @@ cũng đã thôi chờ đợi sẽ có một người tới.
 anh từng rất thích giữ tất cả mọi thứ ở một khoảng cách vừa đủ. đủ để nói chuyện, đủ để vui, đủ để không cảm thấy cô đơn quá, nhưng không đủ gần để một ai đó thật sự có thể chạm vào những phần mà anh giấu đi.
 anh nghĩ anh chấp nhận được điều đó.
 thậm chí anh từng thấy nó khá ổn.
-anh từng nghĩ thà cứ ở trong vùng an toàn của mình còn hơn một lần nữa trao hết cảm xúc cho một người, để rồi nếu một ngày người đó không còn ở đây nữa, anh lại phải mất rất nhiều thời gian để gom nhặt từng mảnh của chính mình.
+anh từng nghĩ thà cứ ở trong vùng an toàn của mình còn hơn một lần trao hết cảm xúc cho một người, để rồi nếu một ngày người đó không còn ở đây nữa, anh lại phải mất rất nhiều thời gian để gom nhặt từng mảnh của chính mình.
 anh biết cảm giác đó rồi.
 nên anh sợ.
 anh sợ cảm giác đặt niềm tin vào 1 người.

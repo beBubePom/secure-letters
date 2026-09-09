@@ -12,13 +12,14 @@ anh đã thôi tin vào chuyện rồi sẽ có 1 người nào đó tới, đ�
 anh nghĩ nếu mình không mở lòng thêm một lần nào nữa thì cũng chẳng ai có cơ hội làm mình đau thêm một lần nào nữa.
 nhưng nó nghe cũng hợp lý mà.
 ít nhất là lúc đó anh đã nghĩ vậy.
-anh tự xây lên một bức tường thật lớn, rồi cứ thế sống ở trong đó. nó giúp anh tránh được rất nhiều thứ anh không muốn cảm nhận, nhưng cũng chính cái bức tường đó giam anh lại khỏi tất cả cảm xúc ngoài kia và… anh biết rất rõ điều đấy, chỉ là anh chấp nhận sự đánh đổi đấy.
+anh tự xây lên một bức tường thật lớn, rồi cứ thế sống ở trong đó.
+nó giúp anh tránh được rất nhiều thứ anh không muốn cảm nhận, nhưng cũng chính cái bức tường đó giam anh lại khỏi tất cả cảm xúc ngoài kia và… anh biết rất rõ điều đấy, chỉ là anh chấp nhận sự đánh đổi đấy.
 không phải vì anh không muốn yêu.
 anh nghĩ sâu bên trong anh vẫn luôn muốn được yêu và cũng muốn được yêu một ai đó hết lòng.
 chỉ là anh đã ở trong vùng an toàn của mình quá lâu, lâu tới mức anh dần quên mất cảm giác khi yêu thật sự là như thế nào.
 anh quen với việc ở 1 mình và thích ở 1 mình hơn.
 anh cũng không muốn giấu diễm bất kì điều gì trong bức thư này.
-nếu em hỏi anh có nói chuyện với ai không? - có
+nếu em hỏi trước khi gặp em anh có nói chuyện với ai không? - có
 anh có ý định tìm hiểu ai không? - có
 nhưng tất cả đều đã kết thúc.
 và anh vẫn không tìm được cảm giác thật sự cho việc yêu là gì.
@@ -26,7 +27,7 @@ vì vậy nên anh không còn muốn đi tìm, hay nói chuyện tìm hiểu v�
 vì anh biết mọi thứ sẽ quay lại với đúng quỹ đạo của nó.
 là anh chẳng cảm thấy có 1 sự rung động nào trước họ cả.
 vì vậy nên anh quen với việc không có một ai chờ mình.
-quen với việc không cần phải báo với ai hôm nay anh đi đâu, làm gì, có mệt không.
+quen với việc không cần phải báo với ai hôm nay anh đi đâu hay làm gì, có mệt không.
 quen với cảm giác có chuyện gì thì cứ để đó, buồn thì tự hết buồn, mệt thì tự ngủ một giấc rồi hôm sau dậy làm tiếp.
 anh cũng quen với việc không cần phải giải thích quá nhiều về bản thân.
 không cần phải nói hôm nay anh cảm thấy như thế nào.
@@ -36,21 +37,29 @@ nói chung là chẳng phải lo cho ai ngoài bản thân mình.
 nghe thì tự do thật.
 và anh đã từng tưởng mình thật sự hạnh phúc với cuộc sống như vậy.
 nhưng chắc anh chỉ đang làm quen với nó thôi.
-giống như khi ở một căn phòng tối đủ lâu thì mắt mình cũng quen với bóng tối vậy. đến một lúc nào đó mình không còn thấy nó tối nữa, anh thấy nó thân thuộc, nhưng nó không còn tối nữa không có nghĩa là ở đó có ánh sáng.
+giống như khi ở một căn phòng tối đủ lâu thì mắt mình cũng quen với bóng tối vậy.
+đến một lúc nào đó mình không còn thấy nó tối nữa, anh thấy nó thân thuộc, nhưng nó không còn tối nữa không có nghĩa là ở đó có ánh sáng.
 anh không mong đợi bất kì ai.
 cũng đã thôi chờ đợi sẽ có một người tới.
-anh từng rất thích giữ tất cả mọi thứ ở một khoảng cách vừa đủ. đủ để nói chuyện, đủ để vui, đủ để không cảm thấy cô đơn quá, nhưng không đủ gần để một ai đó thật sự có thể chạm vào những phần mà anh giấu đi.
+anh từng rất thích giữ tất cả mọi thứ ở một khoảng cách vừa đủ.
+đủ để nói chuyện, đủ để vui, đủ để không cảm thấy cô đơn quá, nhưng không đủ gần để một ai đó thật sự có thể chạm vào những phần mà anh giấu đi.
 anh nghĩ anh chấp nhận được điều đó.
 thậm chí anh từng thấy nó khá ổn.
 anh từng nghĩ thà cứ ở trong vùng an toàn của mình còn hơn một lần trao hết cảm xúc cho một người, để rồi nếu một ngày người đó không còn ở đây nữa, anh lại phải mất rất nhiều thời gian để gom nhặt từng mảnh của chính mình.
 anh biết cảm giác đó rồi.
-nên anh sợ.
+nên anh không muốn để nó xảy ra thêm 1 lần nào nữa.
+đọc tới đây có thể em sẽ nghĩ là anh đã từng dốc hết tâm can để yêu 1 người.
+thật ra là không ... không phải bài học nào, không phải nỗi đau nào cũng tới từ tình yêu.
+và anh là như vậy.
+anh của hiện tại là gom lại từ rất nhiều mảnh cảm xúc tiêu cực, khó chịu, thất vọng, sợ hãi, buồn bã, ...  và cả những cảm xúc anh còn chẳng thể nào miêu tả nó bằng 1 từ ngữ 
+nên anh tìm cách tránh xa những tiềm năng cho những cảm xúc tiêu cực ấy trỗi dậy.
 anh sợ cảm giác đặt niềm tin vào 1 người.
 sợ cảm giác một người dần trở nên quan trọng với mình.
-sợ cái việc tự nhiên một ngày thức dậy, người đầu tiên mình nghĩ tới lại là người khác.
-và càng sợ hơn khi nhận ra rằng nếu người đó quan trọng tới vậy thì mình cũng hoàn toàn có khả năng mất họ.
+và càng sợ hơn khi nhận ra rằng nếu người đó quan trọng tới vậy thì mình cũng hoàn toàn có thể đánh mất họ.
+thứ anh thật sự sợ, là bị bỏ lại.
 chắc vì vậy nên anh cứ ở yên trong thế giới của riêng mình.
-không có tình yêu.
+không có tình yêu, cũng không cần 1 ai hỏi han.
+không cần 1 người bạn, không cần 1 người để tâm sự.
 cũng không có quá nhiều điều để mong chờ.
 mọi thứ bình lặng tới mức anh cảm thấy mình kiểm soát được cuộc sống của mình.
 và anh tưởng thế là đủ.
@@ -62,12 +71,13 @@ anh chỉ đơn giản nghĩ:
 chỉ vậy thôi.
 nhưng vì vốn dĩ anh cũng chẳng muốn overthinking hay tự rước thêm họa vào thân nên anh cứ để kệ cảm giác đó.
 ít nhất là anh nghĩ anh đã để kệ.
-chứ người để kệ chắc không có liên tục vào coi facebook em đâu nhỉ.
+chứ nói vậy thôi chứ lúc đó cứ liên tục vào coi facebook em.
 anh cũng chẳng biết mình coi để làm gì nữa.
 nhiều khi chẳng có gì mới hết anh vẫn coi.
 rồi cứ như vậy, không biết từ lúc nào anh bắt đầu tò mò về em nhiều hơn một chút.
-nhưng vẫn giữ sự cứng đầu, anh chỉ đơn giản là nhắn cho em.
+không thể nào lì lợm hơn được nữa, anh chỉ đơn giản là nhắn cho em.
 nhưng mục đích là đợi 1 sự từ chối để anh không còn chờ đợi nữa.
+sự thật là như vậy đó.
 chẳng biết nhắn gì cho em lúc đó.
 nên anh cũng thổ lộ những gì anh thích ở em nhất với em.
 anh thích em cười.
@@ -80,8 +90,10 @@ muốn biết em là người thế nào.
 muốn biết những thứ em đăng có ý nghĩa gì.
 muốn biết hôm nay em vui hay không.
 mãi sau này, nhờ có em, anh mới hiểu rằng hóa ra nhớ một người lúc đầu nó có thể đơn giản như thế.
-không phải lúc nào cũng là một cảm giác đau đáu kinh khủng.
-đôi khi chỉ là đang làm chuyện của mình tự nhiên nghĩ “không biết giờ người ta đang làm gì”.
+anh bắt đầu mạnh dạn hơn 1 chút, chứ không còn đề phòng như trước nữa.
+anh bắt đầu nhớ em nhiều hơn.
+thật đó bé Như ạ.
+đôi khi chỉ là đang làm chuyện của mình tự nhiên nghĩ “không biết giờ bé Như đang làm gì”.
 hoặc thấy một cái gì đó rồi nghĩ chắc em sẽ thích.
 hoặc cầm điện thoại lên theo thói quen rồi hơi mong thấy tên một người xuất hiện.
 anh đã học lại mấy cảm giác đó từ đầu nhờ em.
@@ -109,6 +121,9 @@ anh thấy em khóc, thấy em buồn vì một câu chuyện mà anh không ph�
 anh nghĩ em đã từng yêu người ta nhiều đến thế, anh sẽ cảm thấy có lỗi nếu mình xuất hiện rồi cố chen chân vào, cố làm em quên đi một người chỉ để quay sang nhìn anh.
 dù lúc đó anh cũng biết hai người đã không còn liên lạc như trước từ rất lâu rồi, anh vẫn không muốn tự cho mình quyền nói với em rằng em nên quên ai, nên hết yêu ai hay nên cảm thấy như thế nào.
 anh luôn tin rằng cảm xúc của người khác cần được tôn trọng.
+vì chính anh cũng chưa bao giờ được tôn trọng cảm xúc của mình.
+nên anh không muốn nhìn mọi thứ bằng cảm xúc nữa.
+và anh nghĩ em không nên trở thành 1 người như vậy.
 vì càng đi ngược lại với cảm xúc thật của mình, càng ép bản thân phải quên, phải hết buồn, phải yêu một người khác thật nhanh, thì tới cuối cùng thứ dễ bị mất nhất lại là chính mình.
 nên anh chỉ muốn ở đó.
 không giục em.
@@ -132,34 +147,44 @@ anh từng nghĩ:
 rồi có những lúc nhìn em, anh còn tự thắc mắc sao mà một người có thể yêu nhiều tới vậy được.
 anh không hiểu.
 hay đúng hơn, lúc đó anh chưa hiểu.
-bây giờ chắc anh hiểu hơn rồi.
+bây giờ chắc anh hiểu hơn rồi, chắc là cũng có ... hơn trước 1 chút.
 vì anh cũng đang yêu em theo cái kiểu nhiều khi chính anh thấy mình hơi ngốc.
 nhưng có một chuyện mà anh nghĩ mình vẫn nhớ khá rõ.
 đó là Valentine.
 trước lúc đó, anh vẫn còn không dám nghĩ quá nhiều về chuyện hai đứa mình sẽ là gì.
 anh biết mình có cảm xúc.
 anh biết em đặc biệt.
-anh biết mình mong em nhiều hơn những gì anh vẫn giả vờ.
-nhưng anh cũng không dám tự gắn một cái tên quá đẹp cho những gì đang có.
+anh biết mình mong em nhiều hơn những gì anh vẫn không thể hiện ra.
+nhưng anh cũng không dám tự nghĩ về một cái kết quá đẹp cho những gì đang diễn ra.
 vì anh sợ kỳ vọng.
 một người từng dùng rất nhiều năm để học cách không mong chờ gì ở ai thì đến lúc thật sự muốn mong một người, phản xạ đầu tiên vẫn là tự nhắc mình:
 “đừng nghĩ xa quá.”
 vậy mà hôm đó anh đọc những lời em gửi.
 anh còn nhớ cái cảm giác khá buồn cười ấy.
-em mở đầu kiểu rất em, bảo rằng em ngại, em không phải người của lời nói hoa mỹ, em thường thích hành động hơn nhưng vì khoảng cách nên tạm thời phải nói bằng lời.
+em mở đầu kiểu rất em, bảo rằng em ngại.
 rồi em nói dù hai đứa lúc đó vẫn gọi nhau là bạn, Valentine năm ấy lại là lần đầu em thấy ngày đó đặc biệt tới vậy.
-em bảo năm trước đối với em nó cũng chỉ normal thôi.
+lúc đó nghĩ thầm "nhỏ này nói xạo không ai bằng."
+em bảo năm trước đối với em nó cũng chỉ "normal thôi".
 nhưng nếu lúc đó có anh bên cạnh thì em cảm giác ngày ấy “như Tết”.
 anh đọc tới đó anh cười, và cũng không tin cho lắm, nghe cho vui =)))
 nhưng mà chỉ là tự nhiên thấy em dễ thương quá nên mắc cười.
-cái cách em không chịu nói thẳng rằng “em muốn ở bên anh”
-rõ ràng tự nhận là con gái mới lớn nên ngại, thế mà cuối cùng vẫn nói ra.
-em còn hy vọng năm sau, rồi năm tới nữa, Valentine sẽ càng ngày càng đặc biệt và ý nghĩa hơn.
+lúc đó em không chịu nói thẳng rằng “em muốn ở bên anh”
+thế mà cuối cùng vẫn nói ra.
+dễ thương thật, mà xạo l thì cũng vô đói.
+100% cute, 0% nói thật.
+em còn nói về năm sau, rồi năm tới nữa, Valentine sẽ càng ngày càng đặc biệt và ý nghĩa hơn.
 anh không biết em có biết không, nhưng với một người như anh, mấy câu đó không hề nhỏ.
 anh đã đọc lại nó nhiều lần.
 không phải vì anh không hiểu.
-mà chắc là vì anh muốn chắc rằng những gì anh vừa đọc thật sự tồn tại.
-chỉ vì anh không tin rằng bọn mình có thể đi được cùng nhau xa tới vậy.
+mà vì thấy hài quá.
+anh không coi thường cảm xúc của em.
+chỉ là thấy xạo quá tin thế nào nổi.
+nhưng em biết không?
+anh có hi vọng dù chỉ nhỏ nhoi thôi.
+rằng những gì anh vừa đọc.
+thật sự tồn tại trong cảm xúc của em.
+không phải vì anh không mong.
+chỉ là anh không tin rằng bọn mình có thể đi được cùng nhau xa tới vậy.
 chính lúc đó anh cũng tự nhủ rằng.
 chắc thời gian mình bên nhau đang đếm ngược đó.
 anh vẫn cứ tận hưởng thôi, cho tới khi nào em không cần anh nữa.

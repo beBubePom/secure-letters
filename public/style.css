@@ -953,6 +953,20 @@ body.overlay-open #volumeBar {
   line-height: 1.8;
   color: var(--ink-dim);
 }
+/* Mỗi chuyến có thể gồm vài đoạn: ngày tới, ngày giữa, rồi ngày về */
+.tl-p { margin: 0 0 var(--s3); }
+.tl-p:last-child { margin-bottom: 0; }
+
+/* Mốc để ngỏ ở cuối — chấm rỗng, chữ nhạt, chưa tới lúc viết */
+.tl-item.pending { opacity: 0; }
+.tl-item.pending.show { opacity: 0.55; }
+.tl-item.pending .tl-dot {
+  background: transparent;
+  border: 1px solid rgba(var(--accent), 0.55);
+  box-shadow: 0 0 0 3px var(--bg);
+}
+.tl-item.pending .tl-title,
+.tl-item.pending .tl-p { color: var(--ink-faint); }
 .tl-badge {
   display: inline-block;
   margin-top: var(--s3);

@@ -63,8 +63,6 @@ function nextTrack() {
 // Tự động chuyển bài khi hết nhạc
 bgMusic.addEventListener("ended", () => nextTrack());
 
-
-
 // ══════════════════════════════════════════════════════════════════════════════
 // CURSOR CHẤM — dùng cho pre-welcome và welcome screen
 // ══════════════════════════════════════════════════════════════════════════════
@@ -507,8 +505,6 @@ document.getElementById("modal").addEventListener("click", e => {
   if (e.target === document.getElementById("modal")) closeModal();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
-
-
 
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1750,8 +1746,6 @@ function startModalBorderCycle() { clearInterval(_borderInterval); }
   renderFeed("chong");
 })();
 
-
-
 // ══════════════════════════════════════════════════════════════════════════════
 // THỜI TIẾT — Fremont CA + Spokane Valley WA
 // ══════════════════════════════════════════════════════════════════════════════
@@ -2199,112 +2193,73 @@ function startModalBorderCycle() { clearInterval(_borderInterval); }
 })();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// LỜI CHÀO THEO THỜI ĐIỂM
-// ══════════════════════════════════════════════════════════════════════════════
-(function initGreeting() {
-  document.addEventListener("introEnded", () => {
-    const hour = new Date().getHours();
-    let greeting;
-    if      (hour >= 5  && hour < 11) greeting = "chào buổi sáng của chồng";
-    else if (hour >= 11 && hour < 14) greeting = "buổi trưa rồi, em ăn gì chưa?";
-    else if (hour >= 14 && hour < 18) greeting = "buổi chiều dịu dàng nha em";
-    else if (hour >= 18 && hour < 22) greeting = "buổi tối an lành nha em yêu";
-    else                              greeting = "khuya rồi đó, nhớ ngủ sớm nha em";
-
-    const el = document.createElement("div");
-    el.id = "greetingToast";
-    el.textContent = greeting;
-    el.style.cssText = `
-      position: fixed; bottom: 24px; left: 18px; max-width: calc(100vw - 210px); z-index: 9998;
-      transform: translateY(60px);
-      padding: 10px 26px;
-      background: rgba(16,11,32,0.95);
-      border: 1px solid rgba(var(--accent),0.25);
-      border-radius: var(--r-pill);
-      font-family: var(--font-display);
-      font-size: var(--t-read); font-style: italic;
-      letter-spacing: 0.02em;
-      color: var(--ink);
-      opacity: 0; pointer-events: none;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: transform 0.7s var(--ease), opacity 0.7s ease;
-    `;
-    document.body.appendChild(el);
-
-    setTimeout(() => {
-      el.style.transform = "translateY(0)";
-      el.style.opacity = "1";
-    }, 1500);
-
-    setTimeout(() => {
-      el.style.transform = "translateY(60px)";
-      el.style.opacity = "0";
-      setTimeout(() => el.remove(), 800);
-    }, 6000);
-  });
-})();
-
-
-// ══════════════════════════════════════════════════════════════════════════════
 // TIMELINE — HÀNH TRÌNH CỦA MÌNH
 // ══════════════════════════════════════════════════════════════════════════════
 (function initTimeline() {
+  // Mỗi chuyến qua Spokane là MỘT mốc: từ ngày tới cho tới ngày về.
+  // desc tách thành từng đoạn để không thành một khối chữ dài quá.
   const EVENTS = [
     {
-      date: "29 THÁNG 6, 2026",
-      title: "lần đầu gặp nhau ở Spokane",
-      desc: "ngày đầu tiên anh thật sự được đứng cạnh em. cảm giác là lạ, nhưng cũng vui lắm, vì cuối cùng anh cũng gặp được người mà anh thương trong lòng.",
-    },
-    {
-      date: "30 THÁNG 6, 2026",
-      title: "anh tỏ tình với em",
-      desc: "cuối cùng anh cũng nói ra được điều giấu trong lòng bấy lâu, theo đúng cách mà em muốn được nghe nhất. và sau tất cả, em đã chọn bước ra khỏi quá khứ để đi tiếp cùng anh. cảm ơn em vì đã tin tưởng anh, anh sẽ không để em phải hối hận đâu.",
+      date: "29 THÁNG 6 — 4 THÁNG 7, 2026",
+      title: "lần đầu qua Spokane gặp em",
       badge: "ngày bắt đầu ♡",
+      desc: [
+        "ngày đầu tiên anh thật sự được đứng cạnh em. cảm giác là lạ, nhưng cũng vui lắm, vì cuối cùng anh cũng gặp được người mà anh thương trong lòng.",
+        "rồi hôm sau anh nói ra được điều giấu trong lòng bấy lâu, theo đúng cách mà em muốn được nghe nhất. và sau tất cả, em đã chọn bước ra khỏi quá khứ để đi tiếp cùng anh. cảm ơn em vì đã tin tưởng anh, anh sẽ không để em phải hối hận đâu.",
+        "tới ngày về thì tạm biệt em bé của anh nhá. anh yêu em nhiều lắm, và lần gặp tiếp theo sẽ tới nhanh thôi.",
+      ],
     },
     {
-      date: "4 THÁNG 7, 2026",
-      title: "anh phải về rồi",
-      desc: "tạm biệt em bé của anh nhá. tới giờ anh phải về rồi. anh yêu em nhiều lắm, và lần gặp tiếp theo sẽ tới nhanh thôi.",
-    },
-    {
-      date: "25 THÁNG 8, 2026",
-      title: "qua lại Spokane thăm em",
-      desc: "tự nhiên cảm thấy trong lòng có nhiều chút hồi hộp hơn cả lần đầu, xen chút cảm giác lạ lẫm nữa không hiểu tại sao, nhưng khi ôm em lần đầu thì cảm thấy siêu ấm áp. còn được em tổ chức sinh nhật cho nữa, anh vui lắm, cũng là lần đầu tiên anh được đón sinh nhật cùng người anh yêu, lần đầu tiên anh được nhận nhiều sự chu đáo tới vậy.",
+      date: "25 — 27 THÁNG 8, 2026",
+      title: "qua Spokane thăm em lần hai",
       badge: "sinh nhật đầu tiên có em ♡",
+      desc: [
+        "tự nhiên cảm thấy trong lòng có nhiều chút hồi hộp hơn cả lần đầu, xen chút cảm giác lạ lẫm nữa không hiểu tại sao, nhưng khi ôm em lần đầu thì cảm thấy siêu ấm áp. còn được em tổ chức sinh nhật cho nữa, anh vui lắm, cũng là lần đầu tiên anh được đón sinh nhật cùng người anh yêu, lần đầu tiên anh được nhận nhiều sự chu đáo tới vậy.",
+        "hôm sau hai đứa đi Silverwood Park chơi, chơi được vài trò sợ toát cả mồ hôi, nhưng mà có em nên... vẫn sợ. cuối cùng cũng kịp đi miniso để mua gấu bông cho em, còn có cả móc khóa đôi nữa.",
+        "ngày về, mặc dù biết là lần sau vẫn sẽ tới nhanh thôi nhưng anh vẫn cảm thấy buồn với nhớ em nhiều lắm, anh muốn được ôm em mãi. anh nhớ cảm giác em nằm gọn trong lòng anh, làm anh mãi mãi không bao giờ muốn khoảnh khắc đấy kết thúc. ước gì lần sau lần sau và lần sau nữa, anh vẫn có thể ôm bé Như nhỏ như cục kẹo của anh ở gọn trong lòng.",
+      ],
     },
     {
-      date: "26 THÁNG 8, 2026",
-      title: "Silverwood Park",
-      desc: "đi Silverwood Park chơi, chơi được vài trò sợ toát cả mồ hôi, nhưng mà có em nên... vẫn sợ. cuối cùng cũng kịp đi miniso để mua gấu bông cho em, còn có cả móc khóa đôi nữa.",
-    },
-    {
-      date: "27 THÁNG 8, 2026",
-      title: "anh phải về rồi, lần nữa",
-      desc: "mặc dù biết là lần sau vẫn sẽ tới nhanh thôi nhưng anh vẫn cảm thấy buồn với nhớ em nhiều lắm, anh muốn được ôm em mãi. anh nhớ cảm giác em nằm gọn trong lòng anh, làm anh mãi mãi không bao giờ muốn khoảnh khắc đấy kết thúc. ước gì lần sau lần sau và lần sau nữa, anh vẫn có thể ôm bé Như nhỏ như cục kẹo của anh ở gọn trong lòng.",
+      date: "29 THÁNG 10 — 1 THÁNG 11, 2026",
+      title: "qua Spokane thăm em lần ba",
+      desc: [
+        "qua lại Spokane thăm em sau hai tháng xa nhau. hai đứa đi dạo với nhau, đi coi hai bộ phim kinh dị lận, mà nói kinh dị chứ cũng không kinh dị lắm. rồi đi ăn đồ Hàn, gặp bạn của em nữa. toàn những chuyện nhỏ thôi, mà cứ ở cạnh em là chuyện nhỏ nào cũng thành đáng nhớ.",
+        "rồi anh lại phải về tiếp. mà hình như ý trời cho hai đứa được ở bên nhau lâu hơn xíu thì phải: trúng ngay ngày đổi giờ nên được thêm một tiếng, xong còn bị trễ chuyến bay nên được thêm bảy tiếng nữa.",
+      ],
     },
   ];
+
+  // Mốc cuối để ngỏ — đường thời gian chưa dừng lại, chỉ là chưa tới lúc viết.
+  const PENDING = {
+    title: "còn lần sau, và lần sau nữa",
+    desc: ["chỗ này để trống cho chuyến tiếp theo của hai đứa."],
+  };
 
   const list = document.getElementById("timelineList");
   if (!list) return;
 
-  EVENTS.forEach((ev, i) => {
+  function render(ev, pending) {
     const item = document.createElement("div");
-    item.className = "tl-item";
+    item.className = "tl-item" + (pending ? " pending" : "");
+    const paras = (Array.isArray(ev.desc) ? ev.desc : [ev.desc])
+      .map(p => `<p class="tl-p">${p}</p>`)
+      .join("");
     item.innerHTML = `
       <div class="tl-dot ${ev.badge ? "first" : ""}"></div>
-      <div class="tl-date">${ev.date}</div>
+      ${ev.date ? `<div class="tl-date">${ev.date}</div>` : ""}
       <div class="tl-title">${ev.title}</div>
-      <div class="tl-desc">${ev.desc}</div>
+      <div class="tl-desc">${paras}</div>
       ${ev.badge ? `<div class="tl-badge">${ev.badge}</div>` : ""}
     `;
     list.appendChild(item);
-  });
+  }
 
-  // Reveal khi tab timeline được mở
+  EVENTS.forEach(ev => render(ev, false));
+  render(PENDING, true);
+
+  // Hiện dần khi mở tab hành trình
   function revealTimeline() {
-    const items = list.querySelectorAll(".tl-item");
-    items.forEach((item, i) => {
+    list.querySelectorAll(".tl-item").forEach((item, i) => {
       setTimeout(() => item.classList.add("show"), i * 120);
     });
   }
@@ -2508,8 +2463,6 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     }
   });
 })();
-
-
 
 // ══════════════════════════════════════════════════════════════════════════════
 // CHỦ ĐỀ THEO TỪNG TAB v3 — mặt trăng siêu chi tiết + hoa đào ≠ vườn hồng rõ rệt

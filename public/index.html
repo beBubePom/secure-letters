@@ -2,22 +2,26 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070512">
+  <meta name="description" content="Nơi lưu giữ kí ức của bọn mình.">
   <title>100 Lá Thư Cho Em</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Hai bộ chữ: Cormorant Garamond (chữ đẹp) + Be Vietnam Pro (nhãn, giao diện) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=GFS+Didot:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;1,300&display=swap">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- ══ PRE-WELCOME SCREEN ══ -->
+
+  <!-- ══ MÀN CHẠM ĐỂ BẮT ĐẦU ════════════════════════════════════════════════ -->
   <div id="preWelcome">
     <div id="preWelcomeHint">chạm để bắt đầu</div>
   </div>
 
-  <!-- ══ INTRO SCREEN ══ -->
+  <!-- ══ MÀN GIỚI THIỆU ═════════════════════════════════════════════════════ -->
   <div id="introScreen">
     <canvas id="introCanvas"></canvas>
     <div id="introWrap">
@@ -32,93 +36,116 @@
     <div id="introFl"></div>
   </div>
 
-
-
-  <!-- Canvas hạt bụi -->
+  <!-- ══ LỚP NỀN ════════════════════════════════════════════════════════════ -->
   <div id="themeGlow"></div>
   <canvas id="particleCanvas"></canvas>
   <canvas id="themeCanvas"></canvas>
 
-
-
-  <!-- PopCat + Volume -->
+  <!-- ══ MÈO NHẠC + ÂM LƯỢNG ════════════════════════════════════════════════ -->
   <div id="musicCat">
     <img id="catImg" src="images/pop1.png" alt="Pop Cat">
   </div>
+  <div id="volumeBar">
+    <span class="vol-icon" id="volIcon">🔊</span>
+    <input type="range" id="volumeSlider" min="0" max="100" value="9"
+           aria-label="Âm lượng nhạc nền">
+  </div>
 
-  <!-- Tiêu đề typing -->
+  <!-- ══ TIÊU ĐỀ ════════════════════════════════════════════════════════════ -->
   <h1><span id="typingText"></span><span id="typingCursor">|</span></h1>
   <p class="subtitle page-hidden">mong rằng sự đồng hành cùng em có thể giúp anh hiểu hơn về nó</p>
 
-  <!-- ══ TAB NAVIGATION ══ -->
+  <!-- ══ THANH MENU ═════════════════════════════════════════════════════════ -->
   <nav id="tabNav">
     <button class="tab-btn active" data-tab="home">THƯ</button>
     <button class="tab-btn" data-tab="timeline">HÀNH TRÌNH CHÚNG MÌNH</button>
     <button class="tab-btn" data-tab="gallery">ẢNH CHỤP CHUNG</button>
     <button class="tab-btn" data-tab="diary">NHẬT KÝ</button>
-    <button class="tab-btn" data-tab="things">VÌ SAO ANH YÊU & TỰ HÀO VỀ EM</button>
+    <button class="tab-btn" data-tab="things">VÌ SAO ANH YÊU &amp; TỰ HÀO VỀ EM</button>
     <button class="tab-btn" data-tab="firsts">TRƯỚC KHI GẶP EM</button>
     <button class="tab-btn" data-tab="radio">ĐIỀU LÀM ANH NHỚ VỀ EM</button>
     <button class="tab-btn" data-tab="future">DỰ ĐỊNH TƯƠNG LAI</button>
   </nav>
 
-  <!-- ══ TAB PAGES ══ -->
+  <!-- ══ CÁC TRANG ══════════════════════════════════════════════════════════ -->
 
-  <!-- HOME — trang chính (thư) -->
+  <!-- THƯ -->
   <div id="page-home" class="tab-page active">
-
-
-  <!-- Layout chính: 2 cột -->
-  <div class="main-layout page-hidden">
-    <div class="letter-list" id="letterGrid"></div>
-    <div class="side-panel">
-      <div id="countdown"></div>
-      <div id="daysTogether">
-        <div id="daysNum">0</div>
-        <div id="daysLabel">ngày bên nhau</div>
+    <div class="main-layout page-hidden">
+      <div class="letter-list" id="letterGrid"></div>
+      <div class="side-panel">
+        <div id="countdown"></div>
+        <div id="daysTogether">
+          <div id="daysNum">0</div>
+          <div id="daysLabel">ngày bên nhau</div>
+        </div>
       </div>
-
     </div>
   </div>
 
-  </div><!-- end page-home -->
-
-  <!-- DIARY -->
-  <div id="page-diary" class="tab-page">
-    <div id="diaryWrap">
-      <p class="tab-coming-label" style="text-align:center">NHẬT KÝ</p>
-      <p id="diaryIntro">chồng không viết mỗi ngày đâu, chỉ là vào những ngày nào đó có điều muốn nói ra.</p>
-      <div id="diaryFeed"></div>
-    </div>
-  </div>
-
-  <!-- VÌ SAO ANH YÊU & TỰ HÀO VỀ EM (gộp reasons + 100 things) -->
-  <div id="page-things" class="tab-page">
-    <div id="thingsWrap">
-      <p class="tab-coming-label" style="text-align:center">VÌ SAO ANH YÊU & TỰ HÀO VỀ EM</p>
-      <p id="thingsIntro">không phải vì một lý do lớn, mà vì rất nhiều điều nhỏ cộng lại. anh tự hào về em ở nhiều điều lắm, và nó được xây dựng nên từ trước tới nay chứ không phải ở 1 hành động nhỏ nào đó của em. vì vậy nên những điều anh đã ghi ở đây sẽ mãi mãi là như thế và không bao giờ có thể thay đổi được.</p>
-      <div id="thingsList"></div>
-    </div>
-  </div>
-
-  <!-- TIMELINE -->
+  <!-- HÀNH TRÌNH CHÚNG MÌNH -->
   <div id="page-timeline" class="tab-page">
     <div id="timelineWrap">
-      <p class="tab-coming-label" style="text-align:center;margin-bottom:40px">HÀNH TRÌNH CHÚNG MÌNH</p>
+      <p class="tab-coming-label">Hành trình chúng mình</p>
       <div id="timelineList"></div>
     </div>
   </div>
 
-  <!-- GALLERY -->
+  <!-- ẢNH CHỤP CHUNG -->
   <div id="page-gallery" class="tab-page">
     <div id="galleryWrap">
-      <p class="tab-coming-label" style="text-align:center">ẢNH CHỤP CHUNG</p>
+      <p class="tab-coming-label">Ảnh chụp chung</p>
       <p id="galleryIntro">những khoảnh khắc mình chụp cùng nhau, để sau này nhìn lại.</p>
       <div id="galleryGrid"></div>
     </div>
   </div>
 
-  <!-- Xem ảnh phóng to -->
+  <!-- NHẬT KÝ -->
+  <div id="page-diary" class="tab-page">
+    <div id="diaryWrap">
+      <p class="tab-coming-label">Nhật ký</p>
+      <p id="diaryIntro">chồng không viết mỗi ngày đâu, chỉ là vào những ngày nào đó có điều muốn nói ra.</p>
+      <div id="diaryFeed"></div>
+    </div>
+  </div>
+
+  <!-- VÌ SAO ANH YÊU & TỰ HÀO VỀ EM -->
+  <div id="page-things" class="tab-page">
+    <div id="thingsWrap">
+      <p class="tab-coming-label">Vì sao anh yêu &amp; tự hào về em</p>
+      <p id="thingsIntro">không phải vì một lý do lớn, mà vì rất nhiều điều nhỏ cộng lại. anh tự hào về em ở nhiều điều lắm, và nó được xây dựng nên từ trước tới nay chứ không phải ở 1 hành động nhỏ nào đó của em. vì vậy nên những điều anh đã ghi ở đây sẽ mãi mãi là như thế và không bao giờ có thể thay đổi được.</p>
+      <div id="thingsList"></div>
+    </div>
+  </div>
+
+  <!-- TRƯỚC KHI GẶP EM -->
+  <div id="page-firsts" class="tab-page">
+    <div id="firstsWrap">
+      <p class="tab-coming-label">Trước khi gặp em</p>
+      <p id="firstsIntro">có những điều anh chưa bao giờ làm, cho đến khi em xuất hiện. em không phải người đến sau mà em là lý do anh làm những điều đó lần đầu tiên trong đời.</p>
+      <div id="firstsList"></div>
+    </div>
+  </div>
+
+  <!-- ĐIỀU LÀM ANH NHỚ VỀ EM -->
+  <div id="page-radio" class="tab-page">
+    <div id="radioWrap">
+      <p class="tab-coming-label">Điều làm anh nhớ về em</p>
+      <p id="radioIntro">những điều làm anh nhớ về em, mỗi bài là một khoảnh khắc anh nghĩ đến em.</p>
+      <div id="radioList"></div>
+    </div>
+  </div>
+
+  <!-- DỰ ĐỊNH TƯƠNG LAI -->
+  <div id="page-future" class="tab-page">
+    <div id="futureWrap">
+      <p class="tab-coming-label">Dự định tương lai</p>
+      <p id="futureIntro">những điều anh mong mình sẽ cùng nhau làm, cùng nhau đi tới. không phải lời hứa suông, mà là những điều anh thật sự muốn hướng tới cùng em.</p>
+      <div id="futureList"></div>
+    </div>
+  </div>
+
+  <!-- ══ XEM ẢNH PHÓNG TO ═══════════════════════════════════════════════════ -->
   <div id="lightbox">
     <span id="lightboxClose">&times;</span>
     <span id="lightboxPrev">&#8249;</span>
@@ -132,39 +159,13 @@
     </div>
   </div>
 
-  <!-- RADIO -->
-  <div id="page-radio" class="tab-page">
-    <div id="radioWrap">
-      <p id="radioIntro">những điều làm anh nhớ về em, mỗi bài là một khoảnh khắc anh nghĩ đến em</p>
-      <div id="radioList"></div>
-    </div>
-  </div>
-
-  <!-- LẦN ĐẦU -->
-  <div id="page-firsts" class="tab-page">
-    <div id="firstsWrap">
-      <p class="tab-coming-label" style="text-align:center">NHỮNG ĐIỀU ANH CHƯA TỪNG LÀM TRƯỚC KHI GẶP EM</p>
-      <p id="firstsIntro">có những điều anh chưa bao giờ làm, cho đến khi em xuất hiện. em không phải người đến sau mà em là lý do anh làm những điều đó lần đầu tiên trong đời.</p>
-      <div id="firstsList"></div>
-    </div>
-  </div>
-
-  <!-- DỰ ĐỊNH TƯƠNG LAI -->
-  <div id="page-future" class="tab-page">
-    <div id="futureWrap">
-      <p class="tab-coming-label" style="text-align:center">DỰ ĐỊNH TƯƠNG LAI</p>
-      <p id="futureIntro">những điều anh mong mình sẽ cùng nhau làm, cùng nhau đi tới. không phải lời hứa suông, mà là những điều anh thật sự muốn hướng tới cùng em.</p>
-      <div id="futureList"></div>
-    </div>
-  </div>
-
-  <!-- Modal -->
+  <!-- ══ MODAL ĐỌC THƯ ══════════════════════════════════════════════════════ -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <span id="closeBtn">&times;</span>
       <h2 id="modalTitle"></h2>
 
-      <!-- Envelope animation — Original -->
+      <!-- Phong bì -->
       <div id="envelopeWrap">
         <svg id="envelopeSVG" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -173,19 +174,19 @@
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
-          <!-- Envelope body -->
-          <rect x="5" y="30" width="190" height="105" rx="6" fill="#1a1228" stroke="rgba(240,150,165,0.4)" stroke-width="1"/>
-          <!-- Bottom folds -->
-          <path d="M5,135 L100,80 L195,135 Z" fill="#120d1e" stroke="rgba(240,150,165,0.25)" stroke-width="0.5"/>
-          <path d="M5,30 L100,80 L195,30" fill="#16102a" stroke="rgba(240,150,165,0.3)" stroke-width="0.5"/>
-          <!-- Flap (animate) -->
+          <!-- Thân phong bì -->
+          <rect x="5" y="30" width="190" height="105" rx="6" fill="#171030" stroke="rgba(198,182,255,0.32)" stroke-width="1"/>
+          <!-- Các nếp gấp -->
+          <path d="M5,135 L100,80 L195,135 Z" fill="#110b22" stroke="rgba(198,182,255,0.2)" stroke-width="0.5"/>
+          <path d="M5,30 L100,80 L195,30"     fill="#140e2a" stroke="rgba(198,182,255,0.24)" stroke-width="0.5"/>
+          <!-- Nắp phong bì (có hoạt ảnh) -->
           <g id="envelopeFlap" style="transform-origin: 100px 30px; transform: rotateX(0deg)">
-            <path d="M5,30 L100,90 L195,30 Z" fill="#1d1535" stroke="rgba(240,150,165,0.5)" stroke-width="1" filter="url(#glow)"/>
+            <path d="M5,30 L100,90 L195,30 Z" fill="#1c1440" stroke="rgba(198,182,255,0.42)" stroke-width="1" filter="url(#glow)"/>
           </g>
-          <!-- Seal — nằm đúng điểm giao nhau nắp trên và nắp dưới -->
+          <!-- Sáp niêm phong -->
           <g id="envelopeSeal">
-            <circle cx="100" cy="83" r="12" fill="rgba(180,70,110,1)" stroke="rgba(250,170,190,1)" stroke-width="1" filter="url(#glow)"/>
-            <text x="100" y="87" text-anchor="middle" fill="rgba(255,215,225,0.9)" font-size="10" font-family="serif">♡</text>
+            <circle cx="100" cy="83" r="12" fill="rgba(150,110,215,1)" stroke="rgba(226,214,255,0.95)" stroke-width="1" filter="url(#glow)"/>
+            <text x="100" y="87" text-anchor="middle" fill="rgba(255,250,255,0.92)" font-size="10" font-family="serif">♡</text>
           </g>
         </svg>
       </div>
@@ -200,11 +201,12 @@
     </div>
   </div>
 
+  <!-- ══ ÂM THANH ═══════════════════════════════════════════════════════════ -->
   <audio id="welcomeMusic" src="music/welcome.mp3" loop></audio>
   <audio id="bgMusic" src="music/background.mp3" loop></audio>
   <audio id="letterMusic"></audio>
 
-  <!-- Libraries -->
+  <!-- ══ SCRIPT ═════════════════════════════════════════════════════════════ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="questions.js"></script>

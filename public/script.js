@@ -298,132 +298,23 @@ function getUnlockLabel(num) {
 // ══════════════════════════════════════════════════════════════════════════════
 // BUILD DANH SÁCH THƯ
 // ══════════════════════════════════════════════════════════════════════════════
-// BOX_COLORS theo giờ trong ngày
-function getBoxColors() {
-  const h = new Date().getHours();
-  if (h >= 5 && h < 10) return [ // sáng — hồng
-    { border:"rgb(240,130,180)", hover:"rgb(255,170,210)", bg:"rgba(230,110,165,0.15)", glow:"rgba(240,130,180,0.7)" },
-    { border:"rgb(255,150,200)", hover:"rgb(255,185,220)", bg:"rgba(245,130,185,0.15)", glow:"rgba(255,150,200,0.7)" },
-    { border:"rgb(220,110,160)", hover:"rgb(248,150,195)", bg:"rgba(210,95,148,0.15)",  glow:"rgba(220,110,160,0.7)" },
-    { border:"rgb(255,120,175)", hover:"rgb(255,158,205)", bg:"rgba(245,105,162,0.15)", glow:"rgba(255,120,175,0.7)" },
-    { border:"rgb(235,140,185)", hover:"rgb(255,175,215)", bg:"rgba(225,122,172,0.15)", glow:"rgba(235,140,185,0.7)" },
-    { border:"rgb(255,160,195)", hover:"rgb(255,192,220)", bg:"rgba(245,142,178,0.15)", glow:"rgba(255,160,195,0.7)" },
-    { border:"rgb(210,100,155)", hover:"rgb(240,140,190)", bg:"rgba(200,85,142,0.15)",  glow:"rgba(210,100,155,0.7)" },
-    { border:"rgb(255,135,180)", hover:"rgb(255,170,210)", bg:"rgba(245,118,168,0.15)", glow:"rgba(255,135,180,0.7)" },
-    { border:"rgb(230,120,170)", hover:"rgb(252,158,202)", bg:"rgba(220,104,158,0.15)", glow:"rgba(230,120,170,0.7)" },
-    { border:"rgb(255,145,190)", hover:"rgb(255,180,218)", bg:"rgba(245,128,175,0.15)", glow:"rgba(255,145,190,0.7)" },
-    { border:"rgb(215,105,160)", hover:"rgb(245,142,194)", bg:"rgba(205,88,148,0.15)",  glow:"rgba(215,105,160,0.7)" },
-    { border:"rgb(250,130,178)", hover:"rgb(255,165,208)", bg:"rgba(240,113,165,0.15)", glow:"rgba(250,130,178,0.7)" },
-  ];
-  if (h >= 10 && h < 17) return [ // trưa — xanh
-    { border:"rgb(100,190,255)", hover:"rgb(150,220,255)", bg:"rgba(80,175,245,0.15)",  glow:"rgba(100,190,255,0.7)" },
-    { border:"rgb(80,220,210)",  hover:"rgb(120,248,235)", bg:"rgba(70,210,200,0.15)",  glow:"rgba(80,220,210,0.7)"  },
-    { border:"rgb(140,210,255)", hover:"rgb(175,238,255)", bg:"rgba(125,198,252,0.15)", glow:"rgba(140,210,255,0.7)" },
-    { border:"rgb(80,200,240)",  hover:"rgb(120,228,255)", bg:"rgba(68,190,232,0.15)",  glow:"rgba(80,200,240,0.7)"  },
-    { border:"rgb(160,220,255)", hover:"rgb(195,238,255)", bg:"rgba(145,210,252,0.15)", glow:"rgba(160,220,255,0.7)" },
-    { border:"rgb(100,240,220)", hover:"rgb(140,255,238)", bg:"rgba(88,232,214,0.15)",  glow:"rgba(100,240,220,0.7)" },
-    { border:"rgb(120,200,255)", hover:"rgb(158,228,255)", bg:"rgba(108,188,248,0.15)", glow:"rgba(120,200,255,0.7)" },
-    { border:"rgb(80,225,200)",  hover:"rgb(118,252,228)", bg:"rgba(68,218,192,0.15)",  glow:"rgba(80,225,200,0.7)"  },
-    { border:"rgb(170,215,255)", hover:"rgb(200,238,255)", bg:"rgba(158,202,252,0.15)", glow:"rgba(170,215,255,0.7)" },
-    { border:"rgb(90,210,250)",  hover:"rgb(130,235,255)", bg:"rgba(78,200,245,0.15)",  glow:"rgba(90,210,250,0.7)"  },
-    { border:"rgb(140,230,215)", hover:"rgb(175,255,238)", bg:"rgba(128,220,204,0.15)", glow:"rgba(140,230,215,0.7)" },
-    { border:"rgb(100,195,255)", hover:"rgb(140,225,255)", bg:"rgba(88,182,248,0.15)",  glow:"rgba(100,195,255,0.7)" },
-  ];
-  if (h >= 17 && h < 21) return [ // chiều — tím
-    { border:"rgb(180,120,255)", hover:"rgb(210,158,255)", bg:"rgba(168,105,248,0.15)", glow:"rgba(180,120,255,0.7)" },
-    { border:"rgb(200,140,255)", hover:"rgb(228,172,255)", bg:"rgba(188,125,248,0.15)", glow:"rgba(200,140,255,0.7)" },
-    { border:"rgb(160,100,240)", hover:"rgb(195,135,255)", bg:"rgba(148,88,232,0.15)",  glow:"rgba(160,100,240,0.7)" },
-    { border:"rgb(210,150,255)", hover:"rgb(235,182,255)", bg:"rgba(198,135,248,0.15)", glow:"rgba(210,150,255,0.7)" },
-    { border:"rgb(175,115,255)", hover:"rgb(205,150,255)", bg:"rgba(162,100,248,0.15)", glow:"rgba(175,115,255,0.7)" },
-    { border:"rgb(220,160,255)", hover:"rgb(245,190,255)", bg:"rgba(208,145,248,0.15)", glow:"rgba(220,160,255,0.7)" },
-    { border:"rgb(155,90,235)",  hover:"rgb(188,125,255)", bg:"rgba(142,78,225,0.15)",  glow:"rgba(155,90,235,0.7)"  },
-    { border:"rgb(195,130,255)", hover:"rgb(222,162,255)", bg:"rgba(182,115,248,0.15)", glow:"rgba(195,130,255,0.7)" },
-    { border:"rgb(170,105,248)", hover:"rgb(200,138,255)", bg:"rgba(158,92,238,0.15)",  glow:"rgba(170,105,248,0.7)" },
-    { border:"rgb(205,145,255)", hover:"rgb(232,178,255)", bg:"rgba(192,130,248,0.15)", glow:"rgba(205,145,255,0.7)" },
-    { border:"rgb(185,125,255)", hover:"rgb(215,158,255)", bg:"rgba(172,110,248,0.15)", glow:"rgba(185,125,255,0.7)" },
-    { border:"rgb(215,155,255)", hover:"rgb(240,185,255)", bg:"rgba(202,140,248,0.15)", glow:"rgba(215,155,255,0.7)" },
-  ];
-  return [ // đêm — xanh cobalt lạnh
-    { border:"rgb(80,150,220)",  hover:"rgb(120,185,250)", bg:"rgba(68,138,212,0.15)",  glow:"rgba(80,150,220,0.7)"  },
-    { border:"rgb(60,200,190)",  hover:"rgb(95,230,222)",  bg:"rgba(50,190,182,0.15)",  glow:"rgba(60,200,190,0.7)"  },
-    { border:"rgb(100,165,235)", hover:"rgb(138,198,255)", bg:"rgba(88,152,225,0.15)",  glow:"rgba(100,165,235,0.7)" },
-    { border:"rgb(70,185,210)",  hover:"rgb(105,218,240)", bg:"rgba(60,175,202,0.15)",  glow:"rgba(70,185,210,0.7)"  },
-    { border:"rgb(110,175,240)", hover:"rgb(148,205,255)", bg:"rgba(98,162,232,0.15)",  glow:"rgba(110,175,240,0.7)" },
-    { border:"rgb(65,195,185)",  hover:"rgb(100,225,218)", bg:"rgba(55,185,178,0.15)",  glow:"rgba(65,195,185,0.7)"  },
-    { border:"rgb(90,158,228)",  hover:"rgb(128,192,255)", bg:"rgba(78,145,220,0.15)",  glow:"rgba(90,158,228,0.7)"  },
-    { border:"rgb(75,205,195)",  hover:"rgb(110,235,225)", bg:"rgba(62,195,188,0.15)",  glow:"rgba(75,205,195,0.7)"  },
-    { border:"rgb(105,170,238)", hover:"rgb(142,202,255)", bg:"rgba(92,158,228,0.15)",  glow:"rgba(105,170,238,0.7)" },
-    { border:"rgb(72,190,215)",  hover:"rgb(108,222,245)", bg:"rgba(60,180,208,0.15)",  glow:"rgba(72,190,215,0.7)"  },
-    { border:"rgb(95,162,232)",  hover:"rgb(132,195,255)", bg:"rgba(82,150,222,0.15)",  glow:"rgba(95,162,232,0.7)"  },
-    { border:"rgb(68,198,188)",  hover:"rgb(104,228,220)", bg:"rgba(56,188,180,0.15)",  glow:"rgba(68,198,188,0.7)"  },
-  ];
-}
-const BOX_COLORS = getBoxColors();
+// ── Biểu tượng cho thư đã mở ─────────────────────────────────────────────────
+// Danh sách thư để nguyên một tông: 100 dòng mà mỗi dòng một màu thì rối mắt.
+// Màu viền, màu chữ và hiệu ứng hover đều do CSS lo (biến --accent của tab).
+const ICONS_UNLOCKED = [
+  "\u2661","\u2726","\u25c8","\u274b","\u273f","\u25c7","\u27e1","\u2740",
+  "\u2727","\u25c9","\u2732","\u2739","\u22c6","\u273e","\u27e2","\u2743",
+];
 
-const ICONS_UNLOCKED = ["♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
-  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
-  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
-  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃",
-  "♡","✦","◈","❋","✿","◇","⟡","❀","✧","◉","꩜","⌘","✺","⊹","❁","⋆","◈","✾","⟢","❃"];
-
-// Apply hover style
-function applyHover(box, c, on) {
-  if (on) {
-    box.style.paddingLeft     = "20px";
-    box.style.borderLeftColor = c.hover;
-    box.style.borderLeftWidth = "3px";
-    box.style.background      = c.bg;
-    box.style.boxShadow       = `2px 0 0 ${c.glow}, 4px 0 24px ${c.glow}, 8px 0 40px ${c.glow}`;
-    const title = box.querySelector(".box-title");
-    const icon  = box.querySelector(".box-icon");
-    if (title) { title.style.color = "#f0f5ff"; title.style.textShadow = `0 0 16px ${c.glow}`; }
-    if (icon)  { icon.style.transform = "scale(1.18)"; icon.style.filter = `drop-shadow(0 0 6px ${c.glow})`; }
-  } else {
-    box.style.paddingLeft     = "14px";
-    box.style.borderLeftColor = c.border;
-    box.style.borderLeftWidth = "3px";
-    box.style.background      = "transparent";
-    box.style.boxShadow       = "none";
-    const title = box.querySelector(".box-title");
-    const icon  = box.querySelector(".box-icon");
-    if (title) { title.style.color = "#b0c0da"; title.style.textShadow = "none"; }
-    if (icon)  { icon.style.transform = "scale(1)"; icon.style.filter = "none"; }
-  }
-}
-
-// Window mousemove — update hover real-time, no lag
-let _lastHovered = null;
-window.addEventListener("mousemove", (e) => {
-  const el = document.elementFromPoint(e.clientX, e.clientY);
-  const box = el ? el.closest(".box") : null;
-
-  if (box === _lastHovered) return; // same box, skip
-
-  // Un-hover previous
-  if (_lastHovered && _lastHovered._color) {
-    _lastHovered._hovered = false;
-    applyHover(_lastHovered, _lastHovered._color, false);
-  }
-
-  // Hover new
-  if (box && box._color) {
-    box._hovered = true;
-    applyHover(box, box._color, true);
-  }
-
-  _lastHovered = box;
-}, { passive: true });
+// Giữ lại hai thứ này cho tương thích với phần code cũ — hover đã chuyển sang CSS.
+const BOX_COLORS = [{}];
+function applyHover() { /* hover do CSS xử lý */ }
 
 const grid = document.getElementById("letterGrid");
 for (let i = 1; i <= 100; i++) {
   const box = document.createElement("div");
   box.className = "box locked";
   box.id = "box-" + i;
-  const c = BOX_COLORS[(i - 1) % BOX_COLORS.length];
-
-  // Viền luôn sáng, không phân biệt locked/unlocked
-  box.style.borderLeftColor = c.border;
-  box.style.borderLeftWidth = '3px';
 
   box.innerHTML = `
     <div class="box-icon">—</div>
@@ -431,11 +322,6 @@ for (let i = 1; i <= 100; i++) {
       <div class="box-title">Thư #${i}</div>
       <div class="box-date">mở vào ${getUnlockLabel(i)}</div>
     </div>`;
-
-  // Hover effect dùng window mousemove để không bị lag khi scroll
-  box._color = c;
-  box.addEventListener("mouseenter", () => { box._hovered = true; applyHover(box, c, true); });
-  box.addEventListener("mouseleave", () => { box._hovered = false; applyHover(box, c, false); });
 
   box.onclick = () => openModal(i);
   grid.appendChild(box);
@@ -475,8 +361,9 @@ function openModal(num) {
   currentLetter = num;
   document.getElementById("modalTitle").innerText = "Thư #" + num;
   document.getElementById("modal").style.display = "block";
+  document.body.classList.add("overlay-open");
   document.getElementById("letterContent").style.display = "none";
-  document.getElementById("passwordSection").style.display = "block";
+  document.getElementById("passwordSection").style.display = "flex";
   document.getElementById("envelopeWrap").style.display = "block";
   document.getElementById("passwordInput").value = "";
   document.getElementById("error").innerText = !unlockedSet.has(num)
@@ -511,8 +398,9 @@ async function checkPassword() {
 
     // Step 1: Thông báo thành công
     const errorEl = document.getElementById("error");
-    errorEl.style.color = "rgba(180,255,200,0.95)";
-    errorEl.style.fontSize = "15px";
+    errorEl.style.color = "rgba(168, 232, 196, 0.95)";
+    errorEl.style.fontSize = "var(--t-read)";
+    errorEl.style.fontFamily = "var(--font-display)";
     errorEl.style.fontStyle = "italic";
     errorEl.innerText = "vợ yêu mở thư được rồi nhé!!";
     document.getElementById("passwordInput").style.opacity = "0";
@@ -536,13 +424,13 @@ async function checkPassword() {
 
                 // Thêm chữ ký vào cuối
                 const sigHtml = `<div id="letterSig" style="
-                  margin-top:32px; padding-top:20px;
-                  border-top:1px solid rgba(200,180,255,0.12);
+                  margin-top:36px; padding-top:22px;
+                  border-top:1px solid rgba(255,255,255,0.075);
                   text-align:right; opacity:0;
                   transition: opacity 1.2s ease 0.8s;
                 ">
-                  <div style="font-family:'Dancing Script',cursive;font-size:28px;color:rgba(210,190,255,0.8);line-height:1.4">Phong</div>
-                  <div style="font-size:10px;letter-spacing:3px;color:rgba(160,140,200,0.35);font-family:sans-serif;margin-top:4px">chồng yêu của vợ</div>
+                  <div style="font-family:var(--font-display);font-style:italic;font-size:30px;font-weight:400;line-height:1.3;color:rgba(var(--accent),0.9)">Phong</div>
+                  <div style="font-family:var(--font-ui);font-size:10px;font-weight:300;letter-spacing:0.28em;color:var(--ink-faint);margin-top:6px">chồng yêu của vợ</div>
                 </div>`;
                 lc.innerHTML = data.content.replace(/\n/g,'<br>') + sigHtml;
 
@@ -587,6 +475,7 @@ function closeModal() {
     scale: 0.9, opacity: 0, y: 16, duration: 0.22, ease: "power2.in",
     onComplete: () => {
       document.getElementById("modal").style.display = "none";
+      document.body.classList.remove("overlay-open");
   stopConfetti();
   clearInterval(_borderInterval);
       gsap.set(".modal-content", { clearProps: "all" });
@@ -594,7 +483,7 @@ function closeModal() {
       gsap.set("#envelopeFlap",  { clearProps: "all" });
       gsap.set("#envelopeSeal",  { clearProps: "all" });
 
-      document.getElementById("passwordSection").style.display = "block";
+      document.getElementById("passwordSection").style.display = "flex";
       document.getElementById("envelopeWrap").style.display = "block";
       document.getElementById("letterContent").style.display = "none";
 
@@ -607,6 +496,7 @@ function closeModal() {
       err.innerText = "";
       err.style.color = "";
       err.style.fontSize = "";
+      err.style.fontFamily = "";
       err.style.fontStyle = "";
     }
   });
@@ -712,11 +602,12 @@ class Dust {
     this.vx = 0.15 + Math.random() * 0.35;
     this.wobble = Math.random() * Math.PI * 2;
     this.wobbleSpeed = 0.008 + Math.random() * 0.015;
-    this.alpha = Math.random() * 0.5;
+    this.alpha = Math.random() * 0.3;
     this.alphaDir = 1;
     this.alphaSpeed = 0.004 + Math.random() * 0.01;
-    this.alphaMax = 0.6 + Math.random() * 0.35;
-    this.glow = Math.random() > 0.45;
+    this.alphaMax = 0.26 + Math.random() * 0.2;   // mờ hơn: lớp bụi này chỉ
+    this.glow = Math.random() > 0.65;             // tạo chiều sâu, không tranh
+                                                  // chỗ với hạt riêng của tab
   }
   update() {
     this.wobble += this.wobbleSpeed;
@@ -748,9 +639,14 @@ class Dust {
   }
 }
 
-// Ít hạt hơn — thưa, điểm đạm
-const dusts = Array.from({ length: 150 }, () => new Dust(true));
+// Lớp bụi nền: thưa thôi. Mỗi tab đã có hạt riêng (themeCanvas) nên lớp này
+// chỉ cần đủ để tạo chiều sâu. Máy nhỏ thì bớt lại, bật "giảm chuyển động"
+// thì tắt hẳn.
+const DUST_REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DUST_COUNT = DUST_REDUCED ? 0 : (window.innerWidth < 768 ? 22 : 45);
+const dusts = Array.from({ length: DUST_COUNT }, () => new Dust(true));
 function animateDust() {
+  if (DUST_REDUCED) return;
   ctx.clearRect(0, 0, W, H);
   dusts.forEach(d => { d.update(); d.draw(); });
   requestAnimationFrame(animateDust);
@@ -898,20 +794,21 @@ animateDust();
       left:${isLeft ? x + 16 : x - 16}px;
       top:${y - 10}px;
       transform:${isLeft ? "translateY(-50%)" : "translate(-100%,-50%)"};
-      background:rgba(8,5,20,0.85);
-      border:1px solid rgba(220,210,255,0.25);
-      border-radius:12px;
-      padding:10px 14px;
-      font-size:12px;
-      font-family:'Be Vietnam Pro', sans-serif;
+      background:rgba(10,7,22,0.92);
+      border:1px solid rgba(var(--accent),0.22);
+      border-radius:var(--r-m);
+      padding:12px 16px;
+      font-family:var(--font-display);
+      font-size:15px;
       font-style:italic;
-      color:rgba(220,210,255,0.9);
-      max-width:220px;
-      line-height:1.6;
+      line-height:1.7;
+      color:var(--ink);
+      max-width:240px;
       pointer-events:none;
       z-index:9991;
       opacity:0;
-      box-shadow: 0 0 20px rgba(180,160,255,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       white-space:normal;
     `;
@@ -1011,6 +908,7 @@ const GALLERY_PHOTOS = [
     current = i;
     render();
     lb.classList.add("show");
+    document.body.classList.add("overlay-open");
   }
 
   function render() {
@@ -1029,7 +927,10 @@ const GALLERY_PHOTOS = [
     render();
   }
 
-  function closeLightbox() { lb.classList.remove("show"); }
+  function closeLightbox() {
+    lb.classList.remove("show");
+    document.body.classList.remove("overlay-open");
+  }
 
   document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
   document.getElementById("lightboxPrev").addEventListener("click", (e) => { e.stopPropagation(); step(-1); });
@@ -1383,84 +1284,18 @@ function toggleGallery() {
       if (shuffled.length > 0) bgMusic.play().catch(()=>{});
       document.dispatchEvent(new Event("introEnded"));
 
-      // Đổi màu theo giờ — 4 tone chủ đạo
-      (function applyTimeTheme() {
+      // Sắc thái theo giờ — chỉ đổi màu nhấn, không can thiệp vào nền.
+      // Nền của trang do một nơi duy nhất quyết định (initTabThemes) để tránh
+      // hai hệ thống cùng ghi background rồi đánh nhau.
+      (function applyTimeAccent() {
         const hr = new Date().getHours();
-        let theme;
+        let accent;
+        if      (hr >= 5  && hr < 10) accent = "244, 182, 214";   // sáng  — hồng phấn
+        else if (hr >= 10 && hr < 17) accent = "160, 206, 248";   // trưa  — xanh nhạt
+        else if (hr >= 17 && hr < 21) accent = "198, 170, 252";   // chiều — tím
+        else                          accent = "150, 190, 236";   // đêm   — xanh đêm
 
-        if (hr >= 5 && hr < 10) {
-          // Sáng — HỒNG nhẹ
-          theme = {
-            bg: "#080410",
-            accent: "rgba(240,150,200,VAL)",
-            glow: "rgba(220,120,180,VAL)",
-            text: "rgba(240,200,230,VAL)",
-            border1: "rgb(230,130,180)",
-            border2: "rgb(200,100,160)",
-          };
-        } else if (hr >= 10 && hr < 17) {
-          // Trưa — XANH
-          theme = {
-            bg: "#050810",
-            accent: "rgba(100,190,255,VAL)",
-            glow: "rgba(80,170,240,VAL)",
-            text: "rgba(190,225,255,VAL)",
-            border1: "rgb(100,190,255)",
-            border2: "rgb(80,220,210)",
-          };
-        } else if (hr >= 17 && hr < 21) {
-          // Chiều — TÍM
-          theme = {
-            bg: "#080510",
-            accent: "rgba(180,120,255,VAL)",
-            glow: "rgba(160,100,240,VAL)",
-            text: "rgba(220,190,255,VAL)",
-            border1: "rgb(180,120,255)",
-            border2: "rgb(140,100,240)",
-          };
-        } else {
-          // Đêm — ĐEN XANH
-          theme = {
-            bg: "#030308",
-            accent: "rgba(80,150,220,VAL)",
-            glow: "rgba(60,130,200,VAL)",
-            text: "rgba(160,200,240,VAL)",
-            border1: "rgb(80,150,220)",
-            border2: "rgb(60,200,190)",
-          };
-        }
-
-        // Apply bg
-        document.body.style.transition = "background 3s ease";
-        document.body.style.background = theme.bg;
-
-        // Apply CSS variables for dynamic theming
-        const root = document.documentElement;
-        root.style.setProperty("--time-accent", theme.accent.replace("VAL", "0.8"));
-        root.style.setProperty("--time-glow",   theme.glow.replace("VAL", "0.5"));
-        root.style.setProperty("--time-text",   theme.text.replace("VAL", "0.85"));
-
-        // Đổi màu BOX_COLORS theo theme — xoay vòng 2 màu chủ đạo
-        const boxes = document.querySelectorAll(".box");
-        boxes.forEach((box, i) => {
-          const c = BOX_COLORS[i % BOX_COLORS.length];
-          // Blend màu gốc với tone theme
-          box.style.borderLeftColor = i % 2 === 0 ? theme.border1 : (theme.border2 || c.border);
-        });
-
-        // Đổi màu chữ title + subtitle
-        const h1 = document.getElementById("mainTitle");
-        const sub = document.querySelector(".subtitle");
-        if (h1)  h1.style.color  = theme.text.replace("VAL", "0.92");
-        if (sub) sub.style.color = theme.text.replace("VAL", "0.4");
-
-        // Đổi màu countdown số
-        const cdDays = document.getElementById("cdDays");
-        if (cdDays) {
-          cdDays.style.color = theme.text.replace("VAL", "0.9");
-          cdDays.style.textShadow = `0 0 40px ${theme.glow.replace("VAL", "0.4")}`;
-        }
-
+        document.documentElement.style.setProperty("--accent-time", accent);
       })();
       // Show cat + volume bar + typing cursor
       setTimeout(() => {
@@ -1693,35 +1528,12 @@ function stopConfetti() { _particleRunning = false; }
 
 
 // ══════════════════════════════════════════════════════════════════════════════
-// MODAL VIỀN ĐỔI MÀU MỖI 15S
+// VIỀN MODAL
+// Trước đây viền đổi màu mỗi 15 giây. Lúc đang đọc thư thì khung cứ nhá màu
+// làm phân tâm, nên bỏ: viền và bóng đổ của modal giờ do CSS quyết định.
 // ══════════════════════════════════════════════════════════════════════════════
 let _borderInterval = null;
-const BORDER_COLORS = [
-  "rgba(100,190,255,0.5)",  // xanh băng
-  "rgba(180,120,255,0.5)",  // tím
-  "rgba(240,150,200,0.5)",  // hồng
-  "rgba(80,220,210,0.5)",   // ngọc
-  "rgba(200,200,255,0.5)",  // lavender
-  "rgba(140,210,255,0.5)",  // sky
-];
-let _borderIdx = 0;
-
-function startModalBorderCycle() {
-  clearInterval(_borderInterval);
-  const modal = document.querySelector(".modal-content");
-  if (!modal) return;
-  modal.style.transition = "border-color 2s ease, box-shadow 2s ease";
-
-  function applyBorder() {
-    const c = BORDER_COLORS[_borderIdx % BORDER_COLORS.length];
-    const glow = c.replace("0.5)", "0.15)");
-    modal.style.borderColor = c;
-    modal.style.boxShadow   = `0 0 40px ${glow}, 0 0 80px ${glow}`;
-    _borderIdx++;
-  }
-  applyBorder();
-  _borderInterval = setInterval(applyBorder, 15000);
-}
+function startModalBorderCycle() { clearInterval(_borderInterval); }
 
 // ══════════════════════════════════════════════════════════════════════════════
 // TAB NAVIGATION
@@ -1747,14 +1559,24 @@ function startModalBorderCycle() {
       const page = document.getElementById("page-" + tab);
       if (page) {
         page.classList.add("active");
-        // Fade + slide nhẹ
+        // Fade + trôi lên nhẹ (tên keyframe phải khớp với style.css)
         page.style.animation = "none";
         requestAnimationFrame(() => {
-          page.style.animation = "tabFadeIn 0.5s ease";
+          page.style.animation = "pageIn 0.5s cubic-bezier(0.22,0.75,0.3,1)";
         });
       }
 
-      // Scroll to top when switching tabs
+      // Màn hẹp: kéo thanh menu sao cho tab đang mở nằm giữa, không bị
+      // nằm nép ở mép rồi bị lớp mờ che mất
+      const nav = document.getElementById("tabNav");
+      if (nav && nav.scrollWidth > nav.clientWidth) {
+        nav.scrollTo({
+          left: btn.offsetLeft - (nav.clientWidth - btn.offsetWidth) / 2,
+          behavior: "smooth",
+        });
+      }
+
+      // Lên đầu trang khi đổi tab
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
@@ -2269,7 +2091,8 @@ function startModalBorderCycle() {
 (function initShootingStars() {
   document.addEventListener("introEnded", () => {
     const canvas = document.createElement("canvas");
-    canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:2;";
+    // z-index 0: nằm sau nội dung (nội dung ở z-index 1), không cắt qua chữ
+    canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:0;";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
@@ -2392,29 +2215,30 @@ function startModalBorderCycle() {
     el.id = "greetingToast";
     el.textContent = greeting;
     el.style.cssText = `
-      position: fixed; top: 24px; left: 50%;
-      transform: translateX(-50%) translateY(-60px);
-      background: rgba(15,10,32,0.92);
-      border: 1px solid rgba(180,150,255,0.2);
-      border-radius: 30px; padding: 10px 26px;
-      font-size: 14px; font-style: italic;
-      color: rgba(215,200,255,0.85);
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      letter-spacing: 1px; z-index: 9998;
-      opacity: 0; pointer-events: none; white-space: nowrap;
+      position: fixed; bottom: 24px; left: 18px; max-width: calc(100vw - 210px); z-index: 9998;
+      transform: translateY(60px);
+      padding: 10px 26px;
+      background: rgba(16,11,32,0.95);
+      border: 1px solid rgba(var(--accent),0.25);
+      border-radius: var(--r-pill);
+      font-family: var(--font-display);
+      font-size: var(--t-read); font-style: italic;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      opacity: 0; pointer-events: none;
       backdrop-filter: blur(10px);
-      transition: transform 0.7s cubic-bezier(0.2,0.8,0.3,1), opacity 0.7s ease;
-      box-shadow: 0 4px 30px rgba(160,120,255,0.12);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.7s var(--ease), opacity 0.7s ease;
     `;
     document.body.appendChild(el);
 
     setTimeout(() => {
-      el.style.transform = "translateX(-50%) translateY(0)";
+      el.style.transform = "translateY(0)";
       el.style.opacity = "1";
     }, 1500);
 
     setTimeout(() => {
-      el.style.transform = "translateX(-50%) translateY(-60px)";
+      el.style.transform = "translateY(60px)";
       el.style.opacity = "0";
       setTimeout(() => el.remove(), 800);
     }, 6000);
@@ -2705,46 +2529,46 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
   // ── 8 chủ đề ─────────────────────────────────────────────────────────────
   const THEMES = {
     home: {
-      bodyBg: "radial-gradient(140% 100% at 50% -10%, #1a1030 0%, #0a0618 45%, #050310 100%)",
+      bodyBg: "radial-gradient(120% 90% at 50% -8%, #171029 0%, #0b0719 46%, #070512 100%)",
       particle: "stars", accentType: "moon",
-      accent: { cx: 0.88, cy: 0.15, r: 42, color: "222,215,250" },
+      accent: { cx: 0.82, cy: 0.32, r: 44, color: "222,215,250" },
     },
     timeline: { // hoa đào — nhẹ, gió cuốn, cụm hoa 5 cánh thật
-      bodyBg: "radial-gradient(140% 100% at 15% -10%, #3a1a30 0%, #200f22 45%, #12081a 100%)",
+      bodyBg: "radial-gradient(120% 90% at 18% -8%, #22142a 0%, #0d0819 46%, #070512 100%)",
       particle: "petals", petalMode: "blossom", secondary: "bokeh",
       accentType: "branch",
       accent: { color: "255,190,215" },
       petalColor: ["255,205,225", "255,180,210"],
     },
     gallery: {
-      bodyBg: "radial-gradient(140% 100% at 50% 110%, #063a48 0%, #042230 50%, #02121c 100%)",
+      bodyBg: "radial-gradient(120% 95% at 50% 108%, #0d2630 0%, #080f1c 50%, #070512 100%)",
       particle: "bubbles", accentType: "wave",
       accent: { color: "120,220,235" },
     },
     diary: {
-      bodyBg: "radial-gradient(140% 100% at 20% 0%, #402508 0%, #22140a 50%, #140b06 100%)",
+      bodyBg: "radial-gradient(120% 90% at 20% -4%, #241a12 0%, #0f0b16 50%, #070512 100%)",
       particle: "fireflies", accentType: "haze",
       accent: { color: "255,200,130" },
     },
     things: { // vườn hồng — nặng hơn, rơi thẳng, nụ hồng thật, đom đóm tim ấm
-      bodyBg: "radial-gradient(140% 100% at 15% -10%, #4a1020 0%, #2a0a15 50%, #170509 100%)",
+      bodyBg: "radial-gradient(120% 90% at 18% -8%, #28121e 0%, #0f0716 50%, #070512 100%)",
       particle: "petals", petalMode: "rose", secondary: "hearts",
       accentType: "vine",
       accent: { color: "255,70,115" },
-      petalColor: ["230,55,100", "150,20,55"],
+      petalColor: ["244,138,170", "196,72,112"],
     },
     firsts: {
-      bodyBg: "radial-gradient(140% 100% at 50% 105%, #6a2606 0%, #3d1506 50%, #1c0803 100%)",
+      bodyBg: "radial-gradient(120% 95% at 50% 106%, #2a180e 0%, #110c15 50%, #070512 100%)",
       particle: "embers", accentType: "sun",
-      accent: { cx: 0.82, cy: 0.86, r: 60, color: "255,175,90" },
+      accent: { cx: 0.78, cy: 0.84, r: 54, color: "255,175,90" },
     },
     radio: {
-      bodyBg: "radial-gradient(140% 100% at 20% -10%, #34164f 0%, #1c0c2e 50%, #0f0619 100%)",
+      bodyBg: "radial-gradient(120% 90% at 20% -8%, #1f1533 0%, #0d0819 50%, #070512 100%)",
       particle: "notes", accentType: "moon",
-      accent: { cx: 0.86, cy: 0.17, r: 38, color: "212,180,255" },
+      accent: { cx: 0.83, cy: 0.38, r: 40, color: "212,180,255" },
     },
     future: {
-      bodyBg: "radial-gradient(140% 100% at 50% 100%, #1c3a2a 0%, #0c2436 55%, #061420 100%)",
+      bodyBg: "radial-gradient(120% 95% at 50% 104%, #112430 0%, #0a0f1d 55%, #070512 100%)",
       particle: "sparks", accentType: "sunrise",
       accent: { cx: 0.5, cy: 0.92, r: 70, color: "255,220,160" },
     },
@@ -2859,9 +2683,9 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.rotate(p.rot);
     const s = p.r;
     const g = ctx.createRadialGradient(-s * 0.2, -s * 0.3, s * 0.1, 0, 0, s * 1.1);
-    g.addColorStop(0, `rgba(${p.c[0]},0.95)`);
-    g.addColorStop(0.6, `rgba(${p.c[1]},0.85)`);
-    g.addColorStop(1, `rgba(${p.c[1]},0.55)`);
+    g.addColorStop(0, `rgba(${p.c[0]},0.62)`);
+    g.addColorStop(0.6, `rgba(${p.c[1]},0.5)`);
+    g.addColorStop(1, `rgba(${p.c[1]},0.26)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.moveTo(0, -s * 0.95);
@@ -2869,7 +2693,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     ctx.bezierCurveTo(-s * 0.9, s * 0.55, -s * 1.05, -s * 0.5, 0, -s * 0.95);
     ctx.closePath(); ctx.fill();
     // gợn nhung — vài đường cong mờ bên trong
-    ctx.strokeStyle = "rgba(0,0,0,0.12)";
+    ctx.strokeStyle = "rgba(0,0,0,0.08)";
     ctx.lineWidth = 0.7;
     ctx.beginPath(); ctx.moveTo(-s * 0.3, -s * 0.5); ctx.quadraticCurveTo(0, 0, -s * 0.2, s * 0.6); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(s * 0.3, -s * 0.5); ctx.quadraticCurveTo(0, 0, s * 0.2, s * 0.6); ctx.stroke();
@@ -2999,7 +2823,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       p.x = Math.random() * W; p.y = -30;
       p.mode = petalMode;
       if (petalMode === "rose") {
-        p.r = 11 + Math.random() * 9;
+        p.r = 7 + Math.random() * 6;
         p.vx = (Math.random() - 0.5) * 0.35;
         p.vy = 0.35 + Math.random() * 0.5;
         p.vrot = (Math.random() - 0.5) * 0.015;
@@ -3057,10 +2881,10 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     if (type === "bokeh") {
       return {
         x: Math.random() * W, y: Math.random() * H,
-        r: 30 + Math.random() * 55,
+        r: 26 + Math.random() * 40,
         vx: (Math.random() - 0.5) * 0.12,
         vy: -(0.05 + Math.random() * 0.1),
-        a: 0.15 + Math.random() * 0.25,
+        a: 0.08 + Math.random() * 0.12,   // mờ hẳn đi: để đậm thì nhìn như vết bẩn
         c: "255,190,215",
       };
     }
@@ -3076,13 +2900,26 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     }
   }
 
+  // Trên máy nhỏ thì bớt hạt lại cho nhẹ máy và đỡ rối mắt
+  const DENSITY = window.innerWidth < 768 ? 0.55 : 1;
+  const n = (v) => Math.max(6, Math.round(v * DENSITY));
+
   function initPool(type) {
-    const counts = { stars: 100, petals: petalMode === "rose" ? 30 : 42, bubbles: 36, fireflies: 42, embers: 42, notes: 18, sparks: 42 };
-    pool = Array.from({ length: counts[type] || 40 }, () => spawn(type));
+    const counts = { stars: 70, petals: petalMode === "rose" ? 22 : 30, bubbles: 26, fireflies: 30, embers: 30, notes: 14, sparks: 30 };
+    pool = Array.from({ length: n(counts[type] || 28) }, () => spawn(type));
+
+    // Lúc mới đổi tab, mọi hạt đều sinh ra cùng một mép nên dồn lại thành một
+    // mảng dày trông rất rối. Rải sẵn chúng khắp màn hình ngay từ đầu.
+    pool.forEach((p) => {
+      if (p.y === undefined) return;
+      if (p.y < 0 || p.y > H) p.y = Math.random() * H;
+    });
   }
   function initSecondary(type) {
-    const counts = { bokeh: 9, hearts: 14 };
-    secondaryPool = type ? Array.from({ length: counts[type] || 0 }, () => spawnSecondary(type)) : [];
+    const counts = { bokeh: 7, hearts: 10 };
+    secondaryPool = type && counts[type]
+      ? Array.from({ length: n(counts[type]) }, () => spawnSecondary(type))
+      : [];
   }
 
   // ── Cụm hoa đào 5 cánh thật (dùng cho cành hoa) ─────────────────────────────
@@ -3146,8 +2983,8 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(cx, cy, a.r * 3.4 * pulse, 0, Math.PI * 2); ctx.fill();
       const g2 = ctx.createRadialGradient(cx, cy, 0, cx, cy, a.r);
-      g2.addColorStop(0, "rgba(255,245,225,0.98)");
-      g2.addColorStop(1, `rgba(${a.color},0.85)`);
+      g2.addColorStop(0, "rgba(255,245,225,0.55)");   // dịu lại — là khung cảnh
+      g2.addColorStop(1, `rgba(${a.color},0.4)`);     // nền, không phải nút bấm
       ctx.fillStyle = g2;
       ctx.beginPath(); ctx.arc(cx, cy, a.r, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
@@ -3195,7 +3032,7 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
       ctx.bezierCurveTo(W - 80, 70, W - 30, 150, W - 120, 230);
       ctx.stroke();
       // gai dọc dây leo
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 4; i++) {
         const t = i / 6;
         const tx = W + 10 - t * 110, ty = t * 220;
         ctx.save();
@@ -3226,7 +3063,12 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 
   let tt = 0, windPhase = 0;
   let activeThemeKey = "home";
+
+  // Người dùng bật "giảm chuyển động" thì không chạy hiệu ứng hạt — chỉ đổi nền
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   function loop() {
+    if (REDUCED) return;
     requestAnimationFrame(loop);
     if (!currentType) return;
     ctx.clearRect(0, 0, W, H);
@@ -3327,21 +3169,21 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
 (function initTabHoverBurst() {
   // Ký tự + màu tương ứng từng chủ đề
   const BURST = {
-    home:     { glyphs: ["✦", "✧", "⋆"], color: "200,180,255" },
-    timeline: { glyphs: ["🌸", "❀", "✿"], color: "255,175,205" },
-    gallery:  { glyphs: ["○", "◦", "°"],  color: "110,215,235" },
-    diary:    { glyphs: ["✦", "·", "✧"],  color: "255,200,130" },
-    things:   { glyphs: ["🌹", "❤", "✿"], color: "255,105,145" },
-    firsts:   { glyphs: ["✦", "◦", "⋆"],  color: "255,165,90"  },
-    radio:    { glyphs: ["♪", "♫", "♩"],  color: "200,165,255" },
-    future:   { glyphs: ["✧", "✦", "⋆"],  color: "150,205,255" },
+    home:     { glyphs: ["✦", "✧", "⋆"], color: "198,182,255" },
+    timeline: { glyphs: ["❀", "✿", "✧"], color: "255,176,203" },
+    gallery:  { glyphs: ["○", "◦", "°"],  color: "126,206,224" },
+    diary:    { glyphs: ["✦", "·", "✧"],  color: "240,196,130" },
+    things:   { glyphs: ["✿", "❀", "✦"],  color: "240,134,164" },
+    firsts:   { glyphs: ["✦", "◦", "⋆"],  color: "240,164,112" },
+    radio:    { glyphs: ["♪", "♫", "♩"],  color: "196,170,250" },
+    future:   { glyphs: ["✧", "✦", "⋆"],  color: "150,200,240" },
   };
 
   let lastBurst = 0;
 
   function burst(btn) {
     const now = Date.now();
-    if (now - lastBurst < 400) return;   // tránh spam khi rê chuột qua lại
+    if (now - lastBurst < 700) return;   // tránh spam khi rê chuột qua lại
     lastBurst = now;
 
     const cfg = BURST[btn.dataset.tab] || BURST.home;
@@ -3352,14 +3194,13 @@ Chồng chỉ mong thời gian trôi nhanh hơn một chút, để lần gặp t
     for (let i = 0; i < 7; i++) {
       const el = document.createElement("div");
       el.textContent = cfg.glyphs[Math.floor(Math.random() * cfg.glyphs.length)];
-      const size = 8 + Math.random() * 7;
+      const size = 7 + Math.random() * 5;
       el.style.cssText = `
         position: fixed;
         left: ${originX}px;
         top: ${originY}px;
         font-size: ${size}px;
-        color: rgba(${cfg.color}, 0.95);
-        text-shadow: 0 0 10px rgba(${cfg.color}, 0.9);
+        color: rgba(${cfg.color}, 0.8);
         pointer-events: none;
         z-index: 9996;
         opacity: 0;
